@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "760850192119",
+    "firebase_url": "https://gerestock-aa75e.firebaseio.com",
+    "project_id": "gerestock-aa75e",
+    "storage_bucket": "gerestock-aa75e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760850192119:android:23f1475134d0c5766e65f2",
+        "android_client_info": {
+          "package_name": "gerestock.com.gerestock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "760850192119-mv9mclu5tdn1dekmtfgm18h91kic0rg7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArv5QUNsgEMuIRxuRPSnO_ch1omQI2CJs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760850192119-mv9mclu5tdn1dekmtfgm18h91kic0rg7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
