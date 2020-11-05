@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 
+
 class Depenses extends StatefulWidget {
   @override
   _DepensesState createState() => _DepensesState();

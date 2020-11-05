@@ -4,6 +4,7 @@ import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 
+
 class MouvementDeStock extends StatefulWidget {
   @override
   _MouvementDeStockState createState() => _MouvementDeStockState();
@@ -80,6 +81,7 @@ class _MouvementDeStockState extends State<MouvementDeStock> {
                  ),
                ),
              ],
+
           )),
     );
   }

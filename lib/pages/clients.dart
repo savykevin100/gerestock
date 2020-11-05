@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gerestock/constantes/color.dart';
-
-
-class Sorties extends StatefulWidget {
+import 'package:hexcolor/hexcolor.dart';
+class Clients extends StatefulWidget {
   @override
-  _SortiesState createState() => _SortiesState();
+  _ClientsState createState() => _ClientsState();
 }
 
-class _SortiesState extends State<Sorties> {
+class _ClientsState extends State<Clients> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +19,7 @@ class _SortiesState extends State<Sorties> {
             Navigator.pop(context);
           },
         ),
-        title: Text("Sorties",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+        title: Text("Clients",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
         actions: [
           IconButton(
               icon:Icon(Icons.search,color:Colors.white)

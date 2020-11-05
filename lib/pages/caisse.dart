@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 
+
 class Caisse extends StatefulWidget {
   @override
   _CaisseState createState() => _CaisseState();

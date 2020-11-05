@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'hexadecimal.dart';
 
+
 const bleuPrincipale= Color(0xFF3675BD);
 const kPrimaryColor = Color(0xFF184098);
 const kSecondaryColor = Color(0xFFFFA41B);
@@ -16,3 +17,4 @@ Color primaryColor = HexColor("#3675BD");
 Color secondaryColor = HexColor("#B2C40F");
 Color textColor = HexColor("#001C36");
 Color white = Colors.white;
+
