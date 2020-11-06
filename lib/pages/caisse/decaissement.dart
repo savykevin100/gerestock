@@ -9,16 +9,16 @@ import 'package:gerestock/constantes/text_classe.dart';
 
 
 
-class Depenses extends StatefulWidget {
+class Decaissement extends StatefulWidget {
   @override
-  _DepensesState createState() => _DepensesState();
+  DecaissementState createState() => DecaissementState();
 }
 
-class _DepensesState extends State<Depenses> {
+class DecaissementState extends State<Decaissement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Dépenses"),
+      appBar: appBar("Decaissement"),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
         child: StaggeredGridView.countBuilder(
@@ -35,14 +35,14 @@ class _DepensesState extends State<Depenses> {
                       Container(
                         height: 13,
                         width: 4,
-                        color: primaryColor,
+                        color: HexColor("#B2C40F"),
                       ),
                       Text("   "),
-                      autoSizeTextGreyEntrer("18/02/2020"),
-                      autoSizeTextGreyEntrer("686868"),
-                      autoSizeTextGreyEntrer("SAHA Enterprise"),
+                      autoSizeTextGreySorti("18/02/2020"),
+                      autoSizeTextGreySorti("686868"),
+                      autoSizeTextGreySorti("SAHA Enterprise"),
                       SizedBox(width: 10,),
-                      autoSizeTextGreyEntrer("3.000")
+                      autoSizeTextGreySorti("3.000")
                     ],
                   ),
                   Divider(color: HexColor("#ADB3C4"),),
@@ -56,14 +56,6 @@ class _DepensesState extends State<Depenses> {
           crossAxisSpacing: 0.0,
           shrinkWrap: true,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //Navigator.of(context).pushNamed("/FicheClient");
-
-        },
-        child: Icon(Icons.add, color: white,),
-        backgroundColor: primaryColor,
       ),
     );
   }
@@ -79,12 +71,12 @@ class _DepensesState extends State<Depenses> {
 
 
 
-  Expanded autoSizeTextGreyEntrer(String titre){
+  Expanded autoSizeTextGreySorti(String titre){
     return Expanded(
         flex: 1,
         child: AutoSizeText(
           titre,
-          style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: primaryColor),
+          style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: HexColor("#B2C40F")),
           maxLines: 3,
           minFontSize: 9,
         )

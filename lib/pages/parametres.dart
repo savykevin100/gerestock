@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 
@@ -12,12 +13,7 @@ class _ParametresState extends State<Parametres> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: bleuPrincipale,
-        elevation: 0.0,
-        title: TextClasse(text: "Paramètres", color: white, fontSize: 20, family: "MonserratBold",),
-
-      ),
+      appBar: appBar("Paramètres")
     );
   }
 }
