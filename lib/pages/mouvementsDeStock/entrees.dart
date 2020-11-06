@@ -6,19 +6,16 @@ import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
-
-
-
-class Depenses extends StatefulWidget {
+class Entrees extends StatefulWidget {
   @override
-  _DepensesState createState() => _DepensesState();
+  _EntreesState createState() => _EntreesState();
 }
 
-class _DepensesState extends State<Depenses> {
+class _EntreesState extends State<Entrees> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Dépenses"),
+      appBar: appBar("Entrées"),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
         child: StaggeredGridView.countBuilder(

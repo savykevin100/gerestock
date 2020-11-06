@@ -9,16 +9,16 @@ import 'package:gerestock/constantes/text_classe.dart';
 
 
 
-class Depenses extends StatefulWidget {
+class Encaissement extends StatefulWidget {
   @override
-  _DepensesState createState() => _DepensesState();
+  _EncaissementState createState() => _EncaissementState();
 }
 
-class _DepensesState extends State<Depenses> {
+class _EncaissementState extends State<Encaissement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Dépenses"),
+      appBar: appBar("Encaissement"),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
         child: StaggeredGridView.countBuilder(
@@ -56,14 +56,6 @@ class _DepensesState extends State<Depenses> {
           crossAxisSpacing: 0.0,
           shrinkWrap: true,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //Navigator.of(context).pushNamed("/FicheClient");
-
-        },
-        child: Icon(Icons.add, color: white,),
-        backgroundColor: primaryColor,
       ),
     );
   }

@@ -5,20 +5,22 @@ import 'package:gerestock/authentification/connexion.dart';
 import 'package:gerestock/authentification/inscription.dart';
 import 'package:gerestock/pages/abonnement.dart';
 import 'package:gerestock/pages/accueil.dart';
-import 'package:gerestock/pages/caisse.dart';
+import 'package:gerestock/pages/caisse/caisse.dart';
+import 'package:gerestock/pages/caisse/encaissement.dart';
 import 'package:gerestock/pages/clients/clients.dart';
 import 'package:gerestock/pages/clients/ficheClient.dart';
+import 'package:gerestock/pages/decaissement.dart';
 import 'package:gerestock/pages/depenses.dart';
-import 'package:gerestock/pages/entrees.dart';
+import 'package:gerestock/pages/mouvementsDeStock/entrees.dart';
 import 'package:gerestock/pages/facturations/facturation1.dart';
 import 'package:gerestock/pages/facturations/facturation2.dart';
 import 'package:gerestock/pages/fournisseurs/ficheFournisseur.dart';
 import 'package:gerestock/pages/fournisseurs/fournisseurs.dart';
 import 'package:gerestock/pages/inventaire.dart';
-import 'package:gerestock/pages/mouvementDeStock.dart';
+import 'package:gerestock/pages/mouvementsDeStock/mouvementDeStock.dart';
 import 'package:gerestock/pages/nouveauProduit/nouveauProduit.dart';
 import 'package:gerestock/pages/parametres.dart';
-import 'package:gerestock/pages/sorties.dart';
+import 'package:gerestock/pages/mouvementsDeStock/sorties.dart';
 
 void main() {
   runApp(MyApp());
@@ -55,6 +57,8 @@ class MyApp extends StatelessWidget {
         '/Paramètres': (BuildContext context) => Parametres(),
         '/Entrées': (BuildContext context) => Entrees(),
         '/Sorties': (BuildContext context) => Sorties(),
+        '/Encaissement': (BuildContext context) => Encaissement(),
+        '/Décaissement': (BuildContext context) => Decaissement(),
       },
     );
   }
