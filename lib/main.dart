@@ -9,7 +9,7 @@ import 'package:gerestock/pages/caisse/caisse.dart';
 import 'package:gerestock/pages/caisse/encaissement.dart';
 import 'package:gerestock/pages/clients/clients.dart';
 import 'package:gerestock/pages/clients/ficheClient.dart';
-import 'package:gerestock/pages/decaissement.dart';
+import 'package:gerestock/pages/caisse/decaissement.dart';
 import 'package:gerestock/pages/depenses.dart';
 import 'package:gerestock/pages/mouvementsDeStock/entrees.dart';
 import 'package:gerestock/pages/facturations/facturation1.dart';

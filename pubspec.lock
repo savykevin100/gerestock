@@ -95,6 +95,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2+6"
+
   matcher:
     dependency: transitive
     description:
@@ -180,3 +181,4 @@ packages:
 sdks:
   dart: ">=2.10.0-0.0.dev <2.10.0"
   flutter: ">=1.17.0"
+
