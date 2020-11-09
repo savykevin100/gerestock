@@ -18,7 +18,7 @@ class _DepensesState extends State<Depenses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Dépenses"),
+      appBar: appBar(context,"Dépenses"),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
         child: StaggeredGridView.countBuilder(

@@ -18,7 +18,7 @@ class _SortiesState extends State<Sorties> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Sorties"),
+      appBar: appBar(context,"Sorties"),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
         child: StaggeredGridView.countBuilder(

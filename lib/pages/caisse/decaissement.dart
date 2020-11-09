@@ -18,7 +18,7 @@ class DecaissementState extends State<Decaissement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Decaissement"),
+      appBar: appBar(context,"Decaissement"),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
         child: StaggeredGridView.countBuilder(

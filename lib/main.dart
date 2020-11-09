@@ -22,6 +22,8 @@ import 'package:gerestock/pages/nouveauProduit/nouveauProduit.dart';
 import 'package:gerestock/pages/parametres.dart';
 import 'package:gerestock/pages/mouvementsDeStock/sorties.dart';
 
+import 'pages/mouvementsDeStock/ficheEntrees.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -59,6 +61,7 @@ class MyApp extends StatelessWidget {
         '/Sorties': (BuildContext context) => Sorties(),
         '/Encaissement': (BuildContext context) => Encaissement(),
         '/Décaissement': (BuildContext context) => Decaissement(),
+        '/FicheEntrees': (BuildContext context) => FicheEntrees(),
       },
     );
   }

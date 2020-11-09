@@ -19,7 +19,7 @@ class _FicheClientState extends State<FicheClient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Fiche client"),
+      appBar: appBar(context,"Fiche client"),
       body: Center(
         child:SingleChildScrollView(
           child: Column(
