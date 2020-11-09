@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gerestock/constantes/appBar.dart';
@@ -5,6 +6,7 @@ import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
+import 'package:gerestock/pages/clients/clientDetail.dart';
 
 
 
@@ -32,19 +34,25 @@ class _ClientsState extends State<Clients> {
                 itemBuilder: (context,  i) {
                  return Column(
                    children: [
-                     ListTile(
-                          title: TextClasse(
-                            text: "Nom du client",
-                            family: "MonserratSemiBold",
+                     InkWell(
+                       onTap: (){
+                         Navigator.push(context, MaterialPageRoute(builder: (context) => ClientDetail()),
+                         );
+                       },
+                       child: ListTile(
+                            title: TextClasse(
+                              text: "Nom du client",
+                              family: "MonserratSemiBold",
+                            ),
+                            subtitle: TextClasse(text: "68 68 68 68", family: "MonserratMedium", fontSize: 13,),
+                            trailing: Icon(
+                              Icons.navigate_next,
+                              color: HexColor("#ADB3C4"),
+                              size: 30,
+                            ),
                           ),
-                          subtitle: TextClasse(text: "68 68 68 68", family: "MonserratMedium", fontSize: 13,),
-                          trailing: Icon(
-                            Icons.navigate_next,
-                            color: HexColor("#ADB3C4"),
-                            size: 30,
-                          ),
-                        ),
-                     Divider(color: HexColor("#ADB3C4"),)
+                     ),
+                        Divider(color: HexColor("#ADB3C4"),)
                    ],
                  );
                 }
