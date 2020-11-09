@@ -5,6 +5,7 @@ import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
+import 'package:gerestock/pages/clients/clientDetail.dart';
 
 
 
@@ -32,16 +33,21 @@ class _ClientsState extends State<Fournisseurs> {
                   itemBuilder: (context,  i) {
                     return Column(
                       children: [
-                        ListTile(
-                          title: TextClasse(
-                            text: "Nom du fournisseur",
-                            family: "MonserratSemiBold",
-                          ),
-                          subtitle: TextClasse(text: "68 68 68 68", family: "MonserratMedium", fontSize: 13,),
-                          trailing: Icon(
-                            Icons.navigate_next,
-                            color: HexColor("#ADB3C4"),
-                            size: 30,
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ClientDetail()));
+                          },
+                          child: ListTile(
+                            title: TextClasse(
+                              text: "Nom du fournisseur",
+                              family: "MonserratSemiBold",
+                            ),
+                            subtitle: TextClasse(text: "68 68 68 68", family: "MonserratMedium", fontSize: 13,),
+                            trailing: Icon(
+                              Icons.navigate_next,
+                              color: HexColor("#ADB3C4"),
+                              size: 30,
+                            ),
                           ),
                         ),
                         Divider(color: HexColor("#ADB3C4"),)
