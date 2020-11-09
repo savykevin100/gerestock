@@ -23,7 +23,7 @@ class _MouvementDeStockState extends State<MouvementDeStock> {
 
     double deviceHeight = queryData.size.height;
     return Scaffold(
-      appBar: appBar("Mouvements de Stock"),
+      appBar: appBar(context,"Mouvements de Stock"),
       body: ListView(
         children: [
           SizedBox(height: longueurPerCent(20, context),),

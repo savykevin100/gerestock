@@ -27,7 +27,7 @@ class _NouveauProduit extends State<NouveauProduit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:appBar("Nouveau Produit"),
+        appBar:appBar(context,"Nouveau Produit"),
         body: ListView(
           children: <Widget>[
             SizedBox(height: 17,),

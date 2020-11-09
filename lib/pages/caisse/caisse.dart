@@ -23,7 +23,7 @@ class _CaisseState extends State<Caisse> {
 
     double deviceHeight = queryData.size.height;
     return Scaffold(
-      appBar: appBar("Caisse"),
+      appBar: appBar(context,"Caisse"),
       body: ListView(
         children: [
           SizedBox(height: longueurPerCent(20, context),),

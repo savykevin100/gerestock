@@ -13,7 +13,7 @@ class _ParametresState extends State<Parametres> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Paramètres")
+      appBar: appBar(context,"Paramètres")
     );
   }
 }

@@ -18,7 +18,7 @@ class _EncaissementState extends State<Encaissement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Encaissement"),
+      appBar: appBar(context,"Encaissement"),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
         child: StaggeredGridView.countBuilder(

@@ -15,7 +15,7 @@ class _InventaireState extends State<Inventaire> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWithSearch("Inventaire"),
+      appBar: appBarWithSearch(context,"Inventaire"),
       body:Center(
         child: Card(
            margin: EdgeInsets.symmetric(horizontal: largeurPerCent(21, context), vertical: longueurPerCent(46, context)),

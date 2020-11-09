@@ -22,7 +22,7 @@ class _ClientsState extends State<Clients> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWithSearch("Clients"),
+      appBar: appBarWithSearch(context,"Clients"),
       body: Center(
         child: Card(
           margin: EdgeInsets.symmetric(horizontal: largeurPerCent(21, context), vertical: longueurPerCent(46, context)),

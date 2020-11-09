@@ -15,7 +15,7 @@ class _EntreesState extends State<Entrees> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Entrées"),
+      appBar: appBarWithSearch(context,"Entrées"),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
         child: StaggeredGridView.countBuilder(
@@ -56,7 +56,7 @@ class _EntreesState extends State<Entrees> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //Navigator.of(context).pushNamed("/FicheClient");
+          Navigator.of(context).pushNamed("/FicheEntrees");
 
         },
         child: Icon(Icons.add, color: white,),

@@ -26,7 +26,7 @@ class _AccueilPageState extends State<Accueil> {
     double deviceHeight = queryData.size.height;
 
     return new Scaffold(
-      appBar:  appBar("Accueil"),
+      appBar:  appBar(context,"Accueil"),
         drawer: Drawer(),
         body: GridView.count(
                 shrinkWrap: true,
@@ -36,10 +36,10 @@ class _AccueilPageState extends State<Accueil> {
                   _happyVeganCard( "Clients", Color(0xFFC502FF),Icons.person,deviceHeight),
                   _happyVeganCard( "Fournisseur", Color(0xFF02C5FF),Icons.shopping_cart,deviceHeight),
                   _happyVeganCard( "Mouvement de Stock", Color(0xFF707070),Icons.cached,deviceHeight),
-                  _happyVeganCard( "Facturation", Color(0xFFFF8002),Icons.precision_manufacturing_outlined,deviceHeight),
-                  _happyVeganCard( "Caisse", Color(0xFF092648),Icons.monetization_on_outlined,deviceHeight),
+                  _happyVeganCard( "Facturation", Color(0xFFFF8002),Icons.cached,deviceHeight),
+                  _happyVeganCard( "Caisse", Color(0xFF092648),Icons.cached,deviceHeight),
                   _happyVeganCard( "Inventaire", Color(0xFF026DFF),Icons.list,deviceHeight),
-                  _happyVeganCard( "Abonnement", Color(0xFFFF0202),Icons.all_inclusive_sharp,deviceHeight),
+                  _happyVeganCard( "Abonnement", Color(0xFFFF0202),Icons.cached,deviceHeight),
                   _happyVeganCard( "Dépenses", Color(0xFFFC2872),Icons.book,deviceHeight),
                   _happyVeganCard( "Paramètres", Color(0xFFC9C9C9),Icons.settings,deviceHeight),
                 ],
