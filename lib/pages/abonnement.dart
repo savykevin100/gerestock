@@ -21,7 +21,7 @@ class _AbonnementState extends State<Abonnement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context, "Abonnement"),
+      appBar: appBar(context,"Abonnement"),
       body: ListView(
         children: [
           SizedBox(height: longueurPerCent(20, context),),
@@ -138,12 +138,14 @@ class _AbonnementState extends State<Abonnement> {
                               ),
                               SizedBox(width: 10,),
                               SizedBox(height: 10,),
-                              AutoSizeText("Lorem Ipsum is simply dummy text of the printing and t"
-                                  "ypesetting industry. Lorem Ipsum has been the industry’s standard dummy te"
-                                  "xt ever since the 1500s, when an unknown printer took a galley.",
-                                style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
-                                maxLines: 3,
-                                minFontSize: 9,
+                              Flexible(
+                                child: AutoSizeText("Lorem Ipsum is simply dummy text of the printing and t"
+                                    "ypesetting industry. Lorem Ipsum has been the industry’s standard dummy te"
+                                    "xt ever since the 1500s, when an unknown printer took a galley.",
+                                  style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
+                                  maxLines: 3,
+                                  minFontSize: 9,
+                                ),
                               ),
                               SizedBox(height: 10,),
 
@@ -203,13 +205,14 @@ class _AbonnementState extends State<Abonnement> {
                               ),
                               SizedBox(width: 10,),
                               SizedBox(height: 10,),
-                              AutoSizeText("Lorem Ipsum is simply dummy text of the printing and t"
+                              Flexible(
+                                child: AutoSizeText("Lorem Ipsum is simply dummy text of the printing and t"
                                   "ypesetting industry. Lorem Ipsum has been the industry’s standard dummy te"
                                   "xt ever since the 1500s, when an unknown printer took a galley.",
                                 style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
                                 maxLines: 3,
                                 minFontSize: 9,
-                              ),
+                              )),
                               SizedBox(height: 10,),
 
                             ],
@@ -268,12 +271,14 @@ class _AbonnementState extends State<Abonnement> {
                               ),
                               SizedBox(width: 10,),
                               SizedBox(height: 10,),
-                              AutoSizeText("Lorem Ipsum is simply dummy text of the printing and t"
-                                  "ypesetting industry. Lorem Ipsum has been the industry’s standard dummy te"
-                                  "xt ever since the 1500s, when an unknown printer took a galley.",
-                                style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
-                                maxLines: 3,
-                                minFontSize: 9,
+                              Flexible(
+                                child: AutoSizeText("Lorem Ipsum is simply dummy text of the printing and t"
+                                    "ypesetting industry. Lorem Ipsum has been the industry’s standard dummy te"
+                                    "xt ever since the 1500s, when an unknown printer took a galley.",
+                                  style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
+                                  maxLines: 3,
+                                  minFontSize: 9,
+                                ),
                               ),
                               SizedBox(height: 10,),
 

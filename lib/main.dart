@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:gerestock/authentification/connexion.dart';
 import 'package:gerestock/authentification/inscription.dart';
@@ -10,7 +8,9 @@ import 'package:gerestock/pages/caisse/encaissement.dart';
 import 'package:gerestock/pages/clients/clients.dart';
 import 'package:gerestock/pages/clients/ficheClient.dart';
 import 'package:gerestock/pages/caisse/decaissement.dart';
-import 'package:gerestock/pages/depenses.dart';
+import 'package:gerestock/pages/depenses/depenses.dart';
+import 'package:gerestock/pages/depenses/nouvelleDepense.dart';
+import 'package:gerestock/pages/mouvementsDeStock/confirmEntrees.dart';
 import 'package:gerestock/pages/mouvementsDeStock/entrees.dart';
 import 'package:gerestock/pages/facturations/facturation1.dart';
 import 'package:gerestock/pages/facturations/facturation2.dart';
@@ -62,6 +62,8 @@ class MyApp extends StatelessWidget {
         '/Encaissement': (BuildContext context) => Encaissement(),
         '/Décaissement': (BuildContext context) => Decaissement(),
         '/FicheEntrees': (BuildContext context) => FicheEntrees(),
+        '/ConfirmEntrees': (BuildContext context) => ConfirmEntrees(),
+        '/NouvelleDepense': (BuildContext context) => NouvelleDepense(),
       },
     );
   }
