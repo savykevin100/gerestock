@@ -17,7 +17,7 @@ class _FournisseurDetailState extends State<FournisseurDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Profil"),
+      appBar: appBar(context, "Profil"),
       body: ListView(
         children: [
           SizedBox(height: longueurPerCent(50, context),),
