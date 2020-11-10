@@ -1,34 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/constantsWidgets.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
-import 'package:gerestock/constantes/appBar.dart';
-class FicheEntrees extends StatefulWidget {
 
+class NouvelleDepense extends StatefulWidget {
   @override
-  _FicheEntreesState createState() => _FicheEntreesState();
+  _NouvelleDepenseState createState() => _NouvelleDepenseState();
 }
 
-class _FicheEntreesState extends State<FicheEntrees> {
-
+class _NouvelleDepenseState extends State<NouvelleDepense> {
   String dateInput;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:appBarWithSearch(context,"Entrées"),
+      appBar: appBarWithSearch(context,"Dépenses"),
       body: ListView(
         children: [
           SizedBox(height: longueurPerCent(20, context),),
-          TextClasse(text: "Nouvelle entrée",color: Colors.black,fontSize: 30,textAlign: TextAlign.center, family: "MonserratBold"),
+          TextClasse(text: "Nouvelle dépense",color: Colors.black,fontSize: 30,textAlign: TextAlign.center, family: "MonserratBold"),
           SizedBox(height: longueurPerCent(20, context),),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              nameOfFieldWithPadding("Date de réception", context),
+              Flexible(child: nameOfFieldWithPadding("Date de l'opération", context)),
               InkWell(
                 onTap: (){
                   DatePicker.showDatePicker(context,
@@ -59,71 +57,19 @@ class _FicheEntreesState extends State<FicheEntrees> {
             ],
           ),
           SizedBox(height: longueurPerCent(20, context),),
-          textFieldWidgetWithNameOfField(nameOfFieldWithPadding("N° de bordereau", context), context),
+          textFieldWidgetWithNameOfField(nameOfFieldWithPadding("Numéro", context), context),
           SizedBox(height: longueurPerCent(20, context),),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              nameOfFieldWithPadding("Fournisseur", context),
-              InkWell(
-                onTap: (){
-
-                },
-                child: Container(
-                  height: longueurPerCent(41, context),
-                  width: largeurPerCent(210, context),
-                  margin: EdgeInsets.only(right: largeurPerCent(22, context)),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(3),
-                    border: Border.all(width: 1.0, color: HexColor("#707070")),
-                  ),
-                  child:  DropdownButton(
-                    underline: Text(""),
-                    hint: "" == null
-                        ? Text(
-                      'Payement',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                      ),
-                    )
-                        : Text(
-                      "",
-                      maxLines: 1,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                    isExpanded: true,
-                    iconSize: 30.0,
-                    items:
-                    ["SAVY Kévin", "Jean de dieu Houbgelo"].map(
-                          (val) {
-                        return DropdownMenuItem<String>(
-                          value: val,
-                          child: Text(val,),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (val) {
-
-                    },
-                  ),
-                ),
-              )
-            ],
-          ),
+          Flexible(child: textFieldWidgetWithNameOfField(nameOfFieldWithPadding("Dépense", context), context)),
           SizedBox(height: longueurPerCent(20, context),),
-          textFieldWidgetWithNameOfField(nameOfFieldWithPadding("Livreur", context), context),
+          Flexible(child: textFieldWidgetWithNameOfField(nameOfFieldWithPadding("Montant", context), context)),
           SizedBox(height: longueurPerCent(100, context),),
-          submitButton(context, "CONTINUER", (){
-            Navigator.of(context).pushNamed("/ConfirmEntrees");
+          submitButton(context, "ENREGISTRER", (){
+            //Navigator.of(context).pushNamed("/ConfirmEntrees");
           })
         ],
       ),
     );
   }
-
   TextClasse  displayRecapTextBold(String text){
     return TextClasse(text: text, color: HexColor("#001C36"), family: "MonserratBold", fontSize: 9,);
   }

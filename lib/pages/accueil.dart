@@ -26,7 +26,7 @@ class _AccueilPageState extends State<Accueil> {
     double deviceHeight = queryData.size.height;
 
     return new Scaffold(
-      appBar:  appBar(context,"Accueil"),
+      appBar:  AppBar(title: Text("Accueil"),backgroundColor: bleuPrincipale,),
         drawer: Drawer(),
         body: GridView.count(
                 shrinkWrap: true,

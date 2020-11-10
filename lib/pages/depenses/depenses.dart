@@ -18,7 +18,7 @@ class _DepensesState extends State<Depenses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context,"Dépenses"),
+      appBar: appBarWithSearch(context,"Dépenses"),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
         child: StaggeredGridView.countBuilder(
@@ -59,8 +59,7 @@ class _DepensesState extends State<Depenses> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //Navigator.of(context).pushNamed("/FicheClient");
-
+          Navigator.of(context).pushNamed("/NouvelleDepense");
         },
         child: Icon(Icons.add, color: white,),
         backgroundColor: primaryColor,

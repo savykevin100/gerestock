@@ -39,10 +39,9 @@ class _Facturation1State extends State<Facturation1> {
                  DatePicker.showDatePicker(context,
                      showTitleActions: true,
                      minTime: DateTime(1900, 1, 1),
-                     maxTime: DateTime(2018, 6, 7), onChanged: (date) {
+                     maxTime: DateTime(2040, 12, 31), onChanged: (date) {
                        setState(() {
                          dateInput = date.toString().substring(0, 10);
-                         print(dateInput);
                        });
                      }, onConfirm: (date) {
                        setState(() {
