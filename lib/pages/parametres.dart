@@ -4,7 +4,13 @@ import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+
+
 class Parametres extends StatefulWidget {
+  String email;
+
+  Parametres({this.email});
+
   @override
   ParametresState createState() => ParametresState();
 }
@@ -30,12 +36,22 @@ class ParametresState extends State<Parametres>
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.email==null){
+     setState(() {
+       _status = true;
+     });
+    }
+    else {
+      setState(() {
+        _status=false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: appBar(context,"Parametres"),
+      appBar: appBar(context,"Paramètres"),
         body: new Container(
           color: Colors.white,
           child: new ListView(
@@ -95,17 +111,17 @@ class ParametresState extends State<Parametres>
                                     )
                                   ],
                                 )),
-                            Padding(
+                            (_status)? Padding(
                                 padding: EdgeInsets.only(top: 180.0, left: 20.0),
                                 child: new Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                   Text("Nom de l'entreprise",style: TextStyle(
-                                     fontFamily: "Montserrat",fontWeight: FontWeight.bold,
-                                     fontSize: 20,color: bleuPrincipale
-                                   ),)
+                                    Text("LYNX SOTERIA",style: TextStyle(
+                                        fontFamily: "Montserrat",fontWeight: FontWeight.bold,
+                                        fontSize: 20,color: bleuPrincipale
+                                    ),)
                                   ],
-                                )),
+                                )):Text("")
                           ]),
                         )
                       ],
@@ -119,7 +135,7 @@ class ParametresState extends State<Parametres>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Padding(
+                          (_status)? Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
                               child: new Row(
@@ -145,6 +161,43 @@ class ParametresState extends State<Parametres>
                                       _status ? _getEditIcon() : new Container(),
                                     ],
                                   )
+                                ],
+                              )):Text(""),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
+                                        "Nom de l'entreprise",
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                        fontFamily: "Montserrat"),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 2.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Flexible(
+                                    child: new TextField(
+                                      decoration: const InputDecoration(
+                                        hintText: "Entrer le nom de l'entreprise",
+                                      ),
+                                      enabled: !_status,
+                                      autofocus: !_status,
+                                    ),
+                                  ),
                                 ],
                               )),
                           Padding(
@@ -297,6 +350,10 @@ class ParametresState extends State<Parametres>
                                 ],
                               )),
                           !_status ? _getActionButtons() : new Container(),
+                          IconButton(icon: Icon(Icons.ac_unit), onPressed: (){
+                            Navigator.of(context).pushNamed("/accueil");
+
+                          })
                         ],
                       ),
                     ),

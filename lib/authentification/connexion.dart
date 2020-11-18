@@ -130,7 +130,7 @@ class _InscriptionState extends State<Connexion> {
                 SizedBox(height: longueurPerCent(80, context),),
                 submitButton(context, "SE CONNECTER", () async {
                   if(_formKey.currentState.validate()) {
-                    EasyLoading.show(status: 'loading...');
+                    EasyLoading.show(status: 'Chargement');
                     try{
                       final user = await _auth.signInWithEmailAndPassword(email: email , password: motDePass);
                       if(user!=null){

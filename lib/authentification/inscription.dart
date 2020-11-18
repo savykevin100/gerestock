@@ -9,7 +9,7 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
-import 'package:gerestock/pages/accueil.dart';
+import 'package:gerestock/pages/parametres.dart';
 class Inscription extends StatefulWidget {
   @override
   _InscriptionState createState() => _InscriptionState();
@@ -150,7 +150,7 @@ class _InscriptionState extends State<Inscription> {
                 SizedBox(height: longueurPerCent(60, context),),
                 submitButton(context, "S'INSCRIRE", () async {
                   if(_formKey.currentState.validate()) {
-                    EasyLoading.show(status: 'loading...');
+                    EasyLoading.show(status: 'Chargement');
                     try {
                       final user= await _auth.createUserWithEmailAndPassword(email: email, password: motDePass);
                       /*if(user!=null ) {
@@ -160,7 +160,7 @@ class _InscriptionState extends State<Inscription> {
                       }*/
                       EasyLoading.dismiss();
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                        return Accueil();
+                        return Parametres(email: email);
                       }));
                     } catch(e){
                       EasyLoading.dismiss();
