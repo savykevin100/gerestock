@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gerestock/constantes/appBar.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/constantes/color.dart';
@@ -26,25 +28,74 @@ class _AccueilPageState extends State<Accueil> {
     double deviceHeight = queryData.size.height;
 
     return new Scaffold(
-      appBar:  AppBar(title: Text("Accueil"),backgroundColor: bleuPrincipale,),
+      appBar:  AppBar(
+        title: TextClasse(text: "Accueil", color: white, fontSize: 20, textAlign: TextAlign.center, family: "MonserratBold",),
+        actions: [
+          IconButton(icon: Icon(Icons.logout), onPressed: (){
+            FirebaseAuth.instance.signOut();
+            Navigator.of(context).pushNamed("/connexion");
+          }),
+        ],
+        backgroundColor: primaryColor,
+      ),
         drawer: Drawer(),
-        body: GridView.count(
-                shrinkWrap: true,
-               crossAxisCount: 2,
-                children: <Widget>[
-                  _happyVeganCard( "Nouveau Produit",Colors.green,Icons.add,deviceHeight),
-                  _happyVeganCard( "Clients", Color(0xFFC502FF),Icons.person,deviceHeight),
-                  _happyVeganCard( "Fournisseur", Color(0xFF02C5FF),Icons.shopping_cart,deviceHeight),
-                  _happyVeganCard( "Mouvement de Stock", Color(0xFF707070),Icons.cached,deviceHeight),
-                  _happyVeganCard( "Facturation", Color(0xFFFF8002),Icons.cached,deviceHeight),
-                  _happyVeganCard( "Caisse", Color(0xFF092648),Icons.cached,deviceHeight),
-                  _happyVeganCard( "Inventaire", Color(0xFF026DFF),Icons.list,deviceHeight),
-                  _happyVeganCard( "Abonnement", Color(0xFFFF0202),Icons.cached,deviceHeight),
-                  _happyVeganCard( "Dépenses", Color(0xFFFC2872),Icons.book,deviceHeight),
-                  _happyVeganCard( "Paramètres", Color(0xFFC9C9C9),Icons.settings,deviceHeight),
-                ],
-              ),
+        body: WillPopScope(
+          onWillPop: onBackPressed,
+          child: Container(
+            margin: EdgeInsets.symmetric(vertical: 20),
+            height: double.infinity,
+            child: GridView.count(
+                    shrinkWrap: true,
+                   crossAxisCount: 2,
+                    children: <Widget>[
+                      _happyVeganCard( "Produits",Colors.green,Icons.add,deviceHeight),
+                      _happyVeganCard( "Clients", Color(0xFFC502FF),Icons.person,deviceHeight),
+                      _happyVeganCard( "Fournisseur", Color(0xFF02C5FF),Icons.shopping_cart,deviceHeight),
+                      _happyVeganCard( "Mouvement de Stock", Color(0xFF707070),Icons.cached,deviceHeight),
+                      _happyVeganCard( "Facturation", Color(0xFFFF8002),Icons.cached,deviceHeight),
+                      _happyVeganCard( "Caisse", Color(0xFF092648),Icons.cached,deviceHeight),
+                      _happyVeganCard( "Inventaire", Color(0xFF026DFF),Icons.list,deviceHeight),
+                      _happyVeganCard( "Abonnement", Color(0xFFFF0202),Icons.cached,deviceHeight),
+                      _happyVeganCard( "Dépenses", Color(0xFFFC2872),Icons.book,deviceHeight),
+                      _happyVeganCard( "Paramètres", Color(0xFFC9C9C9),Icons.settings,deviceHeight),
+                    ],
+                  ),
+          ),
+        ),
         );
+  }
+
+
+  Future<bool> onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text("Fermer l'application",  style: TextStyle( color:primaryColor,
+            fontSize: 15.0,
+            fontFamily: "MonserratBold")),
+        content: new Text("Voulez-vous quitter l'application?",  style: TextStyle(fontFamily: "MonserratLight")),
+        actions: <Widget>[
+          new GestureDetector(
+              onTap: () => Navigator.of(context).pop(false),
+              child: Text("NON", style: TextStyle( color: primaryColor,
+                  fontSize: 12.0,
+                  fontFamily: "MonserratBold"),)
+          ),
+          SizedBox(height: longueurPerCent(10, context),),
+
+          SizedBox(width: largeurPerCent(50, context),),
+          new GestureDetector(
+              onTap: () => exit(0),
+              child: Text("OUI", style: TextStyle( color:primaryColor,
+                  fontSize: 12.0,
+                  fontFamily: "MonserratBold"),)
+          ),
+          SizedBox(height: longueurPerCent(10, context),),
+          SizedBox(width: largeurPerCent(20, context),),
+        ],
+      ),
+    ) ??
+        false;
   }
 
   Widget _happyVeganCard(String title, Color couleur,IconData icone ,double deviceHeight) {

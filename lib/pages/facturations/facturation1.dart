@@ -126,8 +126,10 @@ class _Facturation1State extends State<Facturation1> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    displayRecapTextBold("Nom du produit"),
-                    displayRecapTextBold("Entrées"),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: displayRecapTextBold("Nom du produit"),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(right: 55),
                       child: displayRecapTextBold("Quantité"),
@@ -148,39 +150,10 @@ class _Facturation1State extends State<Facturation1> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  height: longueurPerCent(31, context),
-                                  width: largeurPerCent(100, context),
-                                  margin: EdgeInsets.only(right: largeurPerCent(22, context)),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(3),
-                                    border: Border.all(width: 1.0, color: HexColor("#707070")),
-                                  ),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                        enabledBorder: InputBorder.none
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: longueurPerCent(31, context),
-                                  width: largeurPerCent(100, context),
-                                  margin: EdgeInsets.only(right: largeurPerCent(22, context)),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(3),
-                                    border: Border.all(width: 1.0, color: HexColor("#707070")),
-                                  ),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                        enabledBorder: InputBorder.none
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 5),
+                                Expanded(
+                                  flex:2,
                                   child: Container(
                                     height: longueurPerCent(31, context),
-                                    width: largeurPerCent(100, context),
                                     margin: EdgeInsets.only(right: largeurPerCent(22, context)),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(3),
@@ -189,6 +162,26 @@ class _Facturation1State extends State<Facturation1> {
                                     child: TextField(
                                       decoration: InputDecoration(
                                           enabledBorder: InputBorder.none
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                flex:1,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 5),
+                                    child: Container(
+                                      height: longueurPerCent(31, context),
+                                      width: largeurPerCent(100, context),
+                                      margin: EdgeInsets.only(right: largeurPerCent(22, context)),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(3),
+                                        border: Border.all(width: 1.0, color: HexColor("#707070")),
+                                      ),
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                            enabledBorder: InputBorder.none
+                                        ),
                                       ),
                                     ),
                                   ),
