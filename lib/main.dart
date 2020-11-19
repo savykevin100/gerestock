@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gerestock/authentification/connexion.dart';
+import 'package:gerestock/authentification/informations_supplementaire.dart';
 import 'package:gerestock/authentification/inscription.dart';
 import 'package:gerestock/pages/abonnement.dart';
 import 'package:gerestock/pages/accueil.dart';
@@ -28,12 +29,30 @@ import 'package:gerestock/pages/mouvementsDeStock/sorties.dart';
 import 'package:gerestock/spash_screen.dart';
 import 'package:gerestock/test.dart';
 
+import 'constantes/hexadecimal.dart';
 import 'pages/mouvementsDeStock/ficheEntrees.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(new MyApp());
+  configLoading();
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
 }
 
 class MyApp extends StatelessWidget {
@@ -48,7 +67,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Gerestock',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor:HexColor("#3675BD"),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashScreen(),
@@ -78,6 +97,7 @@ class MyApp extends StatelessWidget {
         '/NouvelleDepense': (BuildContext context) => NouvelleDepense(),
         '/HomePage': (BuildContext context) => HomePage(),
         '/SpashScreen': (BuildContext context) => SplashScreen(),
+        '/InformationSupplementaires': (BuildContext context) => InformationSupplementaire(),
       },
       builder: (BuildContext context, Widget child) {
         /// make sure that loading can be displayed in front of all other widgets

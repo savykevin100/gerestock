@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/color.dart';
+import 'package:gerestock/constantes/submit_button.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
@@ -32,6 +33,7 @@ class ParametresState extends State<Parametres>
       }
     });
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -95,7 +97,7 @@ class ParametresState extends State<Parametres>
                               ],
                             ),
                             Padding(
-                                padding: EdgeInsets.only(top: 100.0, left: 100.0),
+                                padding: EdgeInsets.only(top: 50.0, left: 100.0),
                                 child: new Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
@@ -146,12 +148,7 @@ class ParametresState extends State<Parametres>
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      new Text(
-                                        'Informations personnelles',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                        fontFamily: "Montserrat"),
-                                      ),
+
                                     ],
                                   ),
                                   new Column(
@@ -349,10 +346,11 @@ class ParametresState extends State<Parametres>
                                   ),
                                 ],
                               )),
-                          !_status ? _getActionButtons() : new Container(),
-                          IconButton(icon: Icon(Icons.ac_unit), onPressed: (){
+                          SizedBox(height: 50,),
+                          !_status ?  submitButton(context, "CONFIRMER", (){
                             Navigator.of(context).pushNamed("/accueil");
-
+                          }) :submitButton(context, "CONFIRMER", (){
+                            Navigator.of(context).pushNamed("/accueil");
                           })
                         ],
                       ),

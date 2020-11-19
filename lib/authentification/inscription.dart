@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:gerestock/authentification/informations_supplementaire.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/color.dart';
@@ -160,7 +161,7 @@ class _InscriptionState extends State<Inscription> {
                       }*/
                       EasyLoading.dismiss();
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                        return Parametres(email: email);
+                        return InformationSupplementaire(email: email);
                       }));
                     } catch(e){
                       EasyLoading.dismiss();
