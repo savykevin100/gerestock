@@ -20,13 +20,13 @@ Color white = Colors.white;*/
   }
 
 
- Widget textFieldWidgetWithNameOfField(Widget nameField, BuildContext context){
+ Widget textFieldWidgetWithNameOfField(Widget nameField, BuildContext context, TextEditingController controller, TextInputType inputType){
    return Row(
      mainAxisAlignment: MainAxisAlignment.spaceBetween,
      children: [
        nameField,
        Container(
-         height: longueurPerCent(41, context),
+         height: 41,
          width: largeurPerCent(210, context),
          margin: EdgeInsets.only(right: largeurPerCent(22, context)),
          decoration: BoxDecoration(
@@ -34,7 +34,11 @@ Color white = Colors.white;*/
            border: Border.all(width: 1.0, color: HexColor("#707070")),
          ),
          child: TextField(
+           keyboardType: inputType,
+           maxLines: null,
+           controller: controller,
            decoration: InputDecoration(
+             contentPadding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
                enabledBorder: InputBorder.none
            ),
          ),

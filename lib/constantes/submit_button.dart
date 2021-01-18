@@ -12,7 +12,7 @@ InkWell submitButton(BuildContext context, String text, Function onTap, ){
     onTap: onTap,
     child: Center(
       child: Container(
-        height: longueurPerCent(41, context),
+        height:41,
         width: largeurPerCent(239, context),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(7)),

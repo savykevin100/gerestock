@@ -11,6 +11,7 @@ import 'package:gerestock/pages/accueil.dart';
 
 
 class SplashScreen extends StatefulWidget {
+  static String emailEntreprise;
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -29,10 +30,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
 
-
-
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -41,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if(value!=null){
         setState(()  {
           currentUser=true;
+          SplashScreen.emailEntreprise = value.email;
         });
       }
     });

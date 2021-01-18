@@ -24,107 +24,109 @@ class _MouvementDeStockState extends State<MouvementDeStock> {
     double deviceHeight = queryData.size.height;
     return Scaffold(
       appBar: appBar(context,"Mouvements de Stock"),
-      body: ListView(
-        children: [
-          SizedBox(height: longueurPerCent(20, context),),
-         Row(
-           mainAxisAlignment: MainAxisAlignment.center,
-           children: [
-             _happyVeganCard( "Entrées",bleuPrincipale,Icons.arrow_downward,deviceHeight),
-             _happyVeganCard( "Sorties", Color(0xFFB2C40F),Icons.arrow_upward,deviceHeight),
-           ],
-         ),
-          Card(
-              margin: EdgeInsets.symmetric(horizontal: largeurPerCent(21, context), vertical: longueurPerCent(46, context)),
-              child: Container(
-                height: 500,
-                width: double.infinity,
-                child: ListView(
-                  children: [
-                    SizedBox(height: 20,),
-                    TextClasse(text: "Historique", textAlign: TextAlign.center, fontSize: 20, family: "MonserratBold",),
-                    SizedBox(height: 20,),
-                    Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                displayRecapTextBold("    "),
-                                Expanded(
-                                    flex:1,
-                                    child: displayRecapTextBold("Date de l'opération")),
-                                Expanded(
-                                    flex:1,
-                                    child: displayRecapTextBold("Numéro de borderau ou facture")),
-                                Expanded(
-                                    flex: 1,
-                                    child: displayRecapTextBold("Fournisseur ou Client")),
-                                Expanded(
-                                    flex: 1,
-                                    child: displayRecapTextBold("Quantité")),
-                              ],
-                            ),
-                            SizedBox(height: 20,),
-                            StaggeredGridView.countBuilder(
-                              crossAxisCount: 1,
-                              itemCount: 2,
-                              itemBuilder: (context, i) {
-                                return Container(
-                                  width: double.infinity,
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            height: 13,
-                                            width: 4,
-                                            color: primaryColor,
-                                          ),
-                                          Text("   "),
-                                          autoSizeTextGreyEntrer("18/02/2020"),
-                                          autoSizeTextGreyEntrer("686868"),
-                                          autoSizeTextGreyEntrer("SAHA Enterprise"),
-                                          autoSizeTextGreyEntrer("3.000")
-                                        ],
-                                      ),
-                                      Divider(color: HexColor("#ADB3C4"),),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            height: 13,
-                                            width: 4,
-                                            color: HexColor("#B2C40F"),
-                                          ),
-                                          Text("   "),
-                                          autoSizeTextGreySorti("18/02/2020"),
-                                          autoSizeTextGreySorti("686868"),
-                                          autoSizeTextGreySorti("SAHA Enterprise"),
-                                          autoSizeTextGreySorti("3.000")
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+           Row(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+               _happyVeganCard( "Entrées",bleuPrincipale,Icons.arrow_downward,deviceHeight),
+               _happyVeganCard( "Sorties", Color(0xFFB2C40F),Icons.arrow_upward,deviceHeight),
+             ],
+           ),
+           /* Card(
+                margin: EdgeInsets.symmetric(horizontal: largeurPerCent(21, context), vertical: longueurPerCent(46, context)),
+                child: Container(
+                  height: 500,
+                  width: double.infinity,
+                  child: ListView(
+                    children: [
+                      SizedBox(height: 20,),
+                      TextClasse(text: "Historique", textAlign: TextAlign.center, fontSize: 20, family: "MonserratBold",),
+                      SizedBox(height: 20,),
+                      Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  displayRecapTextBold("    "),
+                                  Expanded(
+                                      flex:1,
+                                      child: displayRecapTextBold("Date de l'opération")),
+                                  Expanded(
+                                      flex:1,
+                                      child: displayRecapTextBold("Numéro de borderau ou facture")),
+                                  Expanded(
+                                      flex: 1,
+                                      child: displayRecapTextBold("Fournisseur ou Client")),
+                                  Expanded(
+                                      flex: 1,
+                                      child: displayRecapTextBold("Quantité")),
+                                ],
+                              ),
+                              SizedBox(height: 20,),
+                              StaggeredGridView.countBuilder(
+                                crossAxisCount: 1,
+                                itemCount: 2,
+                                itemBuilder: (context, i) {
+                                  return Container(
+                                    width: double.infinity,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              height: 13,
+                                              width: 4,
+                                              color: primaryColor,
+                                            ),
+                                            Text("   "),
+                                            autoSizeTextGreyEntrer("18/02/2020"),
+                                            autoSizeTextGreyEntrer("686868"),
+                                            autoSizeTextGreyEntrer("SAHA Enterprise"),
+                                            autoSizeTextGreyEntrer("3.000")
+                                          ],
+                                        ),
+                                        Divider(color: HexColor("#ADB3C4"),),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              height: 13,
+                                              width: 4,
+                                              color: HexColor("#B2C40F"),
+                                            ),
+                                            Text("   "),
+                                            autoSizeTextGreySorti("18/02/2020"),
+                                            autoSizeTextGreySorti("686868"),
+                                            autoSizeTextGreySorti("SAHA Enterprise"),
+                                            autoSizeTextGreySorti("3.000")
+                                          ],
+                                        ),
+                                      ],
+                                    ),
 
-                                );
-                              },
-                              staggeredTileBuilder: (_) => StaggeredTile.fit(2),
-                              mainAxisSpacing: 10.0,
-                              crossAxisSpacing: 0.0,
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                            )
-                          ],
-                        )
-                    ),
-                  ],
-                ),
-              )
-          ),
-        ],
+                                  );
+                                },
+                                staggeredTileBuilder: (_) => StaggeredTile.fit(2),
+                                mainAxisSpacing: 10.0,
+                                crossAxisSpacing: 0.0,
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                              )
+                            ],
+                          )
+                      ),
+                    ],
+                  ),
+                )
+            ),*/
+          ],
+        ),
       ),
     );
   }
@@ -183,7 +185,7 @@ class _MouvementDeStockState extends State<MouvementDeStock> {
               borderRadius: BorderRadius.circular(5.0),
             ),
             child: Container(
-                height: (deviceHeight/3.8),
+                height: 200,
                 width: MediaQuery.of(context).size.width/2,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(

@@ -9,6 +9,8 @@ import 'package:flutter/widgets.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/constantes/color.dart';
+import 'package:gerestock/pages/profileSettings.dart';
+import 'package:gerestock/widgets/fournisseurs/fournisseursClientsWidget.dart';
 
 class Accueil extends StatefulWidget {
   Accueil() : super();
@@ -30,16 +32,10 @@ class _AccueilPageState extends State<Accueil> {
     return new Scaffold(
       appBar:  AppBar(
         title: TextClasse(text: "Accueil", color: white, fontSize: 20, textAlign: TextAlign.center, family: "MonserratBold",),
-        actions: [
-          IconButton(icon: Icon(Icons.logout), onPressed: (){
-            FirebaseAuth.instance.signOut();
-            Navigator.of(context).pushNamed("/connexion");
-          }),
-        ],
         backgroundColor: primaryColor,
       ),
-        drawer: Drawer(),
-        body: WillPopScope(
+      drawer: ProfileSettings(),
+      body: WillPopScope(
           onWillPop: onBackPressed,
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 20),
@@ -50,7 +46,7 @@ class _AccueilPageState extends State<Accueil> {
                     children: <Widget>[
                       _happyVeganCard( "Produits",Colors.green,Icons.add,deviceHeight),
                       _happyVeganCard( "Clients", Color(0xFFC502FF),Icons.person,deviceHeight),
-                      _happyVeganCard( "Fournisseur", Color(0xFF02C5FF),Icons.shopping_cart,deviceHeight),
+                      _happyVeganCard( "Fournisseurs", Color(0xFF02C5FF),Icons.shopping_cart,deviceHeight),
                       _happyVeganCard( "Mouvement de Stock", Color(0xFF707070),Icons.cached,deviceHeight),
                       _happyVeganCard( "Facturation", Color(0xFFFF8002),Icons.cached,deviceHeight),
                       _happyVeganCard( "Caisse", Color(0xFF092648),Icons.cached,deviceHeight),
@@ -100,12 +96,17 @@ class _AccueilPageState extends State<Accueil> {
 
   Widget _happyVeganCard(String title, Color couleur,IconData icone ,double deviceHeight) {
     void moveToFoodDetailsScreen() {
+      if(title=="Clients" || title=="Fournisseurs"){
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+          return FournisseursClientsWidget(title: title,);
+        }));
+      } else
       Navigator.of(context).pushNamed("/"+title);
     }
     return new GestureDetector(
       onTap: () => moveToFoodDetailsScreen(),
       child: Container(
-          width: largeurPerCent(175, context),
+          width: 200,
           padding:EdgeInsets.only(left: 5.0,right: 5.0),
           child: Card(
             elevation: 2.0,

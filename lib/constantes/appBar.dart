@@ -27,7 +27,7 @@ AppBar appBarWithSearch(BuildContext context,String titre){
     title: TextClasse(text: titre, color: white, fontSize: 20, family: "MonserratBold",),
     actions: [
       IconButton(
-          icon:Icon(Icons.list,color:Colors.white)
+          icon:Icon(Icons.list,color:Colors.white), onPressed: () {  },
       ),
     ],
   );

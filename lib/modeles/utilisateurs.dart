@@ -1,46 +1,47 @@
 class Utilisateur {
   String email;
   String logo;
-  String nomDeLentreprise;
-  String secteurActivite;
+  String companyName;
+  String activitySector;
   String ifu;
-  String pays;
-  String numeroTelephone;
-  String adresse;
+  String country;
+  String telephoneNumber;
+  String address;
+
 
 
   Utilisateur(
       {this.email,
       this.logo,
-      this.nomDeLentreprise,
-      this.secteurActivite,
+      this.companyName,
+      this.activitySector,
       this.ifu,
-      this.pays,
-      this.numeroTelephone,
-      this.adresse
+      this.country,
+      this.telephoneNumber,
+      this.address
       });
 
   Utilisateur.fromMap(Map<String, dynamic> donnees, String id)
       : email = donnees["email"],
         logo = donnees["logo"],
-        nomDeLentreprise = donnees["nomDeLentreprise"],
-        secteurActivite = donnees["secteurActivite"],
+        companyName = donnees["companyName"],
+        activitySector= donnees["activitySector"],
         ifu = donnees["ifu"],
-        pays = donnees["pays"],
-        numeroTelephone = donnees["numeroTelephone"],
-        adresse = donnees["adresse"];
+        country = donnees["country"],
+        telephoneNumber = donnees["telephoneNumber"],
+        address = donnees["address"];
 
 
       Map<String, dynamic> toMap() {
     return {
       "email": email,
       "logo": logo,
-      "nomDeLentreprise": nomDeLentreprise,
-      "secteurActivite": secteurActivite,
+      "companyName": companyName,
+      "activitySector": activitySector,
       "ifu": ifu,
-      "pays": pays,
-      "numeroTelephone": numeroTelephone,
-      "adresse": adresse,
+      "country": country,
+      "telephoneNumber": telephoneNumber,
+      "address": address,
     };
   }
 }

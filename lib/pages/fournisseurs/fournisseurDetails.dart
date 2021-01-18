@@ -5,7 +5,6 @@ import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/submit_button.dart';
-import 'package:gerestock/constantes/text_classe.dart';
 
 
 class FournisseurDetail extends StatefulWidget {

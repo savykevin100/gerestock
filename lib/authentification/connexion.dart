@@ -25,6 +25,7 @@ class _InscriptionState extends State<Connexion> {
   final _formKey = GlobalKey<FormState>();
   FirebaseAuth _auth = FirebaseAuth.instance;
 
+  
 
 
   Future<bool> onBackPressed() {
@@ -59,6 +60,34 @@ class _InscriptionState extends State<Connexion> {
         false;
   }
 
+
+
+  showAlertDialog(BuildContext context, String text) {
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("RETOUR"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("ALERTE"),
+      content: Text(text),
+      actions: [
+        cancelButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
 
   @override
@@ -144,7 +173,10 @@ class _InscriptionState extends State<Connexion> {
                       print(e.toString());
                       if(e.toString()=="[firebase_auth/wrong-password] The password is invalid or the user does not have a password.")
                         showAlertDialog(context, "Mot de passe incorrect");
-                      else  showAlertDialog(context, "Aucun email ne correspond à l'email entré");
+                      else if(e.toString()=="[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.")
+                        showAlertDialog(context, "Aucun email ne correspond à l'email entré");
+                      else
+                        showAlertDialog(context, "Veuillez vérifier votre connexion internet");
                     }
                   }
                 }),
@@ -175,31 +207,5 @@ class _InscriptionState extends State<Connexion> {
   }
 
 
-  showAlertDialog(BuildContext context, String text) {
 
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("Retour"),
-      onPressed:  () {
-        Navigator.pop(context);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("ALERT"),
-      content: Text(text),
-      actions: [
-        cancelButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
 }

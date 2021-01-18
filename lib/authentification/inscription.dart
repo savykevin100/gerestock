@@ -10,7 +10,8 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
-import 'package:gerestock/pages/parametres.dart';
+
+
 class Inscription extends StatefulWidget {
   @override
   _InscriptionState createState() => _InscriptionState();
@@ -108,6 +109,7 @@ class _InscriptionState extends State<Inscription> {
                         fontSize: 18,
                         fontFamily: "MonserratBold"
                     ),
+                    obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Mot de passe',
                         hintStyle: TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
@@ -134,6 +136,7 @@ class _InscriptionState extends State<Inscription> {
                         fontSize: 18,
                         fontFamily: "MonserratBold"
                     ),
+                    obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Confirmation mot de passe',
                         hintStyle: TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
@@ -153,7 +156,7 @@ class _InscriptionState extends State<Inscription> {
                   if(_formKey.currentState.validate()) {
                     EasyLoading.show(status: 'Chargement');
                     try {
-                      final user= await _auth.createUserWithEmailAndPassword(email: email, password: motDePass);
+                      await _auth.createUserWithEmailAndPassword(email: email, password: motDePass);
                       /*if(user!=null ) {
                         _auth.currentUser().then((value) {
                           value.sendEmailVerification();
@@ -166,7 +169,10 @@ class _InscriptionState extends State<Inscription> {
                     } catch(e){
                       EasyLoading.dismiss();
                       print(e.toString());
+                      if(e.toString()=="[firebase_auth/email-already-in-use] The email address is already in use by another account.")
                       showAlertDialog(context, "Votre email est déjà utilisé par un autre compte");
+                      else
+                        showAlertDialog(context, "Veuillez vérifier votre connexion internet");
                     }
                   }
                 }),

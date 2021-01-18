@@ -1,4 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gerestock/constantes/appBar.dart';
@@ -6,52 +8,135 @@ import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
+import 'package:gerestock/helper.dart';
+import 'package:gerestock/modeles/entrer_models.dart';
+import 'package:gerestock/pages/mouvementsDeStock/detailsEntrer.dart';
 class Entrees extends StatefulWidget {
   @override
   _EntreesState createState() => _EntreesState();
 }
 
 class _EntreesState extends State<Entrees> {
+
+   CollectionReference _users= Firestore.instance
+      .collection("Utilisateurs");
+  String _emailEntreprise;
+
+  Future<User> getUser() async {
+    return FirebaseAuth.instance.currentUser;
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser().then((value){
+      if(value!=null){
+        setState(()  {
+          _emailEntreprise = value.email;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarWithSearch(context,"Entrées"),
-      body: Container(
-        margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
-        child: StaggeredGridView.countBuilder(
-          crossAxisCount: 1,
-          itemCount: 2,
-          itemBuilder: (context, i) {
-            return Container(
-              width: double.infinity,
-              child: Column(
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: 13,
-                        width: 4,
-                        color: primaryColor,
-                      ),
-                      Text("   "),
-                      autoSizeTextGreyEntrer("18/02/2020"),
-                      autoSizeTextGreyEntrer("686868"),
-                      autoSizeTextGreyEntrer("SAHA Enterprise"),
-                      SizedBox(width: 10,),
-                      autoSizeTextGreyEntrer("3.000")
-                    ],
-                  ),
-                  Divider(color: HexColor("#ADB3C4"),),
+                  displayRecapTextBold("    "),
+                  Expanded(
+                      flex:1,
+                      child: displayRecapTextBold("Date de l'opération")),
+                  Expanded(
+                      flex:1,
+                      child: displayRecapTextBold("Nombre de produits")),
+                  Expanded(
+                      flex: 1,
+                      child: displayRecapTextBold("Fournisseur")),
+                  Expanded(
+                      flex: 1,
+                      child: displayRecapTextBold("Montant")),
+                  Expanded(
+                      flex: 1,
+                      child: displayRecapTextBold("Recap")),
                 ],
               ),
+              StreamBuilder(
+                stream:  _users
+                    .doc(_emailEntreprise)
+                    .collection("Entrees")
+                    .orderBy("created", descending: true)
+                    .snapshots(),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError || !snapshot.hasData)
+                    return Center(child: CircularProgressIndicator(),);
+                  if (snapshot.connectionState == ConnectionState.waiting)
+                    return Center(child: CircularProgressIndicator(),);
+                  else if(snapshot.connectionState == ConnectionState.none)
+                    return Center(child: Text("Veuillez vérifier votre connexion internet"),);
+                  return StaggeredGridView.countBuilder(
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 1,
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, i) {
+                      return Container(
+                        width: double.infinity,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  height: 13,
+                                  width: 4,
+                                  color: primaryColor,
+                                ),
+                                Text("   "),
+                                autoSizeTextGreyEntrer(snapshot.data.docs[i].data()["dateReceipt"]),
+                                Text("   "),
+                                autoSizeTextGreyEntrer("${snapshot.data.docs[i].data()["products"].length}"),
+                                autoSizeTextGreyEntrer(snapshot.data.docs[i].data()["provider"]),
+                                autoSizeTextGreyEntrer(Helper.currenceFormat(snapshot.data.docs[i].data()["amount"])),
+                                Expanded(
+                                    flex: 1,
+                                    child:IconButton(icon:  Icon(Icons.navigate_next, color: primaryColor, size: 30,), onPressed: (){
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (_) => DetailsEntrer(
+                                            dateReceipt: snapshot.data.docs[i].data()["dateReceipt"],
+                                            provider: snapshot.data.docs[i].data()["provider"],
+                                            amount: snapshot.data.docs[i].data()["amount"],
+                                            deliveryMan: snapshot.data.docs[i].data()["deliveryMan"],
+                                            products: snapshot.data.docs[i].data()["products"],
+                                            )));
+                                    })
+                                )
+                              ],
+                            ),
+                            Divider(color: HexColor("#ADB3C4"),),
+                          ],
+                        ),
 
-            );
-          },
-          staggeredTileBuilder: (_) => StaggeredTile.fit(2),
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 0.0,
-          shrinkWrap: true,
+                      );
+                    },
+                    staggeredTileBuilder: (_) => StaggeredTile.fit(2),
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 0.0,
+                    shrinkWrap: true,
+                  );
+                  // snapshot.data.documents.map((DocumentSnapshot document)
+                },
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -64,6 +149,7 @@ class _EntreesState extends State<Entrees> {
       ),
     );
   }
+/* */
 
   TextClasse  displayRecapTextBold(String text){
     return TextClasse(text: text, color: HexColor("#C9C9C9"), family: "MonserratBold", fontSize: 9,);

@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gerestock/constantes/appBar.dart';
-import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/text_classe.dart';
@@ -13,6 +14,8 @@ class Inventaire extends StatefulWidget {
 }
 
 class _InventaireState extends State<Inventaire> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

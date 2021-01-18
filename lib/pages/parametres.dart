@@ -1,498 +1,406 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:gerestock/constantes/appBar.dart';
-import 'package:gerestock/constantes/color.dart';
-import 'package:gerestock/constantes/submit_button.dart';
+
 import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:gerestock/constantes/calcul.dart';
+import 'package:gerestock/constantes/color.dart';
+import 'package:gerestock/constantes/firestore_service.dart';
+import 'package:gerestock/constantes/hexadecimal.dart';
+import 'package:gerestock/constantes/submit_button.dart';
+import 'package:gerestock/constantes/text_classe.dart';
+import 'package:gerestock/modeles/utilisateurs.dart';
 import 'package:image_picker/image_picker.dart';
-
-
+// ignore: must_be_immutable
 class Parametres extends StatefulWidget {
-  String email;
 
-  Parametres({this.email});
 
   @override
-  ParametresState createState() => ParametresState();
+  _ParametresState createState() =>
+      _ParametresState();
 }
 
-class ParametresState extends State<Parametres>
-    with SingleTickerProviderStateMixin {
-  bool _status = true;
-  final FocusNode myFocusNode = FocusNode();
+class _ParametresState extends State<Parametres> {
+  final _formKey = GlobalKey<FormState>();
   File _image;
-  final picker = ImagePicker();
+  String code="+229";
+  String pays="Bénin";
+  String logo="";
+  TextEditingController _nomDeLentreprise = TextEditingController();
+  TextEditingController _secteurActivite = TextEditingController();
+  TextEditingController _ifu = TextEditingController();
+  TextEditingController _numeroTelephone = TextEditingController();
+  TextEditingController _adresse = TextEditingController();
 
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
+
+  String _emailEntreprise;
+  String telephoneNumber;
+  Map<String, dynamic> _userData;
+  bool _enableNomDeLentreprise=false;
+  bool _enableSecteurActivite=false;
+  bool _enableIfu=false;
+  bool _enableNumeroTelephone=false;
+  bool _enableAdresse=false;
+  bool _enableModify=false;
+
+
+
+  Future<User> getUser() async {
+    return FirebaseAuth.instance.currentUser;
+  }
+
+  Future<void> fetchDataUser(){
+    FirebaseFirestore.instance.collection("Utilisateurs").doc(_emailEntreprise).get().then((value) {
+      print(value.data());
+      if(this.mounted)
+        setState(() {
+          _userData = value.data();
+           logo=_userData["logo"];
+          _nomDeLentreprise.text=_userData["companyName"];
+          _secteurActivite.text=_userData["activitySector"];
+          _ifu.text=_userData["ifu"];
+           telephoneNumber=_userData["telephoneNumber"];
+          _adresse.text=_userData["address"];
+        });
     });
   }
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.email==null){
-     setState(() {
-       _status = true;
-     });
-    }
-    else {
-      setState(() {
-        _status=false;
-      });
-    }
+    getUser().then((value){
+      if(value!=null){
+        setState(()  {
+          _emailEntreprise = value.email;
+        });
+        fetchDataUser();
+      }
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: appBar(context,"Paramètres"),
-        body: new Container(
-          color: Colors.white,
-          child: new ListView(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  new Container(
-                    height: 250.0,
-                    color: Colors.white,
-                    child: new Column(
+    return Scaffold(
+      appBar:AppBar(
+        title: TextClasse(text: "Paramètres avancés", color: white, fontSize: 20, textAlign: TextAlign.center, family: "MonserratBold",),
+        backgroundColor: primaryColor,
+      ),
+      body: (_userData!=null)?Card(
+        margin: EdgeInsets.symmetric(
+          horizontal: largeurPerCent(16, context),
+        ),
+        elevation: 5.0,
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          child: Padding(
+            padding:EdgeInsets.symmetric(horizontal: 28),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  SizedBox(height: 20,),
+                  Stack(fit: StackFit.loose, children: <Widget>[
+                    new Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(top: 20.0),
-                          child: new Stack(fit: StackFit.loose, children: <Widget>[
-                            new Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                new CircleAvatar(
-                                    radius: 55,
-                                    backgroundColor:bleuPrincipale,
-                                    child: _image != null
-                                        ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(50),
-                                      child: Image.file(
-                                        _image,
-                                        width: 150,
-                                        height: 150,
-                                        fit: BoxFit.fitHeight,
-                                      ),
-                                    )
-                                        : Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius: BorderRadius.circular(50)),
-                                      width: 140,
-                                      height: 140,
-                                    ),
-                                  //
-                                ),
-                              ],
-                            ),
-                            Padding(
-                                padding: EdgeInsets.only(top: 50.0, left: 100.0),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new CircleAvatar(
-                                      backgroundColor: bleuPrincipale,
-                                      radius: 25.0,
-                                      child: new IconButton(
-                                        icon: Icon(Icons.add,color: Colors.white,),
-                                        onPressed: (){
-                                          getImage();
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                )),
-                            (_status)? Padding(
-                                padding: EdgeInsets.only(top: 180.0, left: 20.0),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text("LYNX SOTERIA",style: TextStyle(
-                                        fontFamily: "Montserrat",fontWeight: FontWeight.bold,
-                                        fontSize: 20,color: bleuPrincipale
-                                    ),)
-                                  ],
-                                )):Text("")
-                          ]),
-                        )
+                        _displayLogo(),
                       ],
                     ),
-                  ),
-                  new Container(
-                    color: Color(0xffFFFFFF),
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 25.0),
-                      child: new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          (_status)? Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-
-                                    ],
-                                  ),
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      _status ? _getEditIcon() : new Container(),
-                                    ],
-                                  )
-                                ],
-                              )):Text(""),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        "Nom de l'entreprise",
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                        fontFamily: "Montserrat"),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration(
-                                        hintText: "Entrer le nom de l'entreprise",
-                                      ),
-                                      enabled: !_status,
-                                      autofocus: !_status,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        "Secteur d'activité",
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                        fontFamily: "Montserrat"),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration(
-                                        hintText: "Entrer votre secteur d'activité",
-                                      ),
-                                      enabled: !_status,
-                                      autofocus: !_status,
-
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Numéro IFU',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontFamily: "Montserrat"
-                                           ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Entrer votre numéro IFU"),
-                                      enabled: !_status,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Numéro de téléphone',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Entrer votre numéro de téléphone"),
-                                      enabled: !_status,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Container(
-                                      child: new Text(
-                                        'Adresse',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            ),
-                                      ),
-                                    ),
-                                    flex: 2,
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Flexible(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(right: 10.0),
-                                      child: new TextField(
-                                        decoration: const InputDecoration(
-                                            hintText: "Entrer votre Adresse"),
-                                        enabled: !_status,
-                                      ),
-                                    ),
-                                    flex: 2,
-                                  ),
-                                ],
-                              )),
-                          SizedBox(height: 50,),
-                          !_status ?  submitButton(context, "CONFIRMER", (){
-                            Navigator.of(context).pushNamed("/accueil");
-                          }) :submitButton(context, "CONFIRMER", (){
-                            Navigator.of(context).pushNamed("/accueil");
-                          })
-                        ],
-                      ),
+                    Padding(
+                        padding: EdgeInsets.only(top: 100.0, left: 140.0),
+                        child: new Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                             (_enableModify)?CircleAvatar(
+                              backgroundColor: bleuPrincipale,
+                              radius: 25.0,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  _selectImage(
+                                    // ignore: deprecated_member_use
+                                      ImagePicker.pickImage(
+                                          source: ImageSource.gallery),
+                                      1);
+                                },
+                              )
+                            ):Container()
+                          ],
+                        )),
+                  ]),
+                  SizedBox(height: 40,),
+                  TextFormField(
+                    controller: _nomDeLentreprise,
+                    enabled: _enableNomDeLentreprise,
+                    decoration: InputDecoration(
+                        hintText: _userData["companyName"],
+                        hintStyle: TextStyle(fontFamily: "MonserratRegular", fontSize: 15, color: HexColor("#ADB3C4"))
                     ),
-                  )
+                    // ignore: missing_return
+                    validator: (value){
+                      // ignore: missing_return
+                      if(value.isEmpty)
+                        return ("Veuillez entrer le nom de l'entreprise");
+                    },
+                  ),
+                  SizedBox(height: 20,),
+                  TextFormField(
+                    controller: _secteurActivite,
+                    enabled: _enableSecteurActivite,
+                    decoration: InputDecoration(
+                        hintText: _userData["activitySector"],
+                        hintStyle: TextStyle(fontFamily: "MonserratRegular", fontSize: 15, color: HexColor("#ADB3C4"))
+                    ),
+                    // ignore: missing_return
+                    validator: (value){
+                      // ignore: missing_
+                      if(value.isEmpty)
+                        return ("Veuillez entrer le secteur d'activité de l'entreprise");
+                    },
+                  ),
+                  SizedBox(height: 20,),
+                  TextFormField(
+                    controller: _ifu,
+                    enabled: _enableIfu,
+                    decoration: InputDecoration(
+                        hintText: _userData["ifu"],
+                        hintStyle: TextStyle(fontFamily: "MonserratRegular", fontSize: 15, color: HexColor("#ADB3C4"))
+                    ),
+                    // ignore: missing_return
+                    validator: (value){
+                      // ignore: missing_
+                      if(value.isEmpty)
+                        return ("Veuillez entrer le numéro IFU");
+                    },
+                  ),
+                  SizedBox(height: 20,),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child:  Column(
+                          children: [
+                            SizedBox(height: 15,),
+                            CountryCodePicker(
+                              onChanged: (e)  {
+                                print(e.code.toString());
+                                setState(() {
+                                  code = e.code.toString();
+                                  pays=e.name;
+                                });
+                              },
+                              initialSelection: 'BJ',
+                              showCountryOnly: true,
+                              showOnlyCountryWhenClosed: false,
+                              favorite: ['+229', 'FR'],
+                            ),
+                          ],
+                        ),),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding:EdgeInsets.only(top: 15),
+                          child: TextFormField(
+                            enabled: _enableNumeroTelephone,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                hintText: telephoneNumber.substring(4, telephoneNumber.length),
+                                hintStyle: TextStyle(fontFamily: "MonserratRegular", fontSize: 15, color: HexColor("#ADB3C4"))
+                            ),
+                            // ignore: missing_return
+                            onChanged: (value)=> telephoneNumber=value.toString(),
+                            // ignore: missing_return
+                            validator: (value){
+                              // ignore: missing_
+                              if(value.isEmpty)
+                                return ("Veuillez entrer le numéro de téléphone");
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20,),
+                  TextFormField(
+                    controller: _adresse,
+                    enabled: _enableAdresse,
+                    decoration: InputDecoration(
+                        hintText: _userData["address"],
+                        hintStyle: TextStyle(fontFamily: "MonserratRegular", fontSize: 15, color: HexColor("#ADB3C4"))
+                    ),
+                    // ignore: missing_return
+                    validator: (value){
+                      // ignore: missing_
+                      if(value.isEmpty)
+                        return ("Veuillez entrer l'adresse de l'entreprise");
+                    },
+                  ),
+                  SizedBox(height: 40,),
+                  (_enableModify)?submitButton(context, "ENREGISTRER", () async {
+                    enregistrer();
+                  setState(() {
+                    _enableModify=false;
+                    _enableNomDeLentreprise=false;
+                    _enableSecteurActivite=false;
+                    _enableIfu=false;
+                    _enableNumeroTelephone=false;
+                    _enableAdresse=false;
+                  });
+                  }):submitButton(context, "MODIFIER", (){
+                    setState(() {
+                      _enableModify=true;
+                      _enableNomDeLentreprise=true;
+                      _enableSecteurActivite=true;
+                      _enableIfu=true;
+                      _enableNumeroTelephone=true;
+                      _enableAdresse=true;
+                    });
+                  }),
+                  SizedBox(height: 40,),
                 ],
               ),
-            ],
-          ),
-        ));
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the Widget is disposed
-    myFocusNode.dispose();
-    super.dispose();
-  }
-
-  Widget _getActionButtons() {
-    return Padding(
-      padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 45.0),
-      child: new Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(right: 10.0),
-              child: Container(
-                  child: new RaisedButton(
-                    child: new Text("Valider"),
-                    textColor: Colors.white,
-                    color: Colors.green,
-                    onPressed: () {
-                      setState(() {
-                        _status = true;
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                      });
-                    },
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(20.0)),
-                  )),
             ),
-            flex: 2,
           ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Container(
-                  child: new RaisedButton(
-                    child: new Text("Annuler"),
-                    textColor: Colors.white,
-                    color: Colors.red,
-                    onPressed: () {
-                      setState(() {
-                        _status = true;
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                      });
-                    },
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(20.0)),
-                  )),
-            ),
-            flex: 2,
-          ),
-        ],
-      ),
+        ),
+      ):Center(child: CircularProgressIndicator(),)
     );
   }
 
-  Widget _getEditIcon() {
-    return new GestureDetector(
-      child: new CircleAvatar(
-        backgroundColor: bleuPrincipale,
-        radius: 14.0,
-        child: new Icon(
-          Icons.edit,
-          color: Colors.white,
-          size: 16.0,
-        ),
-      ),
-      onTap: () {
-        setState(() {
-          _status = false;
-        });
+
+
+
+
+
+  void enregistrer(){
+    if(_formKey.currentState.validate() && _image!=null) {
+      EasyLoading.show(status: 'Patientez svp...', dismissOnTap: false);
+      if(_image!=null){
+        try {
+          firebase_storage.UploadTask task = firebase_storage.FirebaseStorage.instance
+              .ref().child(_emailEntreprise + "/LogoEntreprise")
+              .putFile(_image);
+          task.whenComplete(() async {
+            logo = await firebase_storage.FirebaseStorage.instance
+                .ref(_emailEntreprise + "/LogoEntreprise")
+                .getDownloadURL();
+            if(logo!=null){
+              addInfoDb();
+            }
+          });
+        } catch(e) {
+          print(e.toString());
+          EasyLoading.showError("L'ajout a échoué");
+          EasyLoading.dismiss();
+        }
+      }
+    } else {
+      EasyLoading.show(status: 'Chargement', dismissOnTap: false);
+      addInfoDb();
+    }
+  }
+
+
+  showAlertDialog(BuildContext context, String text) {
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Retour"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("ALERT"),
+      content: Text(text),
+      actions: [
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
       },
     );
   }
+
+  void _selectImage(Future<File> pickImage, int imageNumber) async {
+    File tempImg = await pickImage;
+    switch (imageNumber) {
+      case 1:
+        setState(() => _image = tempImg);
+        break;
+    }
+  }
+
+  Widget _displayLogo() {
+    if (_image == null) {
+      return Container(
+        height: 140,
+        width: 140,
+        child: Center(
+          child: CachedNetworkImage(
+            imageUrl: _userData["logo"],
+            fit: BoxFit.cover,
+            placeholder: (context, url) => Container(color:Colors.red, height: 110, width: largeurPerCent(210, context),),
+          )
+        ),
+        decoration: BoxDecoration(
+            border: Border.all(
+              color: HexColor("#707070"),
+            )),
+      );
+    } else {
+      return Container(
+        height: 140,
+        width: 140,
+        child: Image.file(
+          _image,
+          fit: BoxFit.cover,
+        ),
+      );
+    }
+  }
+
+  Future<void> addInfoDb() async {
+    try {
+      await FirestoreService().addUtilisateur(
+          Utilisateur(
+            email: _emailEntreprise,
+            logo: logo,
+            companyName: _nomDeLentreprise.text,
+            activitySector: _secteurActivite.text,
+            ifu: _ifu.text,
+            country:pays,
+            telephoneNumber: code+telephoneNumber,
+            address: _adresse.text,
+          ),
+          _emailEntreprise);
+      EasyLoading.dismiss();
+      EasyLoading.showSuccess('Modification réussie!', maskType: EasyLoadingMaskType.custom);
+      Duration(seconds: 2);
+    } catch(e){
+      EasyLoading.dismiss();
+      print(e);
+      EasyLoading.showError("L'ajout a échoué");
+      EasyLoading.dismiss();
+    }
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

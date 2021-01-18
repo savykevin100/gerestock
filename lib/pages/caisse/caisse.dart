@@ -24,7 +24,8 @@ class _CaisseState extends State<Caisse> {
     double deviceHeight = queryData.size.height;
     return Scaffold(
       appBar: appBar(context,"Caisse"),
-      body: ListView(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: longueurPerCent(20, context),),
           Row(
@@ -34,7 +35,7 @@ class _CaisseState extends State<Caisse> {
               _happyVeganCard( "Décaissement", Color(0xFFB2C40F),Icons.arrow_upward,deviceHeight),
             ],
           ),
-          Card(
+      /*    Card(
               margin: EdgeInsets.symmetric(horizontal: largeurPerCent(21, context), vertical: longueurPerCent(46, context)),
               child: Container(
                 height: 500,
@@ -123,7 +124,7 @@ class _CaisseState extends State<Caisse> {
                   ],
                 ),
               )
-          ),
+          ),*/
         ],
       ),
     );
@@ -183,7 +184,7 @@ class _CaisseState extends State<Caisse> {
               borderRadius: BorderRadius.circular(5.0),
             ),
             child: Container(
-                height: (deviceHeight/3.8),
+                height:200,
                 width: MediaQuery.of(context).size.width/2,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(

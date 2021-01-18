@@ -5,10 +5,16 @@ import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/submit_button.dart';
-import 'package:gerestock/constantes/text_classe.dart';
+import 'package:gerestock/modeles/clients_fournisseurs.dart';
 
 
+// ignore: must_be_immutable
 class ClientDetail extends StatefulWidget {
+
+  ClientsFounisseursModel clientsFouniss = ClientsFounisseursModel();
+  ClientDetail({this.clientsFouniss});
+
+
   @override
   _ClientDetailState createState() => _ClientDetailState();
 }
@@ -34,10 +40,10 @@ class _ClientDetailState extends State<ClientDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    displayRowDetail("Nom du client", "SAVY Kévin"),
-                    displayRowDetail("Adresse", "Vodjè von de la mairie"),
-                    displayRowDetail("Téléphone", "61861183"),
-                    displayRowDetail("Email", "savykevin100@gmail.com"),
+                    displayRowDetail("Nom du client",widget.clientsFouniss.name),
+                    displayRowDetail("Adresse", widget.clientsFouniss.address),
+                    displayRowDetail("Téléphone", widget.clientsFouniss.telephoneNumber),
+                    displayRowDetail("Email", widget.clientsFouniss.email),
                   ],
                 ),
               ),
