@@ -18,8 +18,6 @@ import 'package:gerestock/pages/mouvementsDeStock/confirmEntrees.dart';
 import 'package:gerestock/pages/mouvementsDeStock/entrees.dart';
 import 'package:gerestock/pages/facturations/facturation1.dart';
 import 'package:gerestock/pages/facturations/facturation2.dart';
-import 'package:gerestock/pages/fournisseurs/ficheFournisseur.dart';
-import 'package:gerestock/pages/fournisseurs/fournisseurs.dart';
 import 'package:gerestock/pages/inventaire/inventaire.dart';
 import 'package:gerestock/pages/mouvementsDeStock/mouvementDeStock.dart';
 import 'package:gerestock/pages/nouveauProduit/familles.dart';
@@ -90,8 +88,6 @@ class MyApp extends StatelessWidget {
         '/Clients': (BuildContext context) => Clients(),
         '/FicheClient': (BuildContext context) => FicheClient(),
         '/Produits': (BuildContext context) => Produits(),
-        '/Fournisseurs': (BuildContext context) => Fournisseurs(),
-        '/FicheFournisseur': (BuildContext context) => FicheFournisseur(),
         '/Mouvement de Stock': (BuildContext context) => MouvementDeStock(),
         '/Facturation': (BuildContext context) => Facturation1(),
         '/Facturation2': (BuildContext context) => Facturation2(),

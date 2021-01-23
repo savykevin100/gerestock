@@ -196,8 +196,10 @@ class _ConfirmEntreesState extends State<ConfirmEntrees> {
                      created: DateTime.now().toString(),
                  ), _emailEntreprise);
                  _products.forEach((element) {
+                  // ignore: deprecated_member_use
                   Firestore.instance.collection("Utilisateurs").doc(_emailEntreprise).collection("TousLesProduits").where("productName", isEqualTo: element["productName"]).get().then((value){
                     if(value.docs.isNotEmpty)
+                      // ignore: deprecated_member_use
                       Firestore.instance.collection("Utilisateurs").doc(_emailEntreprise).collection("TousLesProduits").doc(value.docs.first.id).update({"theoreticalStock":value.docs.first.data()["theoreticalStock"]+int.tryParse(element["quantite"])});
                   });
                 });

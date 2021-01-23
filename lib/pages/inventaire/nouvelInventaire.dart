@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/calcul.dart';
+import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/constantsWidgets.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
+import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/produits.dart';
+import 'package:gerestock/pages/inventaire/recapInventaire.dart';
 
 
 class NouvelInventaire extends StatefulWidget {
@@ -71,40 +74,6 @@ class _NouvelInventaireState extends State<NouvelInventaire> {
       appBar: appBar(context, "Nouvel Inventaire"),
       body: (familles.length>0)?ListView(
         children: [
-          SizedBox(height: 30,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              nameOfFieldWithPadding("Date de réception", context),
-              InkWell(
-                onTap: (){
-                  DatePicker.showDatePicker(context,
-                      showTitleActions: true,
-                      minTime: DateTime(2000, 1, 1),
-                      maxTime: DateTime(2040, 12, 31), onChanged: (date) {
-                        setState(() {
-                          dateInput = date.toString().substring(0, 10);
-                        });
-                      }, onConfirm: (date) {
-                        setState(() {
-                          dateInput = date.toString().substring(0, 10);
-                          print(dateInput);
-                        });
-                      }, currentTime: DateTime.now(), locale: LocaleType.fr);
-                },
-                child: Container(
-                    height: longueurPerCent(41, context),
-                    width: largeurPerCent(210, context),
-                    margin: EdgeInsets.only(right: largeurPerCent(22, context)),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
-                      border: Border.all(width: 1.0, color: HexColor("#707070")),
-                    ),
-                    child: (dateInput!=null)?Center(child: TextClasse(text: dateInput, color:  HexColor("#707070"), family: "MonserratBold",),):Text("")
-                ),
-              )
-            ],
-          ),
           SizedBox(height: longueurPerCent(20, context),),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -158,7 +127,15 @@ class _NouvelInventaireState extends State<NouvelInventaire> {
                       value.docs.forEach((element) {
                         print(element.data());
                         setState(() {
-                          produitsFamilles.add(element.data());
+                          produitsFamilles = [];
+                          produitsFamilles.add(
+                            {
+                              "productName": element.data()["productName"],
+                              "theoricalStock": element.data()["theoreticalStock"],
+                              "reste":0,
+                              "image":element.data()["image"]
+                            }
+                          );
                         });
                       });
                   });
@@ -169,46 +146,100 @@ class _NouvelInventaireState extends State<NouvelInventaire> {
           ),
           SizedBox(height: 40,),
           TextClasse(text: "Liste des produits", textAlign: TextAlign.center, family: "MonserratBold", color: HexColor("#001C36"),),
-          (produitsFamilles.length!=0)?Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: cva.keys.map((String key) {
-              return new CheckboxListTile(
-                controlAffinity: ListTileControlAffinity.trailing,
-                title:  Row(
-                  children: [
-                    Container(
-                      child: CachedNetworkImage(
-                        height: 60,
-                        width: 60,
-                        imageUrl: "https://firebasestorage.googleapis.com/v0/b/gerestock-aa75e.appspot.com/o/savykevin100%40gmail.com%2FPc%2FTOSHIBA?alt=media&token=60e80d48-0f1e-4c7c-a508-cb2d5a0002dd",
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(color:Colors.red, height: 110, width: largeurPerCent(210, context),),
-                      ),
-                    ),
-                    SizedBox(width: 20,),
-                    TextClasse(text: key, family: "MonserratLight", fontSize: 15,),
-                  ],
-                ),
-                value: cva[key],
-                activeColor:HexColor("#119600"),
-                checkColor: Colors.white,
-                onChanged: (bool value) {
-                  setState(() {
-                    cva[key] = value;
-                  });
-
-                },
+          SizedBox(height: 20,),
+          (produitsFamilles.length!=0)? ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            separatorBuilder: (context , index){
+              return Column(
+                children: [
+                  Divider(height: 10, color: Colors.black,),
+                  SizedBox(height: 15,),
+                ],
               );
-            }).toList(),
+            },
+            itemCount: produitsFamilles.length,
+            itemBuilder: (context, index){
+              return  Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    child: CachedNetworkImage(
+                      height: 80,
+                      width: 80,
+                      imageUrl: produitsFamilles[index]["image"],
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(color:Colors.red, height: 110, width: largeurPerCent(210, context),),
+                    ),),
+                  TextClasse(text: produitsFamilles[index]["productName"], textAlign: TextAlign.center, family: "MonserratLight", color: HexColor("#001C36"),),
+                  Container(
+                    height: 41,
+                    width:70,
+                    margin: EdgeInsets.only(right: largeurPerCent(22, context)),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3),
+                      border: Border.all(width: 1.0, color: HexColor("#707070")),
+                    ),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      maxLines: null,
+                      //controller: controller,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                          enabledBorder: InputBorder.none
+                      ),
+                      onChanged: (value){
+                        setState(() {
+                          produitsFamilles[index]["reste"] =  produitsFamilles[index]["theoricalStock"] - int.tryParse(value);
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 50,)
+                ],
+              );
+            },
           ):Center(child: Column(
             children: [
-              SizedBox(height: 80,),
+              SizedBox(height: 100,),
               Text("Aucune famille selectionnée"),
             ],
-          ),)
+          ),),
         ],
-      ):Center(child: CircularProgressIndicator(),)
+      ):Center(child: CircularProgressIndicator(),),
+     floatingActionButton: Center(
+       child: Container(
+         margin: EdgeInsets.only(
+             top: MediaQuery
+                 .of(context)
+                 .size
+                 .height - 60),
+         child:InkWell(
+           onTap:(){
+             print(familleSelect);
+             Navigator.push(context,
+                 MaterialPageRoute(builder: (_) => RecapInventaire(produitsFamilles: produitsFamilles, familyName: familleSelect,)));
+           },
+           child: Container(
+             height: 38,
+             width: 200,
+             decoration: BoxDecoration(
+               borderRadius: BorderRadius.circular(7),
+               color: primaryColor,
+             ),
+             child: Center(
+                 child: Text(
+                   "VALIDER ",
+                   style: TextStyle(
+                       color: white,
+                       fontFamily: "MonserratBold",
+                       fontSize: 15),
+                 )
+             ),
+           ),
+         ),
+       ),
+     ),
     );
   }
 }

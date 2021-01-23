@@ -12,6 +12,7 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/utilisateurs.dart';
+import 'package:gerestock/pages/payement/select_test_mode_or_payement.dart';
 import 'package:image_picker/image_picker.dart';
 // ignore: must_be_immutable
 class InformationSupplementaire extends StatefulWidget {
@@ -356,7 +357,9 @@ class _InformationSupplementaireState extends State<InformationSupplementaire> {
       EasyLoading.dismiss();
       EasyLoading.showSuccess('Enregistrement réussie!', maskType: EasyLoadingMaskType.custom);
       Duration(seconds: 2);
-      Navigator.pushNamed(context, "/accueil");
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context) => TestModeOrPayement()
+      ));
     } catch(e){
       EasyLoading.dismiss();
       print(e);

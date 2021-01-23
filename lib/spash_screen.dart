@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:gerestock/authentification/inscription.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/pages/accueil.dart';
+import 'package:gerestock/pages/payement/select_test_mode_or_payement.dart';
 
 
 
@@ -25,8 +26,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   bool currentUser=false;
-
-
 
 
 

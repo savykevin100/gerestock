@@ -1,10 +1,14 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/text_classe.dart';
+import 'package:gerestock/pages/inventaire/detailsInventaire.dart';
 import 'package:gerestock/pages/inventaire/nouvelInventaire.dart';
 
 
@@ -16,11 +20,90 @@ class Inventaire extends StatefulWidget {
 class _InventaireState extends State<Inventaire> {
 
 
+  CollectionReference _users= Firestore.instance
+      .collection("Utilisateurs");
+  String _emailEntreprise;
+
+
+
+
+
+  Future<User> getUser() async {
+    return FirebaseAuth.instance.currentUser;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser().then((value) {
+      setState(() {
+        _emailEntreprise = value.email;
+      });
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarWithSearch(context,"Inventaire"),
-      body:Center(
+      body: Container(
+        margin: EdgeInsets.only(left: 10, top: 20),
+        child: StreamBuilder(
+            stream:  _users
+                .doc(_emailEntreprise)
+                .collection("Inventaires")
+                .orderBy("created", descending: true)
+                .snapshots(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError || !snapshot.hasData)
+                return Center(child: CircularProgressIndicator(),);
+                if (snapshot.connectionState == ConnectionState.waiting)
+                return Center(child: CircularProgressIndicator(),);
+                else if(snapshot.connectionState == ConnectionState.none)
+                return Center(child: Text("Veuillez vérifier votre connexion internet"),);
+                return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context,  i) {
+                      return Column(
+                        children: [
+                          ListTile(
+                            title: TextClasse(
+                              text: "Inventaire: Famille ${snapshot.data.docs[i].data()["familyName"]} du ${snapshot.data.docs[i].data()["created"]}",
+                              family: "MonserratSemiBold",
+                            ),
+                            //subtitle: TextClasse(text:client.telephoneNumber, family: "MonserratMedium", fontSize: 13,),
+                            trailing: InkWell(
+                              onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsInventaire(id:snapshot.data.docs[i].data()["id"])),),
+                              child: Icon(
+                                Icons.navigate_next,
+                                color: HexColor("#ADB3C4"),
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                          Divider(color: HexColor("#ADB3C4"),)
+                        ],
+                      );
+                    }
+                );
+            }
+        )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => NouvelInventaire()));
+        },
+        child: Icon(Icons.add, color: white,),
+        backgroundColor: primaryColor,
+      ),
+    );
+  }
+  /*Center(
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           height: double.infinity,
@@ -68,15 +151,32 @@ class _InventaireState extends State<Inventaire> {
               }
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => NouvelInventaire()));
-        },
-        child: Icon(Icons.add, color: white,),
-        backgroundColor: primaryColor,
-      ),
+      ),*/
+  /**/
+
+
+  TextClasse  displayRecapTextBold(String text){
+    return TextClasse(text: text, color: HexColor("#C9C9C9"), family: "MonserratBold", fontSize: 9,);
+  }
+
+  TextClasse  displayRecapTextGrey(String text){
+    return TextClasse(text: text, color: HexColor("#C9C9C9"), family: "MonserratBold", fontSize: 12,);
+  }
+
+
+
+
+
+  Expanded autoSizeTextGreyEntrer(String titre){
+    return Expanded(
+        flex: 1,
+        child: AutoSizeText(
+          titre,
+          style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: primaryColor),
+          maxLines: 3,
+          minFontSize: 9,
+        )
     );
+
   }
 }

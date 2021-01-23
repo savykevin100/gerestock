@@ -118,68 +118,6 @@ class _DepensesState extends State<Depenses> {
             ),
           ],
         ),
-        /* StreamBuilder(
-            stream: FirestoreService().getDepenses(emailEntreprise),
-            builder: (BuildContext context,
-                AsyncSnapshot<List<Depense>> snapshot) {
-              if(snapshot.hasError || !snapshot.hasData)
-                return Center(child: CircularProgressIndicator());
-             else if(snapshot.data.isEmpty)
-              return Center(child:Text("Pas de depenses"));
-              else {
-                return StaggeredGridView.countBuilder(
-                  crossAxisCount: 1,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, i) {
-                    Depense depense = snapshot.data[i];
-                    return Container(
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(right: 5),
-                                height: 13,
-                                width: 4,
-                                color: primaryColor,
-                              ),
-                              Expanded(
-                                  flex: 1,
-                                  child: autoSizeTextGreyEntrer(Helper.currentFormatDate(depense.operationDate))),
-                              SizedBox(width: 5,),
-                              Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    "${depense.id}",
-                                    style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: primaryColor),
-                                    maxLines: 2,
-                                    minFontSize: 7,
-                                  )),
-                              SizedBox(width: 10,),
-                              Expanded(
-                                  flex: 2,
-                                  child: Center(child: autoSizeTextGreyEntrer(depense.expenseTitle))),
-                              Expanded(
-                                  flex: 2,
-                                  child: Center(child: autoSizeTextGreyEntrer(depense.amount)))
-                            ],
-                          ),
-                          Divider(color: HexColor("#ADB3C4"),),
-                        ],
-                      ),
-
-                    );
-                  },
-                  staggeredTileBuilder: (_) => StaggeredTile.fit(2),
-                  mainAxisSpacing: 20.0,
-                  crossAxisSpacing: 0.0,
-                  shrinkWrap: true,
-                );
-              }
-            }
-        )*/
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -4,6 +4,7 @@ import 'package:gerestock/modeles/decaissement_models.dart';
 import 'package:gerestock/modeles/depenses.dart';
 import 'package:gerestock/modeles/entrer_models.dart';
 import 'package:gerestock/modeles/facture.dart';
+import 'package:gerestock/modeles/inventaire.dart';
 import 'package:gerestock/modeles/produits.dart';
 import 'package:gerestock/modeles/utilisateurs.dart';
 class FirestoreService {
@@ -22,6 +23,7 @@ class FirestoreService {
     return _db
         .collection("Utilisateurs")
         .doc(idDocument)
+        // ignore: deprecated_member_use
         .setData(utilisateur.toMap());
   }
 
@@ -153,6 +155,13 @@ class FirestoreService {
   }
 
 
+  Future<void> addInventaire(Inventaires inventaire, String emailEntreprise){
+   _db.collection("Utilisateurs").doc(emailEntreprise).collection("Inventaires").add(inventaire.toMap()).then((value){
+     _db.collection("Utilisateurs").doc(emailEntreprise).collection("Inventaires").doc(value.id).update({"id": value.id});
+   });
+  }
+
+
   Stream<List<Facture>> getFacture(
       String idDocument) {
     return _db
@@ -269,6 +278,23 @@ class FirestoreService {
           (snapshot) => snapshot.documents
               .map(
                 (doc) => Produit.fromMap(doc.data()),
+              )
+              .toList(),
+        );
+  }
+
+
+  Stream<List<Inventaires>> getInventaire(String emailEntreprise) {
+    return _db
+        .collection("Utilisateurs")
+        .doc(emailEntreprise)
+        .collection("Inventaires")
+        .orderBy("created", descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.documents
+              .map(
+                (doc) => Inventaires.fromMap(doc.data()),
               )
               .toList(),
         );
