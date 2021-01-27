@@ -8,7 +8,6 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gerestock/authentification/connexion.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
-import 'package:gerestock/pages/abonnement.dart';
 import 'package:gerestock/pages/parametres.dart';
 
 import 'accueil.dart';

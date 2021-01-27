@@ -50,6 +50,7 @@ dependencies:
   syncfusion_flutter_pdf: ^18.4.33-beta
   advance_pdf_viewer: ^1.2.1+2
   pdf_flutter:
+  kkiapay_flutter_sdk: ^1.0.4
 
 
 
@@ -88,7 +89,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-      - assets/student.png
+      - lib/assets/images/cash_payment.png
+      - lib/assets/images/free.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

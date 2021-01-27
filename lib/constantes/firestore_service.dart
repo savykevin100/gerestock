@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gerestock/modeles/abonnement.dart';
 import 'package:gerestock/modeles/clients_fournisseurs.dart';
 import 'package:gerestock/modeles/decaissement_models.dart';
 import 'package:gerestock/modeles/depenses.dart';
@@ -148,6 +149,7 @@ class FirestoreService {
   }
 
 
+  // ignore: missing_return
   Future<void> addNewEnter(EntrerModels entrerModels, String emailEntreprise){
    _db.collection("Utilisateurs").doc(emailEntreprise).collection("Entrees").add(entrerModels.toMap()).then((value){
      _db.collection("Utilisateurs").doc(emailEntreprise).collection("Entrees").doc(value.id).update({"id": value.id});
@@ -158,6 +160,13 @@ class FirestoreService {
   Future<void> addInventaire(Inventaires inventaire, String emailEntreprise){
    _db.collection("Utilisateurs").doc(emailEntreprise).collection("Inventaires").add(inventaire.toMap()).then((value){
      _db.collection("Utilisateurs").doc(emailEntreprise).collection("Inventaires").doc(value.id).update({"id": value.id});
+   });
+  }
+
+
+  Future<void> addAbonnement(Abonnement abonnement, String emailEntreprise){
+   _db.collection("Utilisateurs").doc(emailEntreprise).collection("Abonnement").add(abonnement.toMap()).then((value){
+     _db.collection("Utilisateurs").doc(emailEntreprise).collection("Abonnement").doc(value.id).update({"id": value.id});
    });
   }
 

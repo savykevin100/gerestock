@@ -7,6 +7,7 @@ class Utilisateur {
   String country;
   String telephoneNumber;
   String address;
+  String created;
 
 
 
@@ -18,7 +19,8 @@ class Utilisateur {
       this.ifu,
       this.country,
       this.telephoneNumber,
-      this.address
+      this.address,
+      this.created
       });
 
   Utilisateur.fromMap(Map<String, dynamic> donnees, String id)
@@ -29,6 +31,7 @@ class Utilisateur {
         ifu = donnees["ifu"],
         country = donnees["country"],
         telephoneNumber = donnees["telephoneNumber"],
+        created = donnees["created"],
         address = donnees["address"];
 
 
@@ -41,6 +44,7 @@ class Utilisateur {
       "ifu": ifu,
       "country": country,
       "telephoneNumber": telephoneNumber,
+      "created": created,
       "address": address,
     };
   }

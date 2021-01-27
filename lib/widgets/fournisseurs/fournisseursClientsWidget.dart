@@ -140,7 +140,7 @@ class _ClientsState extends State<FournisseursClientsWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context, widget.title),
-      body:(nameSearch.length>0)?Center(
+      body:Center(
         child: Card(
             margin: EdgeInsets.symmetric(horizontal: largeurPerCent(21, context), vertical: longueurPerCent(46, context)),
             child: Container(
@@ -148,13 +148,14 @@ class _ClientsState extends State<FournisseursClientsWidget> {
                 width: double.infinity,
                 child: ListView(
                   children: [
-                    _createSearchView(),
-                    _firstSearch ? _createFilteredListView() : _performSearch()
+                   // _createSearchView(),
+                  //  _firstSearch ? _createFilteredListView() : _performSearch()
+                    _createFilteredListView()
                   ],
                 )
             )
         ),
-      ):Center(child: CircularProgressIndicator(),),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if(widget.title=="Clients")

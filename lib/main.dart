@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gerestock/authentification/connexion.dart';
 import 'package:gerestock/authentification/informations_supplementaire.dart';
 import 'package:gerestock/authentification/inscription.dart';
-import 'package:gerestock/pages/abonnement.dart';
+import 'package:gerestock/pages/abonnement_settings.dart';
 import 'package:gerestock/pages/accueil.dart';
 import 'package:gerestock/pages/caisse/caisse.dart';
 import 'package:gerestock/pages/caisse/encaissement.dart';
@@ -21,16 +21,12 @@ import 'package:gerestock/pages/facturations/facturation2.dart';
 import 'package:gerestock/pages/inventaire/inventaire.dart';
 import 'package:gerestock/pages/mouvementsDeStock/mouvementDeStock.dart';
 import 'package:gerestock/pages/nouveauProduit/familles.dart';
-import 'package:gerestock/pages/nouveauProduit/nouveauProduit.dart';
 import 'package:gerestock/pages/parametres.dart';
 import 'package:gerestock/pages/mouvementsDeStock/sorties.dart';
+import 'package:gerestock/pages/payement/select_test_mode_or_payement.dart';
 import 'package:gerestock/spash_screen.dart';
 import 'package:gerestock/test.dart';
 import 'package:gerestock/widgets/fournisseurs/fournisseursClientsWidget.dart';
-import 'package:intl/date_symbol_data_file.dart';
-import 'package:intl/intl.dart';
-
-
 import 'constantes/hexadecimal.dart';
 import 'pages/mouvementsDeStock/ficheEntrees.dart';
 
@@ -64,14 +60,9 @@ void configLoading() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    /*SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown
-    ]);*/
-
+    
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Gerestock',
@@ -93,7 +84,7 @@ class MyApp extends StatelessWidget {
         '/Facturation2': (BuildContext context) => Facturation2(),
         '/Caisse': (BuildContext context) => Caisse(),
         '/Inventaire': (BuildContext context) => Inventaire(),
-        '/Abonnement': (BuildContext context) => Abonnement(),
+        '/Abonnement': (BuildContext context) => AbonnementSettings(),
         '/Dépenses': (BuildContext context) => Depenses(),
         '/Paramètres': (BuildContext context) => Parametres(),
         '/Entrées': (BuildContext context) => Entrees(),
@@ -107,6 +98,7 @@ class MyApp extends StatelessWidget {
         '/SpashScreen': (BuildContext context) => SplashScreen(),
         '/InformationSupplementaires': (BuildContext context) => InformationSupplementaire(),
         '/ClientsFournisseurs': (BuildContext context) => FournisseursClientsWidget(),
+        '/TestModeOrPayement': (BuildContext context) => TestModeOrPayement(),
       },
       builder: (BuildContext context, Widget child) {
         /// make sure that loading can be displayed in front of all other widgets

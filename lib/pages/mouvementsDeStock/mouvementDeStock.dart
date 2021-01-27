@@ -31,7 +31,7 @@ class _MouvementDeStockState extends State<MouvementDeStock> {
            Row(
              mainAxisAlignment: MainAxisAlignment.center,
              children: [
-               _happyVeganCard( "Entrées",bleuPrincipale,Icons.arrow_downward,deviceHeight),
+                 _happyVeganCard( "Entrées",bleuPrincipale,Icons.arrow_downward,deviceHeight),
                _happyVeganCard( "Sorties", Color(0xFFB2C40F),Icons.arrow_upward,deviceHeight),
              ],
            ),

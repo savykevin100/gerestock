@@ -8,12 +8,12 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 
 
-class Abonnement extends StatefulWidget {
+class AbonnementSettings extends StatefulWidget {
   @override
   _AbonnementState createState() => _AbonnementState();
 }
 
-class _AbonnementState extends State<Abonnement> {
+class _AbonnementState extends State<AbonnementSettings> {
 
 
   bool isSwitched = false;
@@ -21,7 +21,7 @@ class _AbonnementState extends State<Abonnement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context,"Abonnement"),
+      appBar: appBar(context,"AbonnementSettings"),
       body: ListView(
         children: [
           SizedBox(height: longueurPerCent(20, context),),
@@ -99,7 +99,7 @@ class _AbonnementState extends State<Abonnement> {
                             child: TextClasse(text: "Activé", color: HexColor("#FF0202"), fontSize: 10, family: "MonserratBold",)),
                       ],
                     ),
-                    displayText("Fin de l’abonnement le 28/12/2000")
+                    displayText("Fin de l’AbonnementSettings le 28/12/2000")
                   ],
                 ),
               ),
