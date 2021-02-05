@@ -329,6 +329,7 @@ class _Facturation1State extends State<Facturation1> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: TextField(
+                  style: TextStyle(fontSize: 15, fontFamily: "MonserratSemiBold"),
                   textAlign: TextAlign.center,
                   controller: _serviceController,
                    maxLines: null,
@@ -345,6 +346,7 @@ class _Facturation1State extends State<Facturation1> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 60),
                 child: TextField(
+                  style: TextStyle(fontSize: 15, fontFamily: "MonserratSemiBold"),
                   textAlign: TextAlign.center,
                   controller: _amountServiceController,
                    keyboardType: TextInputType.number,

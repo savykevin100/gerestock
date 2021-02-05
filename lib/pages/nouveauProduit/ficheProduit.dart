@@ -43,11 +43,11 @@ class _FicheProduitState extends State<FicheProduit> {
                       borderRadius: BorderRadius.circular(3),
                       border: Border.all(color: HexColor("#C9C9C9"),)
                   ),
-                  child:CachedNetworkImage(
+                  child:(widget.produit.image == "")? CachedNetworkImage(
                     imageUrl: widget.produit.image,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(color:Colors.red, height: 110, width: largeurPerCent(210, context),),
-                  ),
+                  ): Container(color:Colors.red, height: 110, width: largeurPerCent(210, context),)
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 10),

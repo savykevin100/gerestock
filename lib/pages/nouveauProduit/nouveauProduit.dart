@@ -48,7 +48,7 @@ class _NouveauProduit extends State<NouveauProduit> {
   FirebaseFirestore _db = Firestore.instance;
   bool currentUser=false;
   List<String> familles=[];
-  String productImageUrl;
+  String productImageUrl = "";
   File _image;
 
 
@@ -318,7 +318,33 @@ class _NouveauProduit extends State<NouveauProduit> {
         EasyLoading.dismiss();
         EasyLoading.showError("L'ajout a échoué", maskType: EasyLoadingMaskType.custom);
       }
-    } else {
+    } else if(famille!=null && prixAchatController.text!="" && prixVenteController.text!="" && stockAlerteController.text!="null" && _image==null){
+      try {
+        FirestoreService().addProductInTousLesProduits(
+            Produit(
+                productName: nomDuProduitController.text,
+                familyName: famille,
+                buyingPrice: prixAchatController.text,
+                sellPrice: prixVenteController.text,
+                stockAlert: int.tryParse(stockAlerteController.text),
+                physicalStock: 0,
+                theoreticalStock: 0,
+                image: productImageUrl
+            )
+            , emailEntreprise);
+        EasyLoading.dismiss();
+        EasyLoading.showSuccess('Enregistrement réussie!', maskType: EasyLoadingMaskType.custom);
+        Navigator.pop(context);
+      } catch(e){
+        EasyLoading.dismiss();
+        print(e);
+        EasyLoading.showError("L'ajout a échoué");
+        EasyLoading.dismiss();
+        EasyLoading.showSuccess('Enregistrement réussie!', maskType: EasyLoadingMaskType.custom);
+        Navigator.pop(context);
+      }
+    }
+    else {
       EasyLoading.showError("Veuillez remplir tous les champs", maskType: EasyLoadingMaskType.custom);
     }
   }

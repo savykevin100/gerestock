@@ -34,6 +34,7 @@ Color white = Colors.white;*/
            border: Border.all(width: 1.0, color: HexColor("#707070")),
          ),
          child: TextField(
+           style: TextStyle(fontSize: 15, fontFamily: "MonserratSemiBold"),
            keyboardType: inputType,
            maxLines: null,
            controller: controller,

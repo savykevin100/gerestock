@@ -31,6 +31,9 @@ class _FormFournisseursClientsWidgetState extends State<FormFournisseursClientsW
   TextEditingController _email = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String emailEntreprise;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
 
 
 
@@ -47,9 +50,12 @@ class _FormFournisseursClientsWidgetState extends State<FormFournisseursClientsW
     getUser().then((value) {
       setState(() {
         emailEntreprise = value.email;
+        _adresse.text = "";
+        _email.text = "";
       });
       print(emailEntreprise);
     });
+
 
   }
 
@@ -57,6 +63,7 @@ class _FormFournisseursClientsWidgetState extends State<FormFournisseursClientsW
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: appBar(context,"Fiche "+widget.title),
       body: Center(
         child:SingleChildScrollView(
@@ -158,7 +165,7 @@ class _FormFournisseursClientsWidgetState extends State<FormFournisseursClientsW
   }
 
   void registerClientOrFournisseur() {
-    if(_formKey.currentState.validate()){
+    if(_nomDuclient.text!="" && _telephone.text!=""){
       try{
         EasyLoading.show(status: 'Chargement', dismissOnTap: false);
         FirestoreService().addClientOrFournisseur(
@@ -176,6 +183,14 @@ class _FormFournisseursClientsWidgetState extends State<FormFournisseursClientsW
         EasyLoading.dismiss();
         EasyLoading.showError("L'ajout a échoué");
       }
-    }
+    } else
+      displaySnackBarNom(context, "Nom et téléphone obligatoires", Colors.white);
   }
+
+
+  displaySnackBarNom(BuildContext context, String text, Color couleur ) {
+    final snackBar = SnackBar(duration: Duration(seconds: 1),content: Text(text,   style: TextStyle(color: couleur, fontSize: 15),),);
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
 }

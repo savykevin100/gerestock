@@ -10,6 +10,8 @@ import 'package:gerestock/pages/accueil.dart';
 import 'package:gerestock/pages/payement/select_payement_mode.dart';
 import 'package:gerestock/pages/payement/select_test_mode_or_payement.dart';
 
+import 'authentification/connexion.dart';
+
 
 
 
@@ -81,11 +83,11 @@ class _SplashScreenState extends State<SplashScreen> {
           builder: (context) => Inscription()
       ));
     }
-   else if(currentUser && activeTestMode && DateTime.now().isBefore(dateBeginTestMode.add(Duration(minutes: 2))) && !activeAbonnement) {
+   else if(currentUser && activeTestMode && DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 10))) && !activeAbonnement) {
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => Accueil()
       ));
-    } else if(currentUser && activeTestMode && !DateTime.now().isBefore(dateBeginTestMode.add(Duration(minutes: 2))) && !activeAbonnement) {
+    } else if(currentUser && activeTestMode && !DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 10))) && !activeAbonnement) {
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => SelectPayementMode()
       ));

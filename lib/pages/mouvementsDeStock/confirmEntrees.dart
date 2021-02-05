@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gerestock/constantes/appBar.dart';
@@ -143,6 +144,50 @@ class _ConfirmEntreesState extends State<ConfirmEntrees> {
               ],
             ),
           ),
+          SizedBox(height: 20,),
+          FlatButton(
+            onPressed: () {
+              print(_quantiteController.text);
+              print(_productSelect);
+
+              if(_products.length!=0){
+
+                _products.forEach((element) {
+                  if(element["productName"] ==  _productSelect)
+                    EasyLoading.showError("Ce produit a déjà été ajouté");
+                  else {
+                    if(_quantiteController.text!="" && _productSelect!=null)
+                      setState(() {
+                        _products.add(
+                            {
+                              "quantite": _quantiteController.text,
+                              "productName": _productSelect,
+                            }
+                        ) ;
+                        _quantiteController.text="";
+                      });
+                    else
+                      EasyLoading.showError("Veuillez remplir tous les champs");
+                  }
+                });
+              } else {
+                if(_quantiteController.text!="" && _productSelect!=null)
+                  setState(() {
+                    _products.add(
+                        {
+                          "quantite": _quantiteController.text,
+                          "productName": _productSelect,
+                        }
+                    ) ;
+                    _quantiteController.text="";
+                  });
+                else
+                  EasyLoading.showError("Veuillez remplir tous les champs");
+              }
+            },
+            child: CircleAvatar(child: Icon(Icons.add,color: Colors.white,)),
+          ),
+          SizedBox(height: 20,),
           ListView.builder(
               shrinkWrap: true,
               itemCount: _products.length,
@@ -177,7 +222,7 @@ class _ConfirmEntreesState extends State<ConfirmEntrees> {
             .size
             .height - 60),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(width: 20,),
             submitButton(context, "Enregister", (){
@@ -223,25 +268,6 @@ class _ConfirmEntreesState extends State<ConfirmEntrees> {
              else
                EasyLoading.showError("Veuillez ajouter le produit et la quantité avant d'enregistrer");
             }),
-            FloatingActionButton(
-              backgroundColor: bleuPrincipale,
-              onPressed: () {
-                print(_quantiteController.text);
-                print(_productSelect);
-                print(_products.contains(_productSelect));
-               if(_quantiteController.text!=null && _productSelect!=null && !_products.contains(_productSelect))
-                 setState(() {
-                   _products.add(
-                       {
-                         "quantite": _quantiteController.text,
-                         "productName": _productSelect,
-                       }
-                   ) ;
-                   _quantiteController.text="";
-                 });
-              },
-              child: Icon(Icons.add,color: Colors.white,),
-            ),
           ],
         ),
       ),

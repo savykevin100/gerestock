@@ -72,7 +72,7 @@ class _TestModeOrPayementState extends State<TestModeOrPayement> {
                   }
 
                   },
-                  child: _buildCard("lib/assets/images/free.png", "Mode test: Avec ce mode vous pouvez découvrir les fonctionnalités de l'application en mode gratuit. Ce mode est valable pour 1 mois d'utilisation.")
+                  child: _buildCard("lib/assets/images/free.png", "Découvrir les fonctionnalités de l'application en mode gratuit. Ce mode est valable pour 1 mois d'utilisation.", "Mode test")
                 ),
 
                 InkWell(
@@ -81,8 +81,8 @@ class _TestModeOrPayementState extends State<TestModeOrPayement> {
                         builder: (context) => SelectPayementMode()
                     ));
                   },
-                    child: _buildCard("lib/assets/images/cash_payment.png", "Mode payant: Avec ce mode, vous bénéficiez des fonctionnalités qui seront disponibles pendant 1 an et en fonction du pack de payement choisi vous pouvez "
-                        "bénéficier d'une aide en fonction des problèmes rencontrés au cours de l'utilisation de l'application")
+                    child: _buildCard("lib/assets/images/cash_payment.png", "Bénéficiez des fonctionnalités qui seront disponibles pendant 1 an et en fonction du pack de payement choisi vous pouvez "
+                        "bénéficier d'une aide en fonction des problèmes rencontrés au cours de l'utilisation de l'application", "Mode Abonnement")
                 ),
               ],
             ),
@@ -93,7 +93,7 @@ class _TestModeOrPayementState extends State<TestModeOrPayement> {
   }
 
 
-  Widget _buildCard(String imgPath, String text) {
+  Widget _buildCard(String imgPath, String text, String title) {
     return Padding(
         padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 5.0, right: 5.0),
         child: InkWell(
@@ -111,25 +111,35 @@ class _TestModeOrPayementState extends State<TestModeOrPayement> {
                     color: Colors.white),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
                     children: [
-                      Container(
-                          height: 80.0,
-                          width: 80.0,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(imgPath),
-                                  fit: BoxFit.contain))),
-                      SizedBox(width: 20,),
-                      Expanded(
-                        flex: 2,
-                        child: Text(text,
-                          style: TextStyle(fontSize: 12.0, fontFamily: "MonserratBold", color: bleuPrincipale),
-                          maxLines: 7,
-                        ),
+                      SizedBox(height: 5,),
+                      Text(title,
+                        style: TextStyle(fontSize: 20.0, fontFamily: "MonserratBold", color: Colors.red),
+                        maxLines: 2,
                       ),
+                      SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                              height: 80.0,
+                              width: 80.0,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(imgPath),
+                                      fit: BoxFit.contain))),
+                          SizedBox(width: 20,),
+                          Expanded(
+                            flex: 2,
+                            child: Text(text,
+                              style: TextStyle(fontSize: 12.0, fontFamily: "MonserratBold", color: bleuPrincipale),
+                              maxLines: 7,
+                            ),
+                          ),
 
+                        ],
+                      ),
                     ],
                   ),
                 ))));

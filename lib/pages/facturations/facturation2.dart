@@ -308,7 +308,7 @@ class _Facturation2State extends State<Facturation2> {
     //Draw grid
     drawGrid(page, grid, result);
     //Add invoice footer
-    drawFooter(page, pageSize);
+   // drawFooter(page, pageSize);
     //Save and launch the document
     final List<int> bytes = document.save();
     //Dispose the document.
@@ -326,11 +326,71 @@ class _Facturation2State extends State<Facturation2> {
 
   //Draws the invoice header
   PdfLayoutResult drawHeader(PdfPage page, Size pageSize, PdfGrid grid) {
-    //Draw rectangle
+    final PdfFont contentFont = PdfStandardFont(PdfFontFamily.helvetica, 15);
+
+    // Image gerestock
+    page.graphics.drawString(
+        "Image gerestock", PdfStandardFont(PdfFontFamily.helvetica, 30),
+        brush: PdfBrushes.red,
+        bounds: Rect.fromLTWH(25, 0, 200, 90),
+        format: PdfStringFormat(lineAlignment: PdfVerticalAlignment.middle));
+
+    final String factureTitle = 'Facture N° \nF93000000001 ';
+    final String dateEmission = "Date d'émission : ${DateTime.now().toString().substring(0, 19)}" ;
+    final String nameEntreprise = _userData["companyName"];
+    final String locationEntreprise = _userData["address"];
+    final String nameClient = "Client: ${widget.client}";
+
+
     page.graphics.drawRectangle(
+    pen: PdfPen(PdfColor(165, 42, 42), width: 1),
+    brush: PdfBrushes.white, bounds: Rect.fromLTWH(30, 150, 200, 70));
+
+    page.graphics.drawRectangle(
+        pen: PdfPen(PdfColor(165, 42, 42), width: 1),
+        brush: PdfBrushes.white, bounds: Rect.fromLTWH(pageSize.width/2+30, 150, 200, 70));
+
+    final Size contentSize = contentFont.measureString(factureTitle);
+
+   // String address = '''N°IFU: ${_userData["ifu"]} \r\n\r\nAdresse: ${_userData["country"]}, \r\n\r\nNuméro: ${_userData["telephoneNumber"]}''';
+
+    PdfTextElement(text: factureTitle, font: contentFont).draw(
+        page: page,
+        bounds: Rect.fromLTWH(pageSize.width - (contentSize.width + 30), 10,
+            contentSize.width + 30, pageSize.height - 120));
+
+    PdfTextElement(text: dateEmission, font: contentFont).draw(
+        page: page,
+        bounds: Rect.fromLTWH(pageSize.width - (contentSize.width + 160), 45,
+            300, pageSize.height - 120));
+
+    PdfTextElement(text: nameEntreprise, font: contentFont).draw(
+        page: page,
+        bounds: Rect.fromLTWH(50, 160,
+            contentSize.width + 30, pageSize.height - 120));
+
+    PdfTextElement(text: locationEntreprise, font: contentFont).draw(
+        page: page,
+        bounds: Rect.fromLTWH(50, 190,
+            contentSize.width + 30, pageSize.height - 120));
+
+    PdfTextElement(
+        format: PdfStringFormat(),
+        text: nameClient, font:  PdfStandardFont(PdfFontFamily.helvetica, 15)).draw(
+        page: page,
+        bounds: Rect.fromLTWH(pageSize.width/2+40, 160,
+            contentSize.width + 30, pageSize.height - 120));
+
+
+    //Draw rectangle
+   /* page.graphics.drawRectangle(
         brush: PdfSolidBrush(PdfColor(91, 126, 215, 255)),
-        bounds: Rect.fromLTWH(0, 0, pageSize.width , 90));
+        bounds: Rect.fromLTWH(0, 50, pageSize.width/2 , 80));*/
     //Draw string
+
+        /*page.graphics.drawRectangle(
+        brush: PdfBrushes.chocolate, bounds: Rect.fromLTWH(10, 10, 500, 50));*/
+
     page.graphics.drawString(
         _userData["companyName"], PdfStandardFont(PdfFontFamily.helvetica, 30),
         brush: PdfBrushes.white,
@@ -349,29 +409,19 @@ class _Facturation2State extends State<Facturation2> {
             alignment: PdfTextAlignment.center,
             lineAlignment: PdfVerticalAlignment.middle));*/
 
-    final PdfFont contentFont = PdfStandardFont(PdfFontFamily.helvetica, 9);
-    //Draw string
-    /*page.graphics.drawString('Montant total', contentFont,
-        brush: PdfBrushes.white,
-        bounds: Rect.fromLTWH(400, 0, pageSize.width - 400, 33),
-        format: PdfStringFormat(
-            alignment: PdfTextAlignment.center,
-            lineAlignment: PdfVerticalAlignment.bottom));*/
-    //Create data foramt and convert it to text.
-
-   // final DateFormat format = DateFormat.yMMMMd('fr');
+    final PdfFont contentFont1 = PdfStandardFont(PdfFontFamily.helvetica, 9);
     final String invoiceNumber = 'Numéro de facture: 2058557939\r\n\r\nDate: ' +
         /*format.format(DateTime.now())*/DateTime.now().toString().substring(0, 19);
-    final Size contentSize = contentFont.measureString(invoiceNumber);
+    final Size contentSize1 = contentFont.measureString(invoiceNumber);
 
      String address = '''N°IFU: ${_userData["ifu"]} \r\n\r\nAdresse: ${_userData["country"]}, \r\n\r\nNuméro: ${_userData["telephoneNumber"]}''';
 
-    PdfTextElement(text: invoiceNumber, font: contentFont).draw(
+   /* PdfTextElement(text: invoiceNumber, font: contentFont).draw(
         page: page,
-        bounds: Rect.fromLTWH(pageSize.width - (contentSize.width + 30), 120,
-            contentSize.width + 30, pageSize.height - 120));
+        bounds: Rect.fromLTWH(pageSize.width - (contentSize.width + 30), 150,
+            contentSize.width + 30, pageSize.height - 120));*/
 
-    return PdfTextElement(text: address, font: contentFont).draw(
+    return PdfTextElement(text: "", font: contentFont).draw(
         page: page,
         bounds: Rect.fromLTWH(30, 120,
             pageSize.width - (contentSize.width + 30), pageSize.height - 120));
@@ -392,7 +442,7 @@ class _Facturation2State extends State<Facturation2> {
     };
     //Draw the PDF grid and get the result.
     result = grid.draw(
-        page: page, bounds: Rect.fromLTWH(0, result.bounds.bottom + 40, 0, 0));
+        page: page, bounds: Rect.fromLTWH(0, 300, 0, 0));
 
     //Draw grand total.
     page.graphics.drawString('Montant Total:',
@@ -405,7 +455,7 @@ class _Facturation2State extends State<Facturation2> {
     page.graphics.drawString("$_amountTotal FCFA",
         PdfStandardFont(PdfFontFamily.helvetica, 9, style: PdfFontStyle.bold),
         bounds: Rect.fromLTWH(
-            totalPriceCellBounds.left,
+            quantityCellBounds.left+100,
             result.bounds.bottom + 10,
             totalPriceCellBounds.width,
             totalPriceCellBounds.height));
@@ -442,10 +492,11 @@ class _Facturation2State extends State<Facturation2> {
     headerRow.style.backgroundBrush = PdfSolidBrush(PdfColor(68, 114, 196));
     headerRow.style.textBrush = PdfBrushes.white;
     //headerRow.cells[0].value = 'Product Id';
-    headerRow.cells[0].value = (widget.typeFacturation==false)?'Nom du produit': "Service";
-    headerRow.cells[1].value = 'Prix';
-    headerRow.cells[2].value = 'Quantité';
-    headerRow.cells[3].value = 'Montant';
+    //headerRow.cells[0].value = (widget.typeFacturation==false)?'Nom du produit': "Service";
+    headerRow.cells[0].value = "Désignation";
+    headerRow.cells[2].value = 'PU';
+    headerRow.cells[1].value = 'Qte';
+    headerRow.cells[3].value = 'Montant (en F)';
     //Add rows
     for(int i=0; i<widget.products.length; i++){
       addProducts((widget.typeFacturation==false)?widget.products[i]["productName"]:widget.products[i]["service"], int.tryParse(widget.products[i]["sellPriceProduct"]),
@@ -464,7 +515,7 @@ class _Facturation2State extends State<Facturation2> {
     grid.columns[1].width = 100;
     for (int i = 0; i < headerRow.cells.count; i++) {
       headerRow.cells[i].style.cellPadding =
-          PdfPaddings(bottom: 5, left: 5, right: 5, top: 5);
+          PdfPaddings(bottom: 5, left: 20, right: 5, top: 5);
     }
     for (int i = 0; i < grid.rows.count; i++) {
       final PdfGridRow row = grid.rows[i];
@@ -474,7 +525,7 @@ class _Facturation2State extends State<Facturation2> {
           cell.stringFormat.alignment = PdfTextAlignment.center;
         }*/
         cell.style.cellPadding =
-            PdfPaddings(bottom: 5, left: 5, right: 5, top: 5);
+            PdfPaddings(bottom: 5, left: 20, right: 5, top: 5);
       }
     }
     return grid;
@@ -486,8 +537,8 @@ class _Facturation2State extends State<Facturation2> {
     final PdfGridRow row = grid.rows.add();
    // row.cells[0].value = productId;
     row.cells[0].value = productName;
-    row.cells[1].value = price.toString();
-    row.cells[2].value = quantity.toString();
+    row.cells[2].value = price.toString();
+    row.cells[1].value = quantity.toString();
     row.cells[3].value = total.toString();
   }
 
