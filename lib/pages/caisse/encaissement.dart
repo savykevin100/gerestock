@@ -84,7 +84,7 @@ class _EncaissementState extends State<Encaissement> {
                   .snapshots(),
               builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError || !snapshot.hasData)
-                  return Text('Pas de données');
+                  return Center(child: CircularProgressIndicator(),);
                 if (snapshot.connectionState == ConnectionState.waiting)
                   return Center(child: CircularProgressIndicator(),);
                 return StaggeredGridView.countBuilder(

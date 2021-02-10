@@ -11,6 +11,7 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/modeles/abonnement.dart';
 import 'package:gerestock/pages/accueil.dart';
 import 'package:gerestock/pages/payement/select_payement_mode.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class TestModeOrPayement extends StatefulWidget {
@@ -54,7 +55,11 @@ class _TestModeOrPayementState extends State<TestModeOrPayement> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InkWell(
-                  onTap: (){
+                  onTap: () async {
+                    SharedPreferences pref = await SharedPreferences.getInstance();
+                    pref.setString("Mode", "Test mode");
+                    pref.setString("Debut", DateTime.now().toString());
+
                   try {
                    if(_emailEntreprise!=null)
                      FirestoreService().addAbonnement(Abonnement(

@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gerestock/authentification/connexion.dart';
+import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/pages/parametres.dart';
 
@@ -35,6 +37,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         children: <Widget>[
           //creationHeader(),
           SizedBox(height: 100,),
+
           drawerItem(
               icon: Icons.home,
               text: "Accueil",

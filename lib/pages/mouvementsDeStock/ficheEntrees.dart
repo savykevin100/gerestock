@@ -160,7 +160,10 @@ class _FicheEntreesState extends State<FicheEntrees> {
                   });
                   },
                 ),
-              ):Text("")
+              ):Padding(
+                padding: EdgeInsets.only(right: 40),
+                child: Text("Pas de fournisseur ajouté", maxLines: 2,),
+              )
             ],
           ),
           SizedBox(height: longueurPerCent(20, context),),
@@ -176,7 +179,7 @@ class _FicheEntreesState extends State<FicheEntrees> {
                   MaterialPageRoute(builder: (_) => ConfirmEntrees(dateInput: dateInput, fournisseur: fournisseur, livreur: livreurController.text, montantEntrer: montantEntrerController.text,)));
             }
             else
-              displaySnackBarNom(context, "Veuillez choisir la date et le fournisseur", Colors.white);
+              displaySnackBarNom(context, "Les champs date, montant et fournisseur doivent être renseignés", Colors.white);
           })
         ],
       )

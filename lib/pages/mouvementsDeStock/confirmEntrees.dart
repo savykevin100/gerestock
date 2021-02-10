@@ -15,6 +15,7 @@ import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/decaissement_models.dart';
 import 'package:gerestock/modeles/entrer_models.dart';
+import 'package:gerestock/pages/accueil.dart';
 import 'package:gerestock/pages/mouvementsDeStock/ficheEntrees.dart';
 
 import '../../spash_screen.dart';
@@ -260,6 +261,8 @@ class _ConfirmEntreesState extends State<ConfirmEntrees> {
                  });
                  EasyLoading.dismiss();
                  EasyLoading.showSuccess("L'ajout a réussie");
+                 Navigator.push(
+                     context, MaterialPageRoute(builder: (context) => Accueil()));
                } catch (e){
                  EasyLoading.dismiss();
                  EasyLoading.showError("L'ajout a échoué");

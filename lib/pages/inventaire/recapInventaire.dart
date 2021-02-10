@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -153,6 +154,12 @@ class _RecapInventaireState extends State<RecapInventaire> {
   Future<void> addInventaire(){
     try {
       EasyLoading.show(status: 'Chargement', dismissOnTap: false);
+      widget.produitsFamilles.forEach((element) {
+        FirebaseFirestore.instance.collection("Utilisateurs").doc(_emailEntreprise).collection("TousLesProduits").doc(element["id"]).update({"theoreticalStock":element["physicalStock"]}).then((value){
+          print("Réussie");
+        });
+      });
+
       FirestoreService().addInventaire( Inventaires(
         created: DateTime.now().toString().toString().substring(0, 10),
         products: widget.produitsFamilles,

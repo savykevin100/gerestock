@@ -353,7 +353,8 @@ class _Facturation1State extends State<Facturation1> {
                    maxLines: 1,
                    decoration: InputDecoration(
                      border: OutlineInputBorder( borderRadius: BorderRadius.all(Radius.circular(7.0) ),
-                         borderSide: BorderSide(width: 2, style: BorderStyle.none)
+                         borderSide: BorderSide(width: 2, style: BorderStyle.none
+                         )
                      ),
                    ),
                 ),
@@ -422,7 +423,12 @@ class _Facturation1State extends State<Facturation1> {
           ),
           SizedBox(height: longueurPerCent(50, context),),
         ],
-      ):Center(child:CircularProgressIndicator(),)
+      ):Center(child:Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+        ],
+      ),)
     );
   }
 

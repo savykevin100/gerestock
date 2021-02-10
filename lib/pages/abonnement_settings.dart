@@ -5,7 +5,10 @@ import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/constantsWidgets.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
+import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
+import 'package:gerestock/pages/payement/select_payement_mode.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class AbonnementSettings extends StatefulWidget {
@@ -17,11 +20,41 @@ class _AbonnementState extends State<AbonnementSettings> {
 
 
   bool isSwitched = false;
+  String mode;
+  String dateDebut;
+  String formule;
+  String fin;
+
+  void getAbonnementSetting() async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      mode = pref.getString("Mode");
+      dateDebut = pref.getString("Debut");
+      if(mode == "Test mode")
+        fin = DateTime.parse(dateDebut).add(Duration(days: 30)).toString();
+       else
+        fin = DateTime.parse(dateDebut).add(Duration(days: 355)).toString();
+
+      if(pref.containsKey("Debut"))
+      formule = pref.getString("Formule");
+      else
+        formule ="";
+      print(dateDebut);
+    });
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAbonnementSetting();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context,"AbonnementSettings"),
+      appBar: appBar(context,"Abonnement"),
       body: ListView(
         children: [
           SizedBox(height: longueurPerCent(20, context),),
@@ -47,10 +80,10 @@ class _AbonnementState extends State<AbonnementSettings> {
                       width: 100,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: HexColor("#FCDB28")),
+                    color:  HexColor("#B2C40F")),
                       child: Center(
                        child: TextClasse(
-                  text: "Preminum",
+                  text: (mode == "Test mode")? "Test mode": formule,
                   color: white,
                   fontSize: 12,
                   family: "MonserratBold",
@@ -59,8 +92,50 @@ class _AbonnementState extends State<AbonnementSettings> {
               ))
             ],
           ),
+          SizedBox(height: 50,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextClasse(
+                text: "Début :",
+                color: Colors.black,
+                fontSize: 15,
+                family: "MonserratBold",
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(width: 50,),
+              TextClasse(
+                text: dateDebut.substring(0, 19),
+                color: Colors.black,
+                fontSize: 15,
+                family: "MonserratBold",
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
+          SizedBox(height: 20,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextClasse(
+                text: "Fin : ",
+                color: Colors.black,
+                fontSize: 15,
+                family: "MonserratBold",
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(width: 50,),
+              TextClasse(
+                text: fin.substring(0, 19),
+                color: Colors.black,
+                fontSize: 15,
+                family: "MonserratBold",
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
           SizedBox(height: longueurPerCent(20, context),),
-          Card(
+          /*Card(
             margin: EdgeInsets.symmetric(horizontal: largeurPerCent(56, context), vertical: longueurPerCent(20, context)),
             elevation: 5.0,
             child: Container(
@@ -104,7 +179,7 @@ class _AbonnementState extends State<AbonnementSettings> {
                 ),
               ),
             ),
-          ),
+          ),*/
           SizedBox(height: longueurPerCent(50, context),),
           Column(
             children: [
@@ -117,7 +192,7 @@ class _AbonnementState extends State<AbonnementSettings> {
                       child: Card(
                         elevation: 5.0,
                         child: Container(
-                          height: longueurPerCent(100, context),
+                          height: 120,
                           child:Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -126,10 +201,10 @@ class _AbonnementState extends State<AbonnementSettings> {
                               Container(
                                 height: 38,
                                 width: 88,
-                              color: HexColor("#FCDB28"),
+                              color: Theme.of(context).primaryColor,
                                 child: Center(
                                     child: TextClasse(
-                                      text: "Preminum",
+                                      text: "Test mode",
                                       color: white,
                                       fontSize: 12,
                                       family: "MonserratBold",
@@ -139,12 +214,13 @@ class _AbonnementState extends State<AbonnementSettings> {
                               SizedBox(width: 10,),
                               SizedBox(height: 10,),
                               Flexible(
-                                child: AutoSizeText("Lorem Ipsum is simply dummy text of the printing and t"
-                                    "ypesetting industry. Lorem Ipsum has been the industry’s standard dummy te"
-                                    "xt ever since the 1500s, when an unknown printer took a galley.",
-                                  style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
-                                  maxLines: 3,
-                                  minFontSize: 9,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 5),
+                                  child: AutoSizeText("Découvrir les fonctionnalités de l'application en mode gratuit. Ce mode est valable pour 1 mois d'utilisation.",
+                                    style: TextStyle(fontSize: 15.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
+                                    maxLines: 5,
+                                    minFontSize: 11,
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 10,),
@@ -161,7 +237,7 @@ class _AbonnementState extends State<AbonnementSettings> {
                         width: 88,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: HexColor("#36BD40")),
+                            color: (mode == "Test mode")?HexColor("#B2C40F"):HexColor("#C9C9C9")),
                         child: Center(
                             child: TextClasse(
                               text: "Activé",
@@ -184,7 +260,7 @@ class _AbonnementState extends State<AbonnementSettings> {
                       child: Card(
                         elevation: 5.0,
                         child: Container(
-                          height: longueurPerCent(100, context),
+                          height: 120,
                           child:Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -193,10 +269,10 @@ class _AbonnementState extends State<AbonnementSettings> {
                               Container(
                                 height: 38,
                                 width: 88,
-                              color: HexColor("#FF8002"),
+                              color: Theme.of(context).primaryColor,
                                 child: Center(
                                     child: TextClasse(
-                                      text: "Medium",
+                                      text: "Basique",
                                       color: white,
                                       fontSize: 12,
                                       family: "MonserratBold",
@@ -206,13 +282,14 @@ class _AbonnementState extends State<AbonnementSettings> {
                               SizedBox(width: 10,),
                               SizedBox(height: 10,),
                               Flexible(
-                                child: AutoSizeText("Lorem Ipsum is simply dummy text of the printing and t"
-                                  "ypesetting industry. Lorem Ipsum has been the industry’s standard dummy te"
-                                  "xt ever since the 1500s, when an unknown printer took a galley.",
-                                style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
-                                maxLines: 3,
-                                minFontSize: 9,
-                              )),
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 5),
+                                  child: AutoSizeText("Bénéficiez de toutes les fonctionnalités de l'application sans aucune aide particulière.",
+                                  style: TextStyle(fontSize: 12.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
+                                  maxLines: 5,
+                                  minFontSize: 11,
+                              ),
+                                )),
                               SizedBox(height: 10,),
 
                             ],
@@ -227,10 +304,10 @@ class _AbonnementState extends State<AbonnementSettings> {
                         width: 88,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: HexColor("#C9C9C9")),
+                            color: (mode !="Test mode" && formule == "Basique")?HexColor("#B2C40F"):HexColor("#C9C9C9")),
                         child: Center(
                             child: TextClasse(
-                              text: "Désactivé",
+                              text: (mode !="Test mode" && formule == "Basique")?"Activé":"Désactivé",
                               color: white,
                               fontSize: 12,
                               family: "MonserratBold",
@@ -250,7 +327,7 @@ class _AbonnementState extends State<AbonnementSettings> {
                       child: Card(
                         elevation: 5.0,
                         child: Container(
-                          height: longueurPerCent(100, context),
+                          height: 120,
                           child:Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -259,10 +336,10 @@ class _AbonnementState extends State<AbonnementSettings> {
                               Container(
                                 height: 38,
                                 width: 88,
-                              color: HexColor("#B2C40F"),
+                              color: Theme.of(context).primaryColor,
                                 child: Center(
                                     child: TextClasse(
-                                      text: "Basique",
+                                      text: "Avancé",
                                       color: white,
                                       fontSize: 12,
                                       family: "MonserratBold",
@@ -272,12 +349,13 @@ class _AbonnementState extends State<AbonnementSettings> {
                               SizedBox(width: 10,),
                               SizedBox(height: 10,),
                               Flexible(
-                                child: AutoSizeText("Lorem Ipsum is simply dummy text of the printing and t"
-                                    "ypesetting industry. Lorem Ipsum has been the industry’s standard dummy te"
-                                    "xt ever since the 1500s, when an unknown printer took a galley.",
-                                  style: TextStyle(fontSize: 10.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
-                                  maxLines: 3,
-                                  minFontSize: 9,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 5),
+                                  child: AutoSizeText("Bénéficiez de toutes les fonctionnalités de l'application avec l'apport de l'aide d'un consultant dans tous les cas d'utilisation. ",
+                                    style: TextStyle(fontSize: 12.0, fontFamily: "MonserratBold", color: HexColor("#001C36")),
+                                    maxLines: 5,
+                                    minFontSize: 11,
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 10,),
@@ -294,10 +372,10 @@ class _AbonnementState extends State<AbonnementSettings> {
                         width: 88,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: HexColor("#C9C9C9")),
+                            color: (mode !="Test mode" && formule == "Avancé")?HexColor("#B2C40F"):HexColor("#C9C9C9")),
                         child: Center(
                             child: TextClasse(
-                              text: "Désactivé",
+                              text: (mode !="Test mode" && formule == "Avancé")?"Activé":"Désactivé",
                               color: white,
                               fontSize: 12,
                               family: "MonserratBold",
@@ -308,7 +386,14 @@ class _AbonnementState extends State<AbonnementSettings> {
                   ],
                 ),
               ),
-              SizedBox(height: longueurPerCent(20, context),)
+              SizedBox(height: longueurPerCent(20, context),),
+              (mode == "Test mode")?submitButton(context, "Quittez le mode test", (){
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => SelectPayementMode()));
+              }):Container(),
+
+              SizedBox(height: longueurPerCent(20, context),),
+
             ],
           )
         ],

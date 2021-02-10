@@ -133,7 +133,9 @@ class _NouvelInventaireState extends State<NouvelInventaire> {
                               "productName": element.data()["productName"],
                               "theoricalStock": element.data()["theoreticalStock"],
                               "reste":0,
-                              "image":element.data()["image"]
+                              "image":element.data()["image"],
+                              "id": element.data()["id"],
+                              "physicalStock":0,
                             }
                           );
                         });
@@ -191,6 +193,7 @@ class _NouvelInventaireState extends State<NouvelInventaire> {
                       onChanged: (value){
                         setState(() {
                           produitsFamilles[index]["reste"] =  produitsFamilles[index]["theoricalStock"] - int.tryParse(value);
+                          produitsFamilles[index]["physicalStock"] = int.tryParse(value);
                         });
                       },
                     ),

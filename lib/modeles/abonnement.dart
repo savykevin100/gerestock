@@ -5,6 +5,7 @@ class Abonnement {
   bool activeTestMode;
   bool activeAbonnement;
   String id;
+  String formule;
 
 
 
@@ -14,7 +15,8 @@ class Abonnement {
         this.dateBeginAbonnement,
         this.id,
         this.activeAbonnement,
-        this.activeTestMode
+        this.activeTestMode,
+        this.formule,
       });
 
   Abonnement.fromMap(Map<String, dynamic> donnees, String id)
@@ -22,7 +24,8 @@ class Abonnement {
         dateBeginAbonnement = donnees["dateBeginAbonnement"],
         id = donnees["id"],
         activeTestMode = donnees["activeTestMode"],
-        activeAbonnement = donnees["activeAbonnement"];
+        activeAbonnement = donnees["activeAbonnement"],
+        formule = donnees["formule"];
 
   Map<String, dynamic> toMap() {
     return {
@@ -31,6 +34,7 @@ class Abonnement {
       "id": id,
       "activeTestMode": activeTestMode,
       "activeAbonnement": activeAbonnement,
+      "formule": formule,
     };
   }
 }

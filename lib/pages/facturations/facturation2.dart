@@ -589,7 +589,8 @@ class _Facturation2State extends State<Facturation2> {
       }
       EasyLoading.dismiss();
       EasyLoading.showSuccess("L'ajout a réussie");
-      generateInvoice();
+
+     // generateInvoice();
     } catch (e){
       print(e);
       EasyLoading.dismiss();

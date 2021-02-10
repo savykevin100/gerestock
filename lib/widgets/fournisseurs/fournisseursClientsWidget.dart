@@ -78,7 +78,13 @@ class _ClientsState extends State<FournisseursClientsWidget> {
           if (snapshot.hasError || !snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           } else if(snapshot.data.isEmpty)
-            return Center(child:Text("Pas de nouveaux "+widget.title));
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 100,),
+                Text("Pas de nouveaux "+widget.title),
+              ],
+            );
           else {
             return ListView.builder(
               shrinkWrap: true,

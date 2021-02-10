@@ -23,6 +23,7 @@ import 'package:gerestock/pages/mouvementsDeStock/mouvementDeStock.dart';
 import 'package:gerestock/pages/nouveauProduit/familles.dart';
 import 'package:gerestock/pages/parametres.dart';
 import 'package:gerestock/pages/mouvementsDeStock/sorties.dart';
+import 'package:gerestock/pages/payement/select_payement_mode.dart';
 import 'package:gerestock/pages/payement/select_test_mode_or_payement.dart';
 import 'package:gerestock/spash_screen.dart';
 import 'package:gerestock/test.dart';
@@ -99,6 +100,7 @@ class MyApp extends StatelessWidget {
         '/InformationSupplementaires': (BuildContext context) => InformationSupplementaire(),
         '/ClientsFournisseurs': (BuildContext context) => FournisseursClientsWidget(),
         '/TestModeOrPayement': (BuildContext context) => TestModeOrPayement(),
+        '/SelectPayementMode': (BuildContext context) => SelectPayementMode(),
       },
       builder: (BuildContext context, Widget child) {
         /// make sure that loading can be displayed in front of all other widgets

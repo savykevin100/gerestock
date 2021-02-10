@@ -10,6 +10,7 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/abonnement.dart';
 import 'package:kkiapay_flutter_sdk/kkiapayWebview.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../accueil.dart';
 
@@ -25,6 +26,8 @@ class _SelectPayementModeState extends State<SelectPayementMode> {
   Future<User> getUser() async {
     return FirebaseAuth.instance.currentUser;
   }
+
+  String formule;
 
 
 
@@ -52,14 +55,17 @@ class _SelectPayementModeState extends State<SelectPayementMode> {
           children: [
             InkWell(
               onTap: (){
+                setState(() {
+                  formule = "Basique";
+                });
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) =>  KKiaPay(
-                    amount: 1,
+                    amount: 100000,
                     phone: '61000000',
                     data: 'hello world',
                     sandbox: true,
-                    apikey: 'pk_02dd5d2594b982670110f239011abfae2003715bd009c4dac0902b5e45430f64',
+                    apikey: '1b28e1d0772911eaa95c41ede0b15bcd',
                     callback: sucessCallback,
                     name: 'JOHN DOE',
                     theme: ("#3675BD"),
@@ -107,14 +113,17 @@ class _SelectPayementModeState extends State<SelectPayementMode> {
             SizedBox(height: 20,),
             InkWell(
               onTap: (){
+                setState(() {
+                  formule = "Avancé";
+                });
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) =>  KKiaPay(
-                    amount: 1,
+                    amount: 200000,
                     phone: '61000000',
                     data: 'hello world',
                     sandbox: true,
-                    apikey: 'pk_02dd5d2594b982670110f239011abfae2003715bd009c4dac0902b5e45430f64',
+                    apikey: '1b28e1d0772911eaa95c41ede0b15bcd',
                     callback: sucessCallback,
                     name: 'JOHN DOE',
                     theme: ("#3675BD"),
@@ -167,12 +176,17 @@ class _SelectPayementModeState extends State<SelectPayementMode> {
 
 
 
-  void sucessCallback(response, context) {
+  Future<void> sucessCallback(response, context) async {
     Navigator.pop(context);
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("Mode", "Abonnement");
+    pref.setString("Debut", DateTime.now().toString());
+    pref.setString("Formule", formule);
     FirestoreService().addAbonnement(Abonnement(
         activeTestMode: true,
         activeAbonnement: false,
-        dateBeginTestMode: DateTime.now().toString()
+        dateBeginTestMode: DateTime.now().toString(),
+        formule: formule,
     ) , _emailEntreprise);
     Navigator.push(
       context,

@@ -9,6 +9,7 @@ import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/pages/accueil.dart';
 import 'package:gerestock/pages/payement/select_payement_mode.dart';
 import 'package:gerestock/pages/payement/select_test_mode_or_payement.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'authentification/connexion.dart';
 
@@ -27,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   bool activeAbonnement;
   DateTime dateBeginTestMode;
   DateTime dateBeginAbonnement;
+  String formule;
 
   Future<User> getUser() async {
     return FirebaseAuth.instance.currentUser;
@@ -41,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
          activeAbonnement = element.data()["activeAbonnement"];
          dateBeginTestMode =DateTime.parse( element.data()["dateBeginTestMode"]);
          dateBeginAbonnement = element.data()["dateBeginAbonnement"];
+         formule = element.data()["formule"];
        });
        print(activeTestMode);
        print(dateBeginTestMode);
@@ -77,25 +80,32 @@ class _SplashScreenState extends State<SplashScreen> {
     return Timer(duration, route);
   }
 
-  route (){
+  route () async {
     if(currentUser == false) {
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => Inscription()
       ));
     }
-   else if(currentUser && activeTestMode && DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 10))) && !activeAbonnement) {
+   else if(currentUser && activeTestMode && DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 30))) && !activeAbonnement) {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setString("Mode", "Test mode");
+      pref.setString("Debut", dateBeginTestMode.toString());
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => Accueil()
       ));
-    } else if(currentUser && activeTestMode && !DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 10))) && !activeAbonnement) {
+    } else if(currentUser && activeTestMode && !DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 30))) && !activeAbonnement) {
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => SelectPayementMode()
       ));
-    } else if(currentUser && !activeTestMode && activeAbonnement && DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 365)))){
+    } else if(currentUser && !activeTestMode && activeAbonnement && DateTime.now().isBefore(dateBeginAbonnement.add(Duration(days: 365)))){
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setString("Mode", "Test mode");
+      pref.setString("Debut", dateBeginAbonnement.toString());
+      pref.setString("Formule", dateBeginAbonnement.toString());
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => Accueil()
       ));
-    } else if(currentUser && activeAbonnement && !activeTestMode && !DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 365)))){
+    } else if(currentUser && activeAbonnement && !activeTestMode && !DateTime.now().isBefore(dateBeginAbonnement.add(Duration(days: 365)))){
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => SelectPayementMode()
       ));
