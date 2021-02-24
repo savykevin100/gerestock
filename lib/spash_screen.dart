@@ -11,6 +11,7 @@ import 'package:gerestock/pages/payement/select_payement_mode.dart';
 import 'package:gerestock/pages/payement/select_test_mode_or_payement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'CustomDialog.dart';
 import 'authentification/connexion.dart';
 
 
@@ -57,6 +58,25 @@ class _SplashScreenState extends State<SplashScreen> {
 
   bool currentUser=false;
 
+ // AppUpdateInfo _updateInfo;
+
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+
+
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  /*Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        _updateInfo = info;
+      });
+    }).catchError((e) => _showError(e));
+  }
+
+  void _showError(dynamic exception) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(exception.toString())));
+  }*/
+
 
 
   @override
@@ -82,8 +102,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   route () async {
     if(currentUser == false) {
+
       Navigator.push(context, MaterialPageRoute(
-          builder: (context) => Inscription()
+          builder: (context) => Connexion()
       ));
     }
    else if(currentUser && activeTestMode && DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 30))) && !activeAbonnement) {
@@ -114,9 +135,60 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Colors.white,
+     body: Container(
+       height: MediaQuery.of(context).size.height,
+       width: MediaQuery.of(context).size.width,
+       decoration: BoxDecoration(
+         image: DecorationImage(
+           image:AssetImage("lib/assets/images/gerestock_logo.jpg",),
+           fit: BoxFit.contain
+         )
+       ),
+     )
     );
   }
 
+
+
+  void showUpdateDialog(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => CustomDialog(
+        title: "Mise à jour",
+        description:
+        "Une nouvelle mise à jour est disponilble, voulez-vous la télécharger maintenant?",
+        cancelButton: FlatButton(
+          onPressed: (
+              ) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Accueil()));
+          },
+          child: Text("Plus tard",
+            style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: 12.0,
+                fontFamily: "MonseraBold"
+            ),
+          ),
+        ),
+        nextButton: FlatButton(
+          onPressed: (
+              ) {
+            Navigator.pop(context);
+          //  InAppUpdate.performImmediateUpdate().catchError((e) => _showError(e));
+          },
+          child: Text("Oui",
+            style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: 12.0,
+                fontFamily: "MonseraBold"
+            ),),
+        ),
+        icon: Icon(Icons.system_update,size: 100,  color: Theme.of(context).primaryColor,
+        ),
+      ),
+    );
+  }
 
 }

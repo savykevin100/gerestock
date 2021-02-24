@@ -103,8 +103,8 @@ class _InscriptionState extends State<Connexion> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget> [
-                SizedBox(height: longueurPerCent(100, context),),
-                Text("LOGO", style: TextStyle(color: bleuPrincipale,fontWeight: FontWeight.bold,fontSize: 53.0),),
+                SizedBox(height: longueurPerCent(50, context),),
+                Image.asset("lib/assets/images/gerestock_logo.jpg", height: 200, width: 200,),
                 SizedBox(height: longueurPerCent(50, context),),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: kDefautPadding),

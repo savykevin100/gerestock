@@ -17,6 +17,7 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/helper.dart';
 import 'package:gerestock/modeles/facture.dart';
+import 'package:gerestock/pages/caisse/encaissement.dart';
 import 'package:gerestock/pages/facturations/factureViewPdf.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
@@ -589,7 +590,8 @@ class _Facturation2State extends State<Facturation2> {
       }
       EasyLoading.dismiss();
       EasyLoading.showSuccess("L'ajout a réussie");
-
+      Navigator.push(context,
+          MaterialPageRoute(builder: (_) => Encaissement()));
      // generateInvoice();
     } catch (e){
       print(e);

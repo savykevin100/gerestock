@@ -64,7 +64,7 @@ class _DetailsEntrerState extends State<DetailsEntrer> {
   }
 
   TextClasse  displayRecapTextGrey(String text){
-    return TextClasse(text: text, color: HexColor("#C9C9C9"), family: "MonserratBold", fontSize: 15,);
+    return TextClasse(text: text, color: Colors.green, family: "MonserratBold", fontSize: 15,);
   }
 
   Row displayField(String nameFiel, String value){
