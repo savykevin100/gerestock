@@ -52,6 +52,9 @@ dependencies:
   pdf_flutter:
   kkiapay_flutter_sdk: ^1.0.4
   flutter_launcher_icons: ^0.8.1
+  url_launcher: ^5.7.10
+
+
 
 
 
@@ -100,6 +103,7 @@ flutter:
       - lib/assets/images/cash_payment.png
       - lib/assets/images/free.png
       - lib/assets/images/gerestock_logo.jpg
+      - lib/assets/images/whatsapp.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

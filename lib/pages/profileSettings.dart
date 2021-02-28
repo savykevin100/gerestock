@@ -13,6 +13,7 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/pages/parametres.dart';
 
 import 'accueil.dart';
+import 'chat.dart';
 import 'nouveauProduit/familles.dart';
 
 
@@ -51,6 +52,13 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               onTap: () {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => Parametres()));
+              }),
+          drawerItem(
+              icon: Icons.chat,
+              text: "Chat",
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Chat()));
               }),
           drawerItem(
               icon: Icons.share,

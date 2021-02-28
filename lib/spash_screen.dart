@@ -4,11 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gerestock/authentification/inscription.dart';
-import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/pages/accueil.dart';
 import 'package:gerestock/pages/payement/select_payement_mode.dart';
-import 'package:gerestock/pages/payement/select_test_mode_or_payement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CustomDialog.dart';
@@ -65,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  /*Future<void> checkForUpdate() async {
+ /* Future<void> checkForUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
       setState(() {
         _updateInfo = info;
@@ -100,8 +97,14 @@ class _SplashScreenState extends State<SplashScreen> {
     return Timer(duration, route);
   }
 
-  route () async {
-    if(currentUser == false) {
+  route () async {    if(currentUser == false) {
+
+     /* if(_updateInfo.updateAvailable==false){
+        showUpdateDialog();
+      } else
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => Connexion()
+        ));*/
 
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => Connexion()
@@ -176,7 +179,7 @@ class _SplashScreenState extends State<SplashScreen> {
           onPressed: (
               ) {
             Navigator.pop(context);
-          //  InAppUpdate.performImmediateUpdate().catchError((e) => _showError(e));
+           // InAppUpdate.performImmediateUpdate().catchError((e) => _showError(e));
           },
           child: Text("Oui",
             style: TextStyle(
