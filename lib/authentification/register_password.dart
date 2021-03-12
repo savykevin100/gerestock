@@ -4,29 +4,27 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:gerestock/authentification/phone_authentification.dart';
+import 'package:gerestock/authentification/informations_supplementaire.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
-import 'package:gerestock/pages/accueil.dart';
 
 
+class RegisterPassword extends StatefulWidget {
 
-class Connexion extends StatefulWidget {
+  String numeroDeTelephone;
+  RegisterPassword({this.numeroDeTelephone});
   @override
   _InscriptionState createState() => _InscriptionState();
 }
 
-class _InscriptionState extends State<Connexion> {
-
-  String email;
-  String motDePass ;
+class _InscriptionState extends State<RegisterPassword> {
+  String email='';
+  String motDePass= '';
+  String confirmation = '';
   final _formKey = GlobalKey<FormState>();
-  FirebaseAuth _auth = FirebaseAuth.instance;
-
-  
 
 
   Future<bool> onBackPressed() {
@@ -62,35 +60,7 @@ class _InscriptionState extends State<Connexion> {
   }
 
 
-
-  showAlertDialog(BuildContext context, String text) {
-
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("RETOUR"),
-      onPressed:  () {
-        Navigator.pop(context);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("ALERTE"),
-      content: Text(text),
-      actions: [
-        cancelButton,
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-
+  FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,31 +85,7 @@ class _InscriptionState extends State<Connexion> {
                         fontSize: 18,
                         fontFamily: "MonserratBold"
                     ),
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        hintText: 'Email',
-                        hintStyle: TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
-                    ),
-                    onChanged: (value){
-                      email = value;
-                    },
-                    // ignore: missing_return
-                    validator: (String value) {
-                      if (EmailValidator.validate(email) == false || email.isEmpty) {
-                        return ("Entrer un email valide");
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(height: longueurPerCent(20, context),),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: kDefautPadding),
-                  child: TextFormField(
-                    style: TextStyle(
-                        color: HexColor("#001C36"),
-                        fontSize: 18,
-                        fontFamily: "MonserratBold"
-                    ),
+                    obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Mot de passe',
                         hintStyle: TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
@@ -157,51 +103,40 @@ class _InscriptionState extends State<Connexion> {
                     },
                   ),
                 ),
-
-                SizedBox(height: longueurPerCent(80, context),),
-                submitButton(context, "SE CONNECTER", () async {
-                  if(_formKey.currentState.validate()) {
-                    EasyLoading.show(status: 'Chargement');
-                    try{
-                      final user = await _auth.signInWithEmailAndPassword(email: email , password: motDePass);
-                      if(user!=null){
-                        EasyLoading.dismiss();
-                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                          return Accueil();
-                        }));
+                SizedBox(height: longueurPerCent(20, context),),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: kDefautPadding),
+                  child: TextFormField(
+                    style: TextStyle(
+                        color: HexColor("#001C36"),
+                        fontSize: 18,
+                        fontFamily: "MonserratBold"
+                    ),
+                    obscureText: true,
+                    decoration: InputDecoration(
+                        hintText: 'Confirmation mot de passe',
+                        hintStyle: TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
+                    ),
+                    onChanged:
+                        (value) => confirmation = value,
+                    // ignore: missing_return
+                    validator: (String value) {
+                      if (value.isEmpty || motDePass != value) {
+                        return ("Veuillez confirmer votre mot de passe");
                       }
-                    } catch (e) {
-                      EasyLoading.dismiss();
-                      print(e.toString());
-                      if(e.toString()=="[firebase_auth/wrong-password] The password is invalid or the user does not have a password.")
-                        showAlertDialog(context, "Mot de passe incorrect");
-                      else if(e.toString()=="[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.")
-                        showAlertDialog(context, "Aucun email ne correspond à l'email entré");
-                      else
-                        showAlertDialog(context, "Veuillez vérifier votre connexion internet");
-                    }
+                    },
+                  ),
+                ),
+                SizedBox(height: longueurPerCent(60, context),),
+                submitButton(context, "CONTINUER", () async {
+                  if(_formKey.currentState.validate()) {
+
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => InformationSupplementaire(numeroDeTelephone: widget.numeroDeTelephone, password: motDePass, )
+                    ));
                   }
                 }),
                 SizedBox(height: longueurPerCent(20, context),),
-                Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width / 1.3,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: FlatButton(
-                      color: Colors.white,
-                      onPressed: ()  {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => PhoneAuthentification()
-                        ));
-                      },
-                      child: TextClasse(text: "S'INSCRIRE", color: bleuPrincipale, fontSize: 15, family: "MonserratBold",)
-                  ),
-                ),
               ],
             ),
           ),
@@ -211,5 +146,31 @@ class _InscriptionState extends State<Connexion> {
   }
 
 
+  showAlertDialog(BuildContext context, String text) {
 
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("ALERT"),
+      content: Text(text),
+      actions: [
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }

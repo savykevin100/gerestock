@@ -13,6 +13,8 @@ import 'package:gerestock/spash_screen.dart';
 
 import '../../helper.dart';
 class FicheEntrees extends StatefulWidget {
+  String userPhone;
+  FicheEntrees({this.userPhone});
 
   @override
   _FicheEntreesState createState() => _FicheEntreesState();
@@ -26,17 +28,13 @@ class _FicheEntreesState extends State<FicheEntrees> {
   String fournisseur;
   List<String> fournisseurDb = [];
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  String _emailEntreprise;
-
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
-  }
 
 
 
-  void fetchFournisseursFromDb(String email){
+
+  void fetchFournisseursFromDb(){
    try {
-     FirebaseFirestore.instance.collection("Utilisateurs").doc(email).collection("Fournisseurs").get().then((value){
+     FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("Fournisseurs").get().then((value){
        value.docs.forEach((element) {
          print(element.data()["name"]);
          setState(() {
@@ -55,15 +53,7 @@ class _FicheEntreesState extends State<FicheEntrees> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value){
-      if(value!=null){
-        setState(()  {
-          _emailEntreprise = value.email;
-        });
-        print(_emailEntreprise);
-        fetchFournisseursFromDb(_emailEntreprise);
-      }
-    });
+    fetchFournisseursFromDb();
   }
 
   @override
@@ -176,7 +166,7 @@ class _FicheEntreesState extends State<FicheEntrees> {
               print(fournisseur);
               print(dateInput);
               Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => ConfirmEntrees(dateInput: dateInput, fournisseur: fournisseur, livreur: livreurController.text, montantEntrer: montantEntrerController.text,)));
+                  MaterialPageRoute(builder: (_) => ConfirmEntrees(dateInput: dateInput, fournisseur: fournisseur, livreur: livreurController.text, montantEntrer: montantEntrerController.text,userPhone: widget.userPhone,)));
             }
             else
               displaySnackBarNom(context, "Les champs date, montant et fournisseur doivent être renseignés", Colors.white);

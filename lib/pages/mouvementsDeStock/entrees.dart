@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:gerestock/app_controller.dart';
 import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
@@ -11,33 +12,32 @@ import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/helper.dart';
 import 'package:gerestock/modeles/entrer_models.dart';
 import 'package:gerestock/pages/mouvementsDeStock/detailsEntrer.dart';
+import 'package:gerestock/pages/mouvementsDeStock/ficheEntrees.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 class Entrees extends StatefulWidget {
   @override
   _EntreesState createState() => _EntreesState();
 }
 
-class _EntreesState extends State<Entrees> {
+class _EntreesState extends StateMVC<Entrees> {
 
    CollectionReference _users= Firestore.instance
       .collection("Utilisateurs");
-  String _emailEntreprise;
-
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
-  }
 
 
-  @override
+   AppController _con ;
+
+
+
+   _EntreesState() : super(AppController()) {
+     _con = controller;
+   }
+
+
+   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value){
-      if(value!=null){
-        setState(()  {
-          _emailEntreprise = value.email;
-        });
-      }
-    });
   }
 
   @override
@@ -70,9 +70,9 @@ class _EntreesState extends State<Entrees> {
                       child: displayRecapTextBold("Recap")),
                 ],
               ),
-              StreamBuilder(
+              (_con.userPhone!="")?StreamBuilder(
                 stream:  _users
-                    .doc(_emailEntreprise)
+                    .doc(_con.userPhone)
                     .collection("Entrees")
                     .orderBy("created", descending: true)
                     .snapshots(),
@@ -134,14 +134,18 @@ class _EntreesState extends State<Entrees> {
                   );
                   // snapshot.data.documents.map((DocumentSnapshot document)
                 },
-              ),
+              ):Center(child: CircularProgressIndicator())
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed("/FicheEntrees");
+          print(_con.userPhone);
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => FicheEntrees(userPhone: _con.userPhone,)));
+         // Navigator.of(context).pushNamed("/FicheEntrees");
 
         },
         child: Icon(Icons.add, color: white,),

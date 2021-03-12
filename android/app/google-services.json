@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "760850192119",
-    "firebase_url": "https://gerestock-aa75e.firebaseio.com",
-    "project_id": "gerestock-aa75e",
-    "storage_bucket": "gerestock-aa75e.appspot.com"
+    "project_number": "937101848294",
+    "project_id": "gerestock-27522",
+    "storage_bucket": "gerestock-27522.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:760850192119:android:23f1475134d0c5766e65f2",
+        "mobilesdk_app_id": "1:937101848294:android:0d3ab499d8d97faaf41527",
         "android_client_info": {
-          "package_name": "gerestock.com.gerestock"
+          "package_name": "com.gerestock.gerestock"
         }
       },
       "oauth_client": [
         {
-          "client_id": "760850192119-mv9mclu5tdn1dekmtfgm18h91kic0rg7.apps.googleusercontent.com",
+          "client_id": "937101848294-icc4a21vqfon7pboakh4dnfdkh5fnvjk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gerestock.gerestock",
+            "certificate_hash": "4eb3a5f6f1b98f61f9088338ac554158997e9011"
+          }
+        },
+        {
+          "client_id": "937101848294-tgtijkccq5l9atptvl3k5cq6n792jobl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyArv5QUNsgEMuIRxuRPSnO_ch1omQI2CJs"
+          "current_key": "AIzaSyBHv8lddFKnwIE5-vvUDPU9SnHlMWbIrc0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "760850192119-mv9mclu5tdn1dekmtfgm18h91kic0rg7.apps.googleusercontent.com",
+              "client_id": "937101848294-tgtijkccq5l9atptvl3k5cq6n792jobl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:email_validator/email_validator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -11,22 +12,28 @@ import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/pages/accueil.dart';
+import 'package:gerestock/repository.dart';
 
 
 
-class Connexion extends StatefulWidget {
+class ConnexionPhone extends StatefulWidget {
   @override
-  _InscriptionState createState() => _InscriptionState();
+  ConnexionPhoneState createState() => ConnexionPhoneState();
 }
 
-class _InscriptionState extends State<Connexion> {
+class ConnexionPhoneState extends State<ConnexionPhone> {
 
   String email;
   String motDePass ;
   final _formKey = GlobalKey<FormState>();
   FirebaseAuth _auth = FirebaseAuth.instance;
+  String code = "+229";
+  TextEditingController _numeroTelephone = TextEditingController();
+  String numeroAvecCode = "";
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  
+
+
 
 
   Future<bool> onBackPressed() {
@@ -94,6 +101,7 @@ class _InscriptionState extends State<Connexion> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       body: WillPopScope(
         onWillPop: onBackPressed,
@@ -109,26 +117,58 @@ class _InscriptionState extends State<Connexion> {
                 SizedBox(height: longueurPerCent(50, context),),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: kDefautPadding),
-                  child: TextFormField(
-                    style: TextStyle(
-                        color: HexColor("#001C36"),
-                        fontSize: 18,
-                        fontFamily: "MonserratBold"
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        hintText: 'Email',
-                        hintStyle: TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
-                    ),
-                    onChanged: (value){
-                      email = value;
-                    },
-                    // ignore: missing_return
-                    validator: (String value) {
-                      if (EmailValidator.validate(email) == false || email.isEmpty) {
-                        return ("Entrer un email valide");
-                      }
-                    },
+                  child:  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child:  Column(
+                          children: [
+                            SizedBox(height: 15,),
+                            CountryCodePicker(
+                              textStyle: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 18,
+                                  fontFamily: "MonserratSemiBold"
+                              ),
+                              onChanged: (e)  {
+                                print(e.code.toString());
+                                setState(() {
+                                  code = e.code.toString();
+                                });
+                              },
+                              initialSelection: 'BJ',
+                              showCountryOnly: true,
+                              showOnlyCountryWhenClosed: false,
+                              favorite: ['+229', 'FR'],
+                            ),
+                          ],
+                        ),),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding:EdgeInsets.only(top: 15),
+                          child: TextFormField(
+                            style:  TextStyle(
+                                color:Theme.of(context).primaryColor,
+                                fontSize: 18,
+                                fontFamily: "MonserratSemiBold"
+                            ),
+                            controller: _numeroTelephone,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                hintText: "Numéro de Téléphone",
+                                hintStyle:TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
+                            ),
+                            // ignore: missing_return
+                            validator: (value){
+                              // ignore: missing_
+                              if(value.isEmpty)
+                                return ("Veuillez entrer le numéro de téléphone");
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: longueurPerCent(20, context),),
@@ -136,9 +176,9 @@ class _InscriptionState extends State<Connexion> {
                   padding: EdgeInsets.symmetric(horizontal: kDefautPadding),
                   child: TextFormField(
                     style: TextStyle(
-                        color: HexColor("#001C36"),
+                        color:Theme.of(context).primaryColor,
                         fontSize: 18,
-                        fontFamily: "MonserratBold"
+                        fontFamily: "MonserratSemiBold"
                     ),
                     decoration: InputDecoration(
                         hintText: 'Mot de passe',
@@ -160,26 +200,11 @@ class _InscriptionState extends State<Connexion> {
 
                 SizedBox(height: longueurPerCent(80, context),),
                 submitButton(context, "SE CONNECTER", () async {
-                  if(_formKey.currentState.validate()) {
-                    EasyLoading.show(status: 'Chargement');
-                    try{
-                      final user = await _auth.signInWithEmailAndPassword(email: email , password: motDePass);
-                      if(user!=null){
-                        EasyLoading.dismiss();
-                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                          return Accueil();
-                        }));
-                      }
-                    } catch (e) {
-                      EasyLoading.dismiss();
-                      print(e.toString());
-                      if(e.toString()=="[firebase_auth/wrong-password] The password is invalid or the user does not have a password.")
-                        showAlertDialog(context, "Mot de passe incorrect");
-                      else if(e.toString()=="[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.")
-                        showAlertDialog(context, "Aucun email ne correspond à l'email entré");
-                      else
-                        showAlertDialog(context, "Veuillez vérifier votre connexion internet");
-                    }
+                  setState(() {
+                    numeroAvecCode = code + _numeroTelephone.text;
+                  });
+                  if(_formKey.currentState.validate() ) {
+                    checkInformation();
                   }
                 }),
                 SizedBox(height: longueurPerCent(20, context),),
@@ -210,6 +235,37 @@ class _InscriptionState extends State<Connexion> {
     );
   }
 
+
+  void checkInformation(){
+    EasyLoading.show(status: 'Chargement', dismissOnTap: false);
+    Firestore.instance.collection("Utilisateurs").doc(numeroAvecCode).get().then((value) {
+      if(value.exists) {
+        if(value.data()["password"] == motDePass){
+          setNumeroUser(numeroAvecCode);
+          EasyLoading.dismiss();
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) => Accueil()
+          ));
+        } else {
+          EasyLoading.dismiss();
+          displaySnackBarNom(context, "Le mot de passe entré est incorrect", Colors.white);
+        }
+      }
+      else {
+        EasyLoading.dismiss();
+        displaySnackBarNom(context, "Aucun compte ne correspond au numéro entré", Colors.white);
+      }
+    });
+  }
+
+
+  displaySnackBarNom(BuildContext context, String text, Color couleur) {
+    final snackBar = SnackBar(
+      content: Text(text, style: TextStyle(color: couleur, fontSize: 13)),
+      duration: Duration(seconds: 2),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
 
 
 }

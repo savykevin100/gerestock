@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:gerestock/app_controller.dart';
 import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
@@ -13,6 +14,7 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/inventaire.dart';
 import 'package:gerestock/pages/accueil.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
 import 'inventaire.dart';
 
@@ -24,14 +26,23 @@ class DetailsInventaire extends StatefulWidget {
   _RecapInventaireState createState() => _RecapInventaireState();
 }
 
-class _RecapInventaireState extends State<DetailsInventaire> {
+class _RecapInventaireState extends StateMVC<DetailsInventaire> {
 
-  String _emailEntreprise;
 
 
   CollectionReference _users= Firestore.instance
       .collection("Utilisateurs");
 
+
+
+
+  AppController _con ;
+
+
+
+  _RecapInventaireState() : super(AppController()) {
+    _con = controller;
+  }
 
 
 
@@ -43,11 +54,6 @@ class _RecapInventaireState extends State<DetailsInventaire> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value) {
-      setState(() {
-        _emailEntreprise = value.email;
-      });
-    });
   }
 
   @override
@@ -73,9 +79,9 @@ class _RecapInventaireState extends State<DetailsInventaire> {
                       child: displayRecapTextBold("ECART")),
                 ],
               ),
-              StreamBuilder(
+              (_con.userPhone!="")? StreamBuilder(
                   stream:  _users
-                      .doc(_emailEntreprise)
+                      .doc(_con.userPhone)
                       .collection("Inventaires")
                       .where("id", isEqualTo:  widget.id)
                       .snapshots(),
@@ -128,7 +134,7 @@ class _RecapInventaireState extends State<DetailsInventaire> {
                       shrinkWrap: true,
                     );
                   }
-              ),
+              ):Center(child: CircularProgressIndicator(),)
 
             ],
           ),

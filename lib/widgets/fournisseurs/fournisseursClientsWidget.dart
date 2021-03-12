@@ -10,7 +10,9 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/clients_fournisseurs.dart';
 import 'package:gerestock/widgets/fournisseurs/fournisseursClientsDetails.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
+import '../../app_controller.dart';
 import 'formFournisseursClientsWidget.dart';
 
 
@@ -24,12 +26,11 @@ class FournisseursClientsWidget extends StatefulWidget {
 
   FournisseursClientsWidget({this.title});
   @override
-  _ClientsState createState() => _ClientsState();
+  _FournisseursClientsWidgetState createState() => _FournisseursClientsWidgetState();
 }
 
-class _ClientsState extends State<FournisseursClientsWidget> {
+class _FournisseursClientsWidgetState extends StateMVC<FournisseursClientsWidget> {
 
-  String emailEntreprise;
   bool _firstSearch = true;
   String _query = "";
   var _searchview = new TextEditingController();
@@ -37,10 +38,15 @@ class _ClientsState extends State<FournisseursClientsWidget> {
   List<String> _nebulae = [];
 
   List<String> _filterList;
+  AppController _con ;
 
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
+  
+
+  _FournisseursClientsWidgetState() : super(AppController()) {
+    _con = controller;
   }
+
+
 
 
   //Create a SearchView
@@ -71,8 +77,8 @@ class _ClientsState extends State<FournisseursClientsWidget> {
 
   //Create the Filtered ListView
   Widget _createFilteredListView() {
-    return StreamBuilder(
-        stream: FirestoreService().getClientsFourniss(emailEntreprise, widget.title),
+    return (_con.userPhone!="")?StreamBuilder(
+        stream: FirestoreService().getClientsFourniss(_con.userPhone, widget.title),
         builder: (BuildContext context,
             AsyncSnapshot<List<ClientsFounisseursModel>> snapshot) {
           if (snapshot.hasError || !snapshot.hasData) {
@@ -118,28 +124,23 @@ class _ClientsState extends State<FournisseursClientsWidget> {
             );
           }
         }
-    );
+    ):Center(child: CircularProgressIndicator(),);
   }
 
 
-  bool currentUser=false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value) {
-      setState(() {
-        emailEntreprise = value.email;
-      });
-      FirebaseFirestore.instance.collection("Utilisateurs").doc(value.email).collection(widget.title).get().then((value){
-        value.docs.forEach((element) {
-          print(element.data());
-          setState(() {
-            nameSearch.add(element.data()["name"]);
-          });
+    _con.numeroUser();
+    (_con.userPhone!="")?FirebaseFirestore.instance.collection("Utilisateurs").doc(_con.userPhone).collection(widget.title).get().then((value){
+      value.docs.forEach((element) {
+        print(element.data());
+        setState(() {
+          nameSearch.add(element.data()["name"]);
         });
       });
-    });
+    }):null;
   }
 
   @override
@@ -166,11 +167,11 @@ class _ClientsState extends State<FournisseursClientsWidget> {
         onPressed: () {
           if(widget.title=="Clients")
             Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-              return FormFournisseursClientsWidget(title: "client", referenceDb: "Clients",);
+              return FormFournisseursClientsWidget(title: "client", referenceDb: "Clients", userPhone: _con.userPhone,);
             }));
           else
             Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-              return FormFournisseursClientsWidget(title: "fournisseur", referenceDb: "Fournisseurs",);
+              return FormFournisseursClientsWidget(title: "fournisseur", referenceDb: "Fournisseurs",  userPhone: _con.userPhone,);
             }));
 
         },

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gerestock/authentification/connexion.dart';
+import 'package:gerestock/authentification/connexion_phone.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/pages/parametres.dart';
@@ -91,7 +92,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 await _auth.signOut();
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Connexion()));
+                    MaterialPageRoute(builder: (context) => ConnexionPhone()));
               }),
         ],
       ),

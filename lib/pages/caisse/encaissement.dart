@@ -12,6 +12,9 @@ import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/helper.dart';
 import 'package:gerestock/modeles/facture.dart';
 import 'package:gerestock/pages/caisse/recapEncaissement.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+
+import '../../app_controller.dart';
 
 
 
@@ -20,16 +23,19 @@ class Encaissement extends StatefulWidget {
   _EncaissementState createState() => _EncaissementState();
 }
 
-class _EncaissementState extends State<Encaissement> {
+class _EncaissementState extends StateMVC<Encaissement> {
 
 
   CollectionReference _users= Firestore.instance
       .collection("Utilisateurs");
 
-  String _emailEntreprise;
 
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
+  AppController _con ;
+
+
+
+  _EncaissementState() : super(AppController()) {
+    _con = controller;
   }
 
 
@@ -37,14 +43,6 @@ class _EncaissementState extends State<Encaissement> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value){
-      if(value!=null){
-        setState(()  {
-          _emailEntreprise = value.email;
-        });
-      }
-      print(_emailEntreprise);
-    });
   }
 
   @override
@@ -53,7 +51,7 @@ class _EncaissementState extends State<Encaissement> {
       appBar: appBar(context,"Encaissement"),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
-        child: ListView(
+        child: (_con.userPhone!="")?ListView(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,7 +76,7 @@ class _EncaissementState extends State<Encaissement> {
             ),
             StreamBuilder(
               stream:  _users
-                  .doc(_emailEntreprise)
+                  .doc(_con.userPhone)
                   .collection("Factures")
                   .orderBy("created", descending: true)
                   .snapshots(),
@@ -116,7 +114,7 @@ class _EncaissementState extends State<Encaissement> {
                                       typeFacturation: snapshot.data.docs[i].data()["billingType"]=="Ventes"?false:true,
                                       dateInput: snapshot.data.docs[i].data()["created"],
                                       client: snapshot.data.docs[i].data()["customerName"],
-                                      emailEntreprise: _emailEntreprise,
+                                      userPhone: _con.userPhone,
                                       products: snapshot.data.docs[i].data()["products"]
                                      ,)));
                               })
@@ -137,7 +135,7 @@ class _EncaissementState extends State<Encaissement> {
               },
             ),
           ],
-        ),
+        ):Center(child:CircularProgressIndicator())
       ),
     );
   }

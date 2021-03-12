@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gerestock/authentification/phone_authentification.dart';
 import 'package:gerestock/pages/accueil.dart';
 import 'package:gerestock/pages/payement/select_payement_mode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen> {
           currentUser=true;
           SplashScreen.emailEntreprise = value.email;
         });
-        getAbonnementInfos(value.email);
+        //getAbonnementInfos(value.email);
       }
     });
     StarTimer();
@@ -97,7 +98,9 @@ class _SplashScreenState extends State<SplashScreen> {
     return Timer(duration, route);
   }
 
-  route () async {    if(currentUser == false) {
+  route () async {
+
+    if(currentUser == false) {
 
      /* if(_updateInfo.updateAvailable==false){
         showUpdateDialog();
@@ -107,10 +110,14 @@ class _SplashScreenState extends State<SplashScreen> {
         ));*/
 
       Navigator.push(context, MaterialPageRoute(
-          builder: (context) => Connexion()
+          builder: (context) => PhoneAuthentification()
       ));
     }
-   else if(currentUser && activeTestMode && DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 30))) && !activeAbonnement) {
+    else
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => Accueil()
+    ));
+ /*  else if(currentUser && activeTestMode && DateTime.now().isBefore(dateBeginTestMode.add(Duration(days: 30))) && !activeAbonnement) {
       SharedPreferences pref = await SharedPreferences.getInstance();
       pref.setString("Mode", "Test mode");
       pref.setString("Debut", dateBeginTestMode.toString());
@@ -133,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => SelectPayementMode()
       ));
-    }
+    }*/
   }
   @override
   Widget build(BuildContext context) {

@@ -17,8 +17,9 @@ import 'package:gerestock/modeles/clients_fournisseurs.dart';
 class FormFournisseursClientsWidget extends StatefulWidget {
   String title;
   String referenceDb;
+  String userPhone;
 
-  FormFournisseursClientsWidget({this.title, this.referenceDb});
+  FormFournisseursClientsWidget({this.title, this.referenceDb, this.userPhone});
   @override
   _FormFournisseursClientsWidgetState createState() => _FormFournisseursClientsWidgetState();
 }
@@ -30,7 +31,6 @@ class _FormFournisseursClientsWidgetState extends State<FormFournisseursClientsW
   TextEditingController _telephone = TextEditingController();
   TextEditingController _email = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String emailEntreprise;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 
@@ -47,16 +47,6 @@ class _FormFournisseursClientsWidgetState extends State<FormFournisseursClientsW
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value) {
-      setState(() {
-        emailEntreprise = value.email;
-        _adresse.text = "";
-        _email.text = "";
-      });
-      print(emailEntreprise);
-    });
-
-
   }
 
 
@@ -166,6 +156,7 @@ class _FormFournisseursClientsWidgetState extends State<FormFournisseursClientsW
 
   void registerClientOrFournisseur() {
     if(_nomDuclient.text!="" && _telephone.text!=""){
+      print(widget.userPhone);
       try{
         EasyLoading.show(status: 'Chargement', dismissOnTap: false);
         FirestoreService().addClientOrFournisseur(
@@ -175,7 +166,7 @@ class _FormFournisseursClientsWidgetState extends State<FormFournisseursClientsW
                 telephoneNumber: _telephone.text,
                 name: _nomDuclient.text
             )
-            , emailEntreprise, widget.referenceDb);
+            , widget.userPhone, widget.referenceDb);
         EasyLoading.dismiss();
         EasyLoading.showSuccess('Enregistrement réussie!', maskType: EasyLoadingMaskType.custom);
         Navigator.pop(context);

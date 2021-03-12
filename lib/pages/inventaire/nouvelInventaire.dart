@@ -15,6 +15,11 @@ import 'package:gerestock/pages/inventaire/recapInventaire.dart';
 
 
 class NouvelInventaire extends StatefulWidget {
+  
+  String userPhone;
+  
+  NouvelInventaire({this.userPhone});
+  
   @override
   _NouvelInventaireState createState() => _NouvelInventaireState();
 }
@@ -23,7 +28,6 @@ class _NouvelInventaireState extends State<NouvelInventaire> {
   String dateInput;
   FirebaseFirestore _db = Firestore.instance;
   List<String> familles=[];
-  String emailEntreprise;
   String familleSelect;
   List<Map<String, dynamic>> produitsFamilles = [];
   Map<String, bool> cva = {
@@ -43,9 +47,9 @@ class _NouvelInventaireState extends State<NouvelInventaire> {
 
 
 
-  Future<void> getNomFamille(String email) async {
+  Future<void> getNomFamille() async {
     _db.collection("Utilisateurs").
-    doc(email).collection("Familles").
+    doc(widget.userPhone).collection("Familles").
     get().then((value) {
       value.docs.forEach((element) {
         setState(() {
@@ -59,12 +63,8 @@ class _NouvelInventaireState extends State<NouvelInventaire> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value) {
-      setState(() {
-        emailEntreprise = value.email;
-      });
-      getNomFamille(value.email);
-    });
+    getNomFamille();
+
   }
 
 
@@ -122,7 +122,7 @@ class _NouvelInventaireState extends State<NouvelInventaire> {
                   setState(() {
                     familleSelect = val;
                   });
-                  _db.collection("Utilisateurs").doc(emailEntreprise).collection("TousLesProduits").where("familyName", isEqualTo: val).get().then((value) {
+                  _db.collection("Utilisateurs").doc(widget.userPhone).collection("TousLesProduits").where("familyName", isEqualTo: val).get().then((value) {
                     if(value.docs.isNotEmpty)
                       value.docs.forEach((element) {
                         print(element.data());
@@ -221,7 +221,7 @@ class _NouvelInventaireState extends State<NouvelInventaire> {
            onTap:(){
              print(familleSelect);
              Navigator.push(context,
-                 MaterialPageRoute(builder: (_) => RecapInventaire(produitsFamilles: produitsFamilles, familyName: familleSelect,)));
+                 MaterialPageRoute(builder: (_) => RecapInventaire(produitsFamilles: produitsFamilles, familyName: familleSelect, userPhone: widget.userPhone,)));
            },
            child: Container(
              height: 38,

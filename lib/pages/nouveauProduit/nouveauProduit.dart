@@ -16,16 +16,21 @@ import 'package:gerestock/modeles/produits.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:mvc_pattern/mvc_pattern.dart';
+
+import '../../app_controller.dart';
 
 
 
 class NouveauProduit extends StatefulWidget {
   static String id="Nouveau Produit";
+  String userPhone;
+  NouveauProduit({this.userPhone});
   @override
   _NouveauProduit createState() => _NouveauProduit();
 }
 
-class _NouveauProduit extends State<NouveauProduit> {
+class _NouveauProduit extends StateMVC<NouveauProduit> {
   // MUST BE MAINTAINED, SEPARATELY.
   int currentIndex = 0;
 
@@ -42,7 +47,6 @@ class _NouveauProduit extends State<NouveauProduit> {
   TextEditingController prixVenteController = TextEditingController();
   TextEditingController stockAlerteController = TextEditingController();
 
-  String emailEntreprise;
   String selectFamily;
   // ignore: deprecated_member_use
   FirebaseFirestore _db = Firestore.instance;
@@ -52,17 +56,22 @@ class _NouveauProduit extends State<NouveauProduit> {
   File _image;
 
 
+  AppController _con ;
 
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
+
+
+
+
+  _NouveauProduit() : super(AppController()) {
+    _con = controller;
   }
 
 
 
-  Future<void> getNomFamille(String email) async {
-    print(emailEntreprise);
+
+  Future<void> getNomFamille() async {
     _db.collection("Utilisateurs").
-    doc(email).collection("Familles").
+    doc(widget.userPhone).collection("Familles").
     get().then((value) {
       print("Ici");
       print(value.size);
@@ -80,12 +89,7 @@ class _NouveauProduit extends State<NouveauProduit> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value) {
-      setState(() {
-        emailEntreprise = value.email;
-      });
-      getNomFamille(value.email);
-    });
+    getNomFamille();
   }
 
   @override
@@ -238,11 +242,11 @@ class _NouveauProduit extends State<NouveauProduit> {
     if (currentIndex == 0 && nomFamille.text!="" && selectFamily==null) {
       try {
         EasyLoading.show(status: 'Chargement', dismissOnTap: false);
-        Firestore.instance.collection("Utilisateurs").doc(emailEntreprise).collection("Familles").add({
+        Firestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("Familles").add({
           "familyName":nomFamille.text,
           "numberOfProduct": 0,
         }).then((value) {
-          Firestore.instance.collection("Utilisateurs").doc(emailEntreprise).collection("Familles").doc(value.id).update(
+          Firestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("Familles").doc(value.id).update(
               {"id": value.id}
            );
         });
@@ -282,11 +286,11 @@ class _NouveauProduit extends State<NouveauProduit> {
       try {
         EasyLoading.show(status: 'Chargement', dismissOnTap: false);
         firebase_storage.UploadTask task = firebase_storage.FirebaseStorage.instance
-            .ref(emailEntreprise + "/$famille" + "/" + "${nomDuProduitController.text}")
+            .ref(widget.userPhone + "/$famille" + "/" + "${nomDuProduitController.text}")
             .putFile(_image);
         task.whenComplete(() async {
           productImageUrl = await firebase_storage.FirebaseStorage.instance
-              .ref(emailEntreprise + "/$famille" + "/" + "${nomDuProduitController.text}")
+              .ref(widget.userPhone + "/$famille" + "/" + "${nomDuProduitController.text}")
               .getDownloadURL();
           if(productImageUrl!=null){
             try {
@@ -301,7 +305,7 @@ class _NouveauProduit extends State<NouveauProduit> {
                       theoreticalStock: 0,
                       image: productImageUrl
                   )
-                  , emailEntreprise);
+                  , widget.userPhone);
             } catch(e){
               EasyLoading.dismiss();
               print(e);
@@ -331,7 +335,7 @@ class _NouveauProduit extends State<NouveauProduit> {
                 theoreticalStock: 0,
                 image: productImageUrl
             )
-            , emailEntreprise);
+            , widget.userPhone);
         EasyLoading.dismiss();
         EasyLoading.showSuccess('Enregistrement réussie!', maskType: EasyLoadingMaskType.custom);
         Navigator.pop(context);

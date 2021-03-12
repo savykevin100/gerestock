@@ -16,6 +16,7 @@ import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/decaissement_models.dart';
 import 'package:gerestock/modeles/entrer_models.dart';
 import 'package:gerestock/pages/accueil.dart';
+import 'package:gerestock/pages/mouvementsDeStock/entrees.dart';
 import 'package:gerestock/pages/mouvementsDeStock/ficheEntrees.dart';
 
 import '../../spash_screen.dart';
@@ -25,8 +26,9 @@ class ConfirmEntrees extends StatefulWidget {
   String fournisseur;
   String livreur;
   String montantEntrer;
+  String userPhone;
 
-  ConfirmEntrees({this.dateInput, this.fournisseur, this.livreur, this.montantEntrer});
+  ConfirmEntrees({this.dateInput, this.fournisseur, this.livreur, this.montantEntrer, this.userPhone});
   @override
   _ConfirmEntreesState createState() => _ConfirmEntreesState();
 }
@@ -37,20 +39,14 @@ class _ConfirmEntreesState extends State<ConfirmEntrees> {
   List<String> _productName=[];
   List<Map<String, dynamic>> _products = [];
   String _productSelect;
-  String _emailEntreprise;
-
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
-  }
 
 
 
 
 
-
-  void fetchProductsFromDb(String email){
+  void fetchProductsFromDb(){
     try {
-      FirebaseFirestore.instance.collection("Utilisateurs").doc(email).collection("TousLesProduits").get().then((value){
+      FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("TousLesProduits").get().then((value){
         value.docs.forEach((element) {
          if(this.mounted)
            setState(() {
@@ -68,14 +64,7 @@ class _ConfirmEntreesState extends State<ConfirmEntrees> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value){
-      if(value!=null){
-        setState(()  {
-         _emailEntreprise = value.email;
-        });
-        fetchProductsFromDb(_emailEntreprise);
-      }
-    });
+    fetchProductsFromDb();
   }
 
   @override
@@ -240,13 +229,13 @@ class _ConfirmEntreesState extends State<ConfirmEntrees> {
                      dateReceipt: widget.dateInput,
                      amount: int.tryParse(widget.montantEntrer),
                      created: DateTime.now().toString(),
-                 ), _emailEntreprise);
+                 ), widget.userPhone);
                  _products.forEach((element) {
                   // ignore: deprecated_member_use
-                  Firestore.instance.collection("Utilisateurs").doc(_emailEntreprise).collection("TousLesProduits").where("productName", isEqualTo: element["productName"]).get().then((value){
+                  Firestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("TousLesProduits").where("productName", isEqualTo: element["productName"]).get().then((value){
                     if(value.docs.isNotEmpty)
                       // ignore: deprecated_member_use
-                      Firestore.instance.collection("Utilisateurs").doc(_emailEntreprise).collection("TousLesProduits").doc(value.docs.first.id).update({"theoreticalStock":value.docs.first.data()["theoreticalStock"]+int.tryParse(element["quantite"])});
+                      Firestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("TousLesProduits").doc(value.docs.first.id).update({"theoreticalStock":value.docs.first.data()["theoreticalStock"]+int.tryParse(element["quantite"])});
                   });
                 });
                  FirestoreService().addDecaissement(DecaissementModels(
@@ -255,14 +244,14 @@ class _ConfirmEntreesState extends State<ConfirmEntrees> {
                      expenseTitle: "Nouvelle entrée",
                      amount: int.tryParse(widget.montantEntrer),
                      etat: "Entrée"
-                 ), _emailEntreprise);
+                 ), widget.userPhone);
                  setState(() {
                    _products = [];
                  });
                  EasyLoading.dismiss();
                  EasyLoading.showSuccess("L'ajout a réussie");
                  Navigator.push(
-                     context, MaterialPageRoute(builder: (context) => Accueil()));
+                     context, MaterialPageRoute(builder: (context) => Entrees()));
                } catch (e){
                  EasyLoading.dismiss();
                  EasyLoading.showError("L'ajout a échoué");

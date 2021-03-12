@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:gerestock/app_controller.dart';
 import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/constantsWidgets.dart';
@@ -9,18 +10,26 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/produits.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
 
   class FicheProduit extends StatefulWidget {
     Produit produit ;
-    String emailEntreprise;
+    String userPhone;
 
-    FicheProduit({this.produit, this.emailEntreprise});
+    FicheProduit({this.produit, this.userPhone});
   @override
   _FicheProduitState createState() => _FicheProduitState();
 }
 
-class _FicheProduitState extends State<FicheProduit> {
+class _FicheProduitState extends StateMVC<FicheProduit> {
+
+    AppController _con;
+
+    _FicheProduitState() : super(AppController()) {
+      _con = controller;
+    }
+
 
     bool _enableSellPriceUpdate=false;
     TextEditingController _sellPriceController=TextEditingController();
@@ -121,10 +130,10 @@ class _FicheProduitState extends State<FicheProduit> {
     if(_enableSellPriceUpdate){
       EasyLoading.show(status: 'Chargement', dismissOnTap: false);
       try {
-        FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.emailEntreprise).collection("Familles")
+        FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("Familles")
             .doc(widget.produit.familyName).collection("TousLesProduits").doc(widget.produit.id).update({"sellPrice": _sellPriceController.text});
-        FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.emailEntreprise).collection("TousLesProduits").where("image", isEqualTo: widget.produit.image).get().then((value) {
-          FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.emailEntreprise).collection("TousLesProduits").doc(value.docs.first.id).update({"sellPrice": _sellPriceController.text});
+        FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("TousLesProduits").where("image", isEqualTo: widget.produit.image).get().then((value) {
+          FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("TousLesProduits").doc(value.docs.first.id).update({"sellPrice": _sellPriceController.text});
         });
       } catch (e) {
         EasyLoading.showError("La modification a échoué");

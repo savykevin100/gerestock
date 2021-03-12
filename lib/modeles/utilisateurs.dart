@@ -1,5 +1,5 @@
 class Utilisateur {
-  String email;
+  String password;
   String logo;
   String companyName;
   String activitySector;
@@ -12,7 +12,7 @@ class Utilisateur {
 
 
   Utilisateur(
-      {this.email,
+      {this.password,
       this.logo,
       this.companyName,
       this.activitySector,
@@ -24,7 +24,7 @@ class Utilisateur {
       });
 
   Utilisateur.fromMap(Map<String, dynamic> donnees, String id)
-      : email = donnees["email"],
+      : password = donnees["password"],
         logo = donnees["logo"],
         companyName = donnees["companyName"],
         activitySector= donnees["activitySector"],
@@ -37,7 +37,7 @@ class Utilisateur {
 
       Map<String, dynamic> toMap() {
     return {
-      "email": email,
+      "password": password,
       "logo": logo,
       "companyName": companyName,
       "activitySector": activitySector,

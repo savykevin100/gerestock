@@ -53,6 +53,8 @@ dependencies:
   kkiapay_flutter_sdk: ^1.0.4
   flutter_launcher_icons: ^0.8.1
   url_launcher: ^5.7.10
+  change_app_package_name: ^0.1.2
+
 
 
 

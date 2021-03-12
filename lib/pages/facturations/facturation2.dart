@@ -34,14 +34,14 @@ class Facturation2 extends StatefulWidget {
   String client;
   List<Map<String, dynamic>> products;
   bool typeFacturation;
-  String emailEntreprise;
+  String userPhone;
 
   Facturation2({
     this.dateInput,
     this.client,
     this.products,
     this.typeFacturation,
-    this.emailEntreprise
+    this.userPhone
    });
 
   @override
@@ -49,7 +49,6 @@ class Facturation2 extends StatefulWidget {
 }
 
 class _Facturation2State extends State<Facturation2> {
-  String _emailEntreprise;
   Map<String, dynamic> _userData;
   int _amountTotal =0;
   String pathPDF = "";
@@ -63,7 +62,7 @@ class _Facturation2State extends State<Facturation2> {
   }
 
   Future<void> fetchDataUser(){
-    FirebaseFirestore.instance.collection("Utilisateurs").doc(_emailEntreprise).get().then((value) {
+    FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).get().then((value) {
       print(value.data());
       if(this.mounted)
         setState(() {
@@ -82,7 +81,7 @@ class _Facturation2State extends State<Facturation2> {
     getUser().then((value){
       if(value!=null){
         setState(()  {
-          _emailEntreprise = value.email;
+          widget.userPhone = value.email;
         });
         fetchDataUser();
       }
@@ -578,13 +577,13 @@ class _Facturation2State extends State<Facturation2> {
           amountTotal: _amountTotal,
           billingType: (widget.typeFacturation==false)?"Ventes":"Services",
           products: widget.products
-      ), widget.emailEntreprise);
+      ), widget.userPhone);
 
       // On parcourt le tableau des produits et on met à jour les quantités dans la base de données
 
       for(int i=0; i<widget.products.length;i++) {
         print(widget.products[i]);
-        FirebaseFirestore.instance.collection("Utilisateurs").doc(_emailEntreprise).collection("TousLesProduits").doc(widget.products[i]["idProduct"]).update({"theoreticalStock": widget.products[i]["remainingQuantity"]}).then((value){
+        FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("TousLesProduits").doc(widget.products[i]["idProduct"]).update({"theoreticalStock": widget.products[i]["remainingQuantity"]}).then((value){
           print("Réussie");
         });
       }

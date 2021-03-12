@@ -34,7 +34,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "gerestock.com.gerestock"
+        applicationId "com.gerestock.gerestock"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
@@ -66,5 +66,7 @@ dependencies {
     // https://firebase.google.com/docs/android/setup#available-libraries
 
     implementation 'com.android.support:multidex:1.0.3'
+    implementation "androidx.browser:browser:1.2.0"
+
 
 }

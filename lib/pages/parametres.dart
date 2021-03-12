@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:gerestock/app_controller.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/firestore_service.dart';
@@ -16,6 +17,7 @@ import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/utilisateurs.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 // ignore: must_be_immutable
 class Parametres extends StatefulWidget {
 
@@ -25,7 +27,7 @@ class Parametres extends StatefulWidget {
       _ParametresState();
 }
 
-class _ParametresState extends State<Parametres> {
+class _ParametresState extends StateMVC<Parametres> {
   final _formKey = GlobalKey<FormState>();
   File _image;
   String code="+229";
@@ -38,7 +40,6 @@ class _ParametresState extends State<Parametres> {
   TextEditingController _adresse = TextEditingController();
 
 
-  String _emailEntreprise;
   String telephoneNumber;
   Map<String, dynamic> _userData;
   bool _enableNomDeLentreprise=false;
@@ -50,12 +51,20 @@ class _ParametresState extends State<Parametres> {
 
 
 
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
+  AppController _con ;
+
+
+
+  _ParametresState() : super(AppController()) {
+    _con = controller;
   }
 
+
+
+
+
   Future<void> fetchDataUser(){
-    FirebaseFirestore.instance.collection("Utilisateurs").doc(_emailEntreprise).get().then((value) {
+    FirebaseFirestore.instance.collection("Utilisateurs").doc(_con.userPhone).get().then((value) {
       print(value.data());
       if(this.mounted)
         setState(() {
@@ -75,14 +84,8 @@ class _ParametresState extends State<Parametres> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value){
-      if(value!=null){
-        setState(()  {
-          _emailEntreprise = value.email;
-        });
-        fetchDataUser();
-      }
-    });
+    if(_con.userPhone!="")
+      fetchDataUser();
   }
 
 
@@ -290,11 +293,11 @@ class _ParametresState extends State<Parametres> {
       if(_image!=null){
         try {
           firebase_storage.UploadTask task = firebase_storage.FirebaseStorage.instance
-              .ref().child(_emailEntreprise + "/LogoEntreprise")
+              .ref().child(_con.userPhone + "/LogoEntreprise")
               .putFile(_image);
           task.whenComplete(() async {
             logo = await firebase_storage.FirebaseStorage.instance
-                .ref(_emailEntreprise + "/LogoEntreprise")
+                .ref(_con.userPhone + "/LogoEntreprise")
                 .getDownloadURL();
             if(logo!=null){
               addInfoDb();
@@ -383,7 +386,7 @@ class _ParametresState extends State<Parametres> {
     try {
       await FirestoreService().addUtilisateur(
           Utilisateur(
-            email: _emailEntreprise,
+            //email: _con.userPhone,
             logo: logo,
             companyName: _nomDeLentreprise.text,
             activitySector: _secteurActivite.text,
@@ -392,7 +395,7 @@ class _ParametresState extends State<Parametres> {
             telephoneNumber: code+telephoneNumber,
             address: _adresse.text,
           ),
-          _emailEntreprise);
+          _con.userPhone);
       EasyLoading.dismiss();
       EasyLoading.showSuccess('Modification réussie!', maskType: EasyLoadingMaskType.custom);
       Duration(seconds: 2);

@@ -17,7 +17,9 @@ import 'package:image_picker/image_picker.dart';
 // ignore: must_be_immutable
 class InformationSupplementaire extends StatefulWidget {
   String email;
-  InformationSupplementaire({this.email});
+  String numeroDeTelephone;
+  String password;
+  InformationSupplementaire({this.numeroDeTelephone, this.password});
   @override
   _InformationSupplementaireState createState() =>
       _InformationSupplementaireState();
@@ -94,10 +96,15 @@ class _InformationSupplementaireState extends State<InformationSupplementaire> {
                     ]),
                     SizedBox(height: 40,),
                     TextFormField(
+                      style:  TextStyle(
+                          color:Theme.of(context).primaryColor,
+                          fontSize: 18,
+                          fontFamily: "MonserratSemiBold"
+                      ),
                       controller: _nomDeLentreprise,
                       decoration: InputDecoration(
                         hintText: "Nom de l'entreprise",
-                        hintStyle: TextStyle(fontFamily: "MonserratRegular", fontSize: 15, color: HexColor("#ADB3C4"))
+                        hintStyle: TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
                       ),
                       // ignore: missing_return
                       validator: (value){
@@ -108,10 +115,15 @@ class _InformationSupplementaireState extends State<InformationSupplementaire> {
                     ),
                     SizedBox(height: 20,),
                     TextFormField(
+                      style:  TextStyle(
+                          color:Theme.of(context).primaryColor,
+                          fontSize: 18,
+                          fontFamily: "MonserratSemiBold"
+                      ),
                       controller: _secteurActivite,
                       decoration: InputDecoration(
                         hintText: "Secteur d'activité",
-                        hintStyle: TextStyle(fontFamily: "MonserratRegular", fontSize: 15, color: HexColor("#ADB3C4"))
+                        hintStyle: TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
                       ),
                       // ignore: missing_return
                       validator: (value){
@@ -122,10 +134,15 @@ class _InformationSupplementaireState extends State<InformationSupplementaire> {
                     ),
                     SizedBox(height: 20,),
                     TextFormField(
+                      style:  TextStyle(
+                          color:Theme.of(context).primaryColor,
+                          fontSize: 18,
+                          fontFamily: "MonserratSemiBold"
+                      ),
                       controller: _ifu,
                       decoration: InputDecoration(
                         hintText: "N°IFU",
-                        hintStyle: TextStyle(fontFamily: "MonserratRegular", fontSize: 15, color: HexColor("#ADB3C4"))
+                        hintStyle:TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
                       ),
                       // ignore: missing_return
                       validator: (value){
@@ -134,7 +151,7 @@ class _InformationSupplementaireState extends State<InformationSupplementaire> {
                           return ("Veuillez entrer le numéro IFU");
                       },
                     ),
-                    SizedBox(height: 20,),
+                    /*SizedBox(height: 20,),
                     Row(
                       children: [
                         Expanded(
@@ -178,13 +195,18 @@ class _InformationSupplementaireState extends State<InformationSupplementaire> {
                           ),
                         ),
                       ],
-                    ),
+                    ),*/
                     SizedBox(height: 20,),
                     TextFormField(
+                      style:  TextStyle(
+                          color:Theme.of(context).primaryColor,
+                          fontSize: 18,
+                          fontFamily: "MonserratSemiBold"
+                      ),
                       controller: _adresse,
                       decoration: InputDecoration(
                         hintText: "Adresse",
-                        hintStyle: TextStyle(fontFamily: "MonserratRegular", fontSize: 15, color: HexColor("#ADB3C4"))
+                        hintStyle: TextStyle(color: HexColor("#ADB3C4"), fontFamily: "MonserratRegular")
                       ),
                       // ignore: missing_return
                       validator: (value){
@@ -250,11 +272,11 @@ class _InformationSupplementaireState extends State<InformationSupplementaire> {
       if(_image!=null){
         try {
           firebase_storage.UploadTask task = firebase_storage.FirebaseStorage.instance
-              .ref().child(widget.email + "/LogoEntreprise")
+              .ref().child(widget.numeroDeTelephone + "/LogoEntreprise")
               .putFile(_image);
           task.whenComplete(() async {
             logo = await firebase_storage.FirebaseStorage.instance
-                .ref(widget.email + "/LogoEntreprise")
+                .ref(widget.numeroDeTelephone + "/LogoEntreprise")
                 .getDownloadURL();
             if(logo!=null){
               addInfoDb();
@@ -344,16 +366,17 @@ class _InformationSupplementaireState extends State<InformationSupplementaire> {
     try {
       await FirestoreService().addUtilisateur(
           Utilisateur(
-              email: widget.email,
+             password: widget.password,
               logo: logo,
               companyName: _nomDeLentreprise.text,
               activitySector: _secteurActivite.text,
               ifu: _ifu.text,
               country:pays,
-              telephoneNumber: code+_numeroTelephone.text,
+              telephoneNumber: widget.numeroDeTelephone,
               address: _adresse.text,
+              created: DateTime.now().toString()
           ),
-          widget.email);
+          widget.numeroDeTelephone);
       EasyLoading.dismiss();
       EasyLoading.showSuccess('Enregistrement réussie!', maskType: EasyLoadingMaskType.custom);
       Duration(seconds: 2);

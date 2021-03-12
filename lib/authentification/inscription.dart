@@ -164,7 +164,7 @@ class _InscriptionState extends State<Inscription> {
                       }*/
                       EasyLoading.dismiss();
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                        return InformationSupplementaire(email: email);
+                        return InformationSupplementaire(numeroDeTelephone: email);
                       }));
                     } catch(e){
                       EasyLoading.dismiss();

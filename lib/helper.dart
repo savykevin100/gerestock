@@ -1,9 +1,14 @@
+import 'package:flutter/cupertino.dart';
+import 'package:gerestock/repository.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 
+ValueNotifier<String> numUser = new ValueNotifier("");
 
 class Helper{
+
+
 
 
   static String currenceFormat(int amount){
@@ -26,4 +31,17 @@ class Helper{
     String f = DateFormat.yMd(currentFormatWithName(date)).toString();
     return f;
   }
+
+
+   String numeroUser(){
+    String num;
+      userNumero().then((value) {
+          numUser.value = value;
+          num = value;
+      });
+      print(numUser.value);
+      print(num);
+      return numUser.value;
+  }
+
 }

@@ -1,36 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gerestock/app_controller.dart';
 import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/produits.dart';
 import 'package:gerestock/pages/nouveauProduit/familles.dart';
 import 'package:gerestock/pages/nouveauProduit/ficheProduit.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
 
 class ProduitsFamille extends StatefulWidget {
   String familyName;
-  ProduitsFamille({this.familyName});
+  String userPhone;
+  ProduitsFamille({this.familyName, this.userPhone});
   @override
   _ProduitsFamilleState createState() => _ProduitsFamilleState();
 }
 
-class _ProduitsFamilleState extends State<ProduitsFamille> {
+class _ProduitsFamilleState extends StateMVC<ProduitsFamille> {
 
 
-  String emailEntreprise;
   List<Map<String, dynamic>> productsList=[];
   CollectionReference _users= Firestore.instance
       .collection("Utilisateurs");
 
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
-  }
 
   void fetchProductsInFamily(){
+    print(_con.userPhone);
     _users
-        .doc(emailEntreprise)
+        .doc(widget.userPhone)
         .collection("TousLesProduits")
         .where("familyName", isEqualTo: widget.familyName)
         .get().then((value){
@@ -44,19 +44,19 @@ class _ProduitsFamilleState extends State<ProduitsFamille> {
   }
 
 
-  bool currentUser=false;
+  AppController _con ;
+
+  _ProduitsFamilleState() : super(AppController()) {
+    _con = controller;
+  }
+
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value) {
-      setState(() {
-        emailEntreprise = value.email;
-      });
-      fetchProductsInFamily();
-    });
+    fetchProductsInFamily();
   }
 
   @override
@@ -69,7 +69,7 @@ class _ProduitsFamilleState extends State<ProduitsFamille> {
           width: double.infinity,
           child: StreamBuilder(
             stream:  _users
-                .doc(emailEntreprise)
+                .doc(widget.userPhone)
                 .collection("TousLesProduits")
                 .where("familyName", isEqualTo: widget.familyName)
                 .snapshots(),
@@ -99,7 +99,7 @@ class _ProduitsFamilleState extends State<ProduitsFamille> {
                                 stockAlert: document.data()["stockAlert"],
                                 theoreticalStock  : document.data()["theoreticalStock"],
                                 familyName  : document.data()["familyName"],
-                              ), emailEntreprise: emailEntreprise,),));
+                              ), userPhone: widget.userPhone,),));
                         },
                         child: ListTile(
                             title: TextClasse(

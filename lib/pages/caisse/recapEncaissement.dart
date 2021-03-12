@@ -27,7 +27,7 @@ class DetailsFacture extends StatefulWidget {
   String client;
   List<dynamic> products;
   bool typeFacturation;
-  String emailEntreprise;
+  String userPhone;
 
   DetailsFacture({
     this.facture,
@@ -35,7 +35,7 @@ class DetailsFacture extends StatefulWidget {
     this.client,
     this.products,
     this.typeFacturation,
-    this.emailEntreprise
+    this.userPhone
   });
 
   @override
@@ -43,7 +43,6 @@ class DetailsFacture extends StatefulWidget {
 }
 
 class _DetailsFactureState extends State<DetailsFacture> {
-  String _emailEntreprise;
   Map<String, dynamic> _userData;
   int _amountTotal =0;
   String pathPDF = "";
@@ -56,7 +55,7 @@ class _DetailsFactureState extends State<DetailsFacture> {
   }
 
   Future<void> fetchDataUser(){
-    FirebaseFirestore.instance.collection("Utilisateurs").doc(_emailEntreprise).get().then((value) {
+    FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).get().then((value) {
       print(value.data());
       if(this.mounted)
         setState(() {
@@ -74,7 +73,7 @@ class _DetailsFactureState extends State<DetailsFacture> {
     getUser().then((value){
       if(value!=null){
         setState(()  {
-          _emailEntreprise = value.email;
+          widget.userPhone = value.email;
         });
         fetchDataUser();
       }

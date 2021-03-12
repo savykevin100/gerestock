@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:gerestock/app_controller.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/constantsWidgets.dart';
 import 'package:gerestock/constantes/color.dart';
@@ -11,6 +12,7 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/pages/facturations/facturation2.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
 import '../../helper.dart';
 
@@ -21,14 +23,13 @@ class Facturation1 extends StatefulWidget {
   _Facturation1State createState() => _Facturation1State();
 }
 
-class _Facturation1State extends State<Facturation1> {
+class _Facturation1State extends StateMVC<Facturation1> {
 
   String _dateInput;
   TextEditingController _numeroFacture = TextEditingController();
   TextEditingController _quantiteController = TextEditingController();
   TextEditingController _serviceController = TextEditingController();
   TextEditingController _amountServiceController = TextEditingController();
-  String _emailEntreprise;
   List<String> _clients = [];
   String _clientSelect;
   bool _serviceOrSelle=false;
@@ -40,11 +41,20 @@ class _Facturation1State extends State<Facturation1> {
   String _productSelect;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  AppController _con ;
+
+
+
+  _Facturation1State() : super(AppController()) {
+    _con = controller;
+  }
+
+
 
 
   Future<void> fetchProductsFromDb(){
     try {
-      FirebaseFirestore.instance.collection("Utilisateurs").doc(_emailEntreprise).collection("TousLesProduits").get().then((value){
+      FirebaseFirestore.instance.collection("Utilisateurs").doc(_con.userPhone).collection("TousLesProduits").get().then((value){
           value.docs.forEach((element) {
             if(this.mounted)
               setState(() {
@@ -61,7 +71,7 @@ class _Facturation1State extends State<Facturation1> {
   }
 
   Future<void> fetchClientFromDb(){
-    FirebaseFirestore.instance.collection("Utilisateurs").doc(_emailEntreprise).collection("Clients").get().then((value) {
+    FirebaseFirestore.instance.collection("Utilisateurs").doc(_con.userPhone).collection("Clients").get().then((value) {
       if(value.docs.isNotEmpty)
         value.docs.forEach((element) {
           if(this.mounted)
@@ -72,9 +82,6 @@ class _Facturation1State extends State<Facturation1> {
     });
   }
 
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
-  }
 
 
   @override
@@ -82,15 +89,11 @@ class _Facturation1State extends State<Facturation1> {
     // TODO: implement initState
     super.initState();
    // displaySnackBarNom(context, "Veuillez vérifier si vous avez déjà enregistrer un client et des produits", Colors.white);
-    getUser().then((value){
-      if(value!=null){
-        setState(()  {
-          _emailEntreprise = value.email;
-        });
+      _con.numeroUser();
+      if(_con.userPhone!=""){
         fetchClientFromDb();
         fetchProductsFromDb();
       }
-    });
   }
 
   @override
@@ -369,7 +372,7 @@ class _Facturation1State extends State<Facturation1> {
                 return  ListTile(
                     title: RichText(
                       text: TextSpan(
-                        text: (!_serviceOrSelle)?"${_products[i]["productName"]}        ": "${_products[i]["service"]}             ",
+                        text: (!_serviceOrSelle)?"${_products[i]["productName"]}": "${_products[i]["service"]}             ",
                         style: TextStyle(color: Colors.black, fontFamily: "MonserratSemiBold", fontSize: 15,),
                         children: <TextSpan> [
                           TextSpan(text:Helper.currenceFormat(int.tryParse( _products[i]["sellPriceProduct"])),
@@ -404,7 +407,7 @@ class _Facturation1State extends State<Facturation1> {
 
                 if(_dateInput!=null && _clientSelect!=null && _products.length!=0) {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => Facturation2(typeFacturation: (_serviceOrSelle==false)?false:true, dateInput: _dateInput, client: _clientSelect, products: _products, emailEntreprise: _emailEntreprise,)));
+                      MaterialPageRoute(builder: (_) => Facturation2(typeFacturation: (_serviceOrSelle==false)?false:true, dateInput: _dateInput, client: _clientSelect, products: _products, userPhone: _con.userPhone,)));
                 }
 
                 else displaySnackBarNom(context, "Veuillez remplir tous les champs", Colors.white);

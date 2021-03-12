@@ -4,12 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:gerestock/app_controller.dart';
 import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/pages/inventaire/detailsInventaire.dart';
 import 'package:gerestock/pages/inventaire/nouvelInventaire.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
 
 class Inventaire extends StatefulWidget {
@@ -17,14 +19,23 @@ class Inventaire extends StatefulWidget {
   _InventaireState createState() => _InventaireState();
 }
 
-class _InventaireState extends State<Inventaire> {
+class _InventaireState extends StateMVC<Inventaire> {
 
 
   CollectionReference _users= Firestore.instance
       .collection("Utilisateurs");
-  String _emailEntreprise;
 
 
+
+
+
+  AppController _con ;
+
+
+
+  _InventaireState() : super(AppController()) {
+    _con = controller;
+  }
 
 
 
@@ -38,7 +49,7 @@ class _InventaireState extends State<Inventaire> {
     super.initState();
     getUser().then((value) {
       setState(() {
-        _emailEntreprise = value.email;
+        _con.userPhone = value.email;
       });
     });
   }
@@ -53,7 +64,7 @@ class _InventaireState extends State<Inventaire> {
         margin: EdgeInsets.only(left: 10, top: 20),
         child: StreamBuilder(
             stream:  _users
-                .doc(_emailEntreprise)
+                .doc(_con.userPhone)
                 .collection("Inventaires")
                 .orderBy("created", descending: true)
                 .snapshots(),
@@ -96,7 +107,7 @@ class _InventaireState extends State<Inventaire> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (_) => NouvelInventaire()));
+              MaterialPageRoute(builder: (_) => NouvelInventaire(userPhone: _con.userPhone,)));
         },
         child: Icon(Icons.add, color: white,),
         backgroundColor: primaryColor,

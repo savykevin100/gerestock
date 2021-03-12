@@ -15,6 +15,9 @@ import 'package:gerestock/modeles/depenses.dart';
 import '../../helper.dart';
 
 class NouvelleDepense extends StatefulWidget {
+  String userPhone;
+  
+  NouvelleDepense({this.userPhone});
   @override
   _NouvelleDepenseState createState() => _NouvelleDepenseState();
 }
@@ -24,11 +27,8 @@ class _NouvelleDepenseState extends State<NouvelleDepense> {
   TextEditingController intituleDepenseController=TextEditingController();
   TextEditingController montantController =TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  String emailEntreprise;
 
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
-  }
+
 
 
   bool currentUser=false;
@@ -36,11 +36,6 @@ class _NouvelleDepenseState extends State<NouvelleDepense> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value) {
-      setState(() {
-        emailEntreprise = value.email;
-      });
-    });
 
   }
 
@@ -124,14 +119,14 @@ class _NouvelleDepenseState extends State<NouvelleDepense> {
             expenseTitle: intituleDepenseController.text,
             amount: int.tryParse(montantController.text),
             created: DateTime.now().toString()
-        ), emailEntreprise);
+        ), widget.userPhone);
         FirestoreService().addDecaissement(DecaissementModels(
             created: DateTime.now().toString(),
             operationDate: dateOperation,
             expenseTitle: intituleDepenseController.text,
             amount: int.tryParse(montantController.text),
             etat: "Dépense"
-        ), emailEntreprise);
+        ), widget.userPhone);
         EasyLoading.dismiss();
         EasyLoading.showSuccess('Enregistrement réussie!', maskType: EasyLoadingMaskType.custom);
         Navigator.pop(context);

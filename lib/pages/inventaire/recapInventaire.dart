@@ -19,15 +19,15 @@ import 'inventaire.dart';
 class RecapInventaire extends StatefulWidget {
   List<Map<String, dynamic>> produitsFamilles = [];
   String familyName ;
+  String userPhone;
 
-  RecapInventaire({this.produitsFamilles, this.familyName});
+  RecapInventaire({this.produitsFamilles, this.familyName, this.userPhone});
   @override
   _RecapInventaireState createState() => _RecapInventaireState();
 }
 
 class _RecapInventaireState extends State<RecapInventaire> {
 
-  String _emailEntreprise;
 
 
 
@@ -41,11 +41,6 @@ class _RecapInventaireState extends State<RecapInventaire> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value) {
-      setState(() {
-        _emailEntreprise = value.email;
-      });
-    });
   }
 
   @override
@@ -155,7 +150,7 @@ class _RecapInventaireState extends State<RecapInventaire> {
     try {
       EasyLoading.show(status: 'Chargement', dismissOnTap: false);
       widget.produitsFamilles.forEach((element) {
-        FirebaseFirestore.instance.collection("Utilisateurs").doc(_emailEntreprise).collection("TousLesProduits").doc(element["id"]).update({"theoreticalStock":element["physicalStock"]}).then((value){
+        FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("TousLesProduits").doc(element["id"]).update({"theoreticalStock":element["physicalStock"]}).then((value){
           print("Réussie");
         });
       });
@@ -164,9 +159,9 @@ class _RecapInventaireState extends State<RecapInventaire> {
         created: DateTime.now().toString().toString().substring(0, 10),
         products: widget.produitsFamilles,
         familyName: widget.familyName,
-      ), _emailEntreprise);
+      ), widget.userPhone);
       Navigator.push(context,
-          MaterialPageRoute(builder: (_) => Accueil()));
+          MaterialPageRoute(builder: (_) => Inventaire()));
 
       EasyLoading.dismiss();
       EasyLoading.showSuccess("L'ajout a réussie");

@@ -3,12 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:gerestock/app_controller.dart';
 import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/firestore_service.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/depenses.dart';
+import 'package:gerestock/pages/depenses/nouvelleDepense.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
 import '../../helper.dart';
 
@@ -19,29 +22,29 @@ class Depenses extends StatefulWidget {
   _DepensesState createState() => _DepensesState();
 }
 
-class _DepensesState extends State<Depenses> {
+class _DepensesState extends StateMVC<Depenses> {
 
 
-  String emailEntreprise;
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
-  }
+
   CollectionReference _users= Firestore.instance
       .collection("Utilisateurs");
 
 
   bool currentUser=false;
+
+  AppController _con ;
+
+
+
+  _DepensesState() : super(AppController()) {
+    _con = controller;
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value) {
-      setState(() {
-        emailEntreprise = value.email;
-      });
-      print(emailEntreprise);
-    });
-
   }
   @override
   Widget build(BuildContext context) {
@@ -66,9 +69,9 @@ class _DepensesState extends State<Depenses> {
                     child: displayRecapTextBold("Montant")),
               ],
             ),
-            StreamBuilder(
+            (_con.userPhone!="")?StreamBuilder(
               stream:  _users
-                  .doc(emailEntreprise)
+                  .doc(_con.userPhone)
                   .collection("Depenses")
                   .orderBy("created", descending: true)
                   .snapshots(),
@@ -115,13 +118,15 @@ class _DepensesState extends State<Depenses> {
                 );
                 // snapshot.data.documents.map((DocumentSnapshot document)
               },
-            ),
+            ):Center(child: CircularProgressIndicator(),)
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed("/NouvelleDepense");
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NouvelleDepense(userPhone: _con.userPhone,)));
         },
         child: Icon(Icons.add, color: white,),
         backgroundColor: primaryColor,

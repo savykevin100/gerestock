@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:gerestock/app_controller.dart';
 import 'package:gerestock/constantes/appBar.dart';
 import 'package:gerestock/constantes/calcul.dart';
 import 'package:gerestock/constantes/color.dart';
@@ -10,6 +11,7 @@ import 'package:gerestock/constantes/firestore_service.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/decaissement_models.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
 import '../../helper.dart';
 
@@ -20,86 +22,34 @@ class Decaissement extends StatefulWidget {
   DecaissementState createState() => DecaissementState();
 }
 
-class DecaissementState extends State<Decaissement> {
+class DecaissementState extends StateMVC<Decaissement> {
   CollectionReference _users= Firestore.instance
       .collection("Utilisateurs");
-  String _emailEntreprise;
 
-  Future<User> getUser() async {
-    return FirebaseAuth.instance.currentUser;
+
+
+
+  AppController _con ;
+
+
+
+  DecaissementState() : super(AppController()) {
+    _con = controller;
   }
+
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value){
-      if(value!=null){
-        setState(()  {
-          _emailEntreprise = value.email;
-        });
-      }
-    });
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context,"Decaissement"),
-      body: ListView(
+      body: (_con.userPhone!="")?ListView(
         children: [
-          /*Container(
-            margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
-            child:   StreamBuilder(
-              stream:  FirestoreService().getDecaissement(_emailEntreprise),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<DecaissementModels>> snapshot) {
-                if (snapshot.hasError || !snapshot.hasData)
-                  return Center(child: CircularProgressIndicator(),);
-                if (snapshot.connectionState == ConnectionState.waiting)
-                  return Center(child: CircularProgressIndicator(),);
-                else if(snapshot.data.isEmpty)
-                  return Center(child:Text("Aucun decaissement effectuée"));
-                return StaggeredGridView.countBuilder(
-                  crossAxisCount: 1,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, i) {
-                    DecaissementModels decaissementModels = snapshot.data[i];
-                    return Container(
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                height: 13,
-                                width: 4,
-                                color: HexColor("#B2C40F"),
-                              ),
-                              Text("   "),
-                              autoSizeTextGreySorti(decaissementModels.operationDate),
-                              autoSizeTextGreySorti(decaissementModels.etat),
-                              autoSizeTextGreySorti(decaissementModels.expenseTitle),
-                              SizedBox(width: 10,),
-                              autoSizeTextGreySorti("${decaissementModels.amount}")
-                            ],
-                          ),
-                          Divider(color: HexColor("#ADB3C4"),),
-                        ],
-                      ),
-
-                    );
-                  },
-                  staggeredTileBuilder: (_) => StaggeredTile.fit(2),
-                  mainAxisSpacing: 10.0,
-                  crossAxisSpacing: 0.0,
-                  shrinkWrap: true,
-                );
-                // snapshot.data.documents.map((DocumentSnapshot document)
-              },
-            ),
-          ),*/
           Container(
             margin: EdgeInsets.symmetric(vertical: longueurPerCent(30, context), horizontal: largeurPerCent(20, context)),
             child: Column(
@@ -127,7 +77,7 @@ class DecaissementState extends State<Decaissement> {
                 ),
                 StreamBuilder(
                   stream:  _users
-                      .doc(_emailEntreprise)
+                      .doc(_con.userPhone)
                       .collection("Decaissement")
                       .orderBy("created", descending: true)
                       .snapshots(),
@@ -167,7 +117,7 @@ class DecaissementState extends State<Decaissement> {
                                               typeFacturation: snapshot.data.docs[i].data()["billingType"]=="Ventes"?false:true,
                                               dateInput: snapshot.data.docs[i].data()["created"],
                                               client: snapshot.data.docs[i].data()["customerName"],
-                                              emailEntreprise: _emailEntreprise,
+                                              emailEntreprise: _con.userPhone,
                                               products: snapshot.data.docs[i].data()["products"]
                                               ,)));*/
                                       })
@@ -192,7 +142,7 @@ class DecaissementState extends State<Decaissement> {
             ),
           ),
         ],
-      ),
+      ):Center(child: CircularProgressIndicator(),)
 
     );
   }
