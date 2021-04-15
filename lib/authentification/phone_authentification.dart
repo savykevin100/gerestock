@@ -53,7 +53,6 @@ class _MyHomePageState extends State<PhoneAuthentification> {
 
   Future<bool> loginUser(String phone, BuildContext context) async{
     print(phone);
-    EasyLoading.show(status: 'Chargement', dismissOnTap: false);
     FirebaseAuth _auth = FirebaseAuth.instance;
     _auth.verifyPhoneNumber(
       phoneNumber: phone,
@@ -191,7 +190,7 @@ class _MyHomePageState extends State<PhoneAuthentification> {
               child: Text("Activez l'application", style: TextStyle(color: Colors.white, fontFamily: "OSemiBold", fontSize: 20),),
             ),*/
             SizedBox(height: longueurPerCent(100, context),),
-            Image.asset("lib/assets/images/gerestock_logo.jpg", height: 200, width: 200,),
+            Image.asset("lib/assets/images/gerestock_logo.jpg", height: 190, width: 300,),
             SizedBox(height: 50,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -234,7 +233,6 @@ class _MyHomePageState extends State<PhoneAuthentification> {
                     ),
                     controller: _phoneController,
                     keyboardType: TextInputType.number,
-                    autofocus: true,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(left: 10),
                         labelText: "Entrez votre numéro",
@@ -258,7 +256,6 @@ class _MyHomePageState extends State<PhoneAuthentification> {
             ),*/
             SizedBox(height: longueurPerCent(100, context),),
             submitButton(context, "Continuer", (){
-              EasyLoading.show(status: 'Chargement', dismissOnTap: false);
               if(code!=null && numero!=null){
                 setState(() {
                   numeroAvecCode = code+numero;
@@ -288,6 +285,7 @@ class _MyHomePageState extends State<PhoneAuthentification> {
                   child: TextClasse(text: "SE CONNECTER", color: bleuPrincipale, fontSize: 15, family: "MonserratBold",)
               ),
             ),
+            SizedBox(height: longueurPerCent(20, context),),
           ],
         ),
 
@@ -295,6 +293,7 @@ class _MyHomePageState extends State<PhoneAuthentification> {
   }
 
   void verifyPhoneIsAlreadyExist(){
+    EasyLoading.show(status: 'Chargement', dismissOnTap: false);
     Firestore.instance.collection("Utilisateurs").doc(numeroAvecCode).get().then((value) {
       if(value.exists) {
         EasyLoading.dismiss();

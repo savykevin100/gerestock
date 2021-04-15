@@ -21,7 +21,9 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 // ignore: must_be_immutable
 class Parametres extends StatefulWidget {
 
+String userPhone;
 
+Parametres({this.userPhone});
   @override
   _ParametresState createState() =>
       _ParametresState();
@@ -64,7 +66,7 @@ class _ParametresState extends StateMVC<Parametres> {
 
 
   Future<void> fetchDataUser(){
-    FirebaseFirestore.instance.collection("Utilisateurs").doc(_con.userPhone).get().then((value) {
+    FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).get().then((value) {
       print(value.data());
       if(this.mounted)
         setState(() {
@@ -84,7 +86,7 @@ class _ParametresState extends StateMVC<Parametres> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(_con.userPhone!="")
+    if(widget.userPhone!="")
       fetchDataUser();
   }
 
@@ -293,11 +295,11 @@ class _ParametresState extends StateMVC<Parametres> {
       if(_image!=null){
         try {
           firebase_storage.UploadTask task = firebase_storage.FirebaseStorage.instance
-              .ref().child(_con.userPhone + "/LogoEntreprise")
+              .ref().child(widget.userPhone + "/LogoEntreprise")
               .putFile(_image);
           task.whenComplete(() async {
             logo = await firebase_storage.FirebaseStorage.instance
-                .ref(_con.userPhone + "/LogoEntreprise")
+                .ref(widget.userPhone + "/LogoEntreprise")
                 .getDownloadURL();
             if(logo!=null){
               addInfoDb();
@@ -386,7 +388,7 @@ class _ParametresState extends StateMVC<Parametres> {
     try {
       await FirestoreService().addUtilisateur(
           Utilisateur(
-            //email: _con.userPhone,
+            //email: widget.userPhone,
             logo: logo,
             companyName: _nomDeLentreprise.text,
             activitySector: _secteurActivite.text,
@@ -394,8 +396,12 @@ class _ParametresState extends StateMVC<Parametres> {
             country:pays,
             telephoneNumber: code+telephoneNumber,
             address: _adresse.text,
+            password: _userData["password"],
+            created: _userData["created"],
+            dateExpiryAmount: _userData["dateExpiryAmount"],
+            amount: _userData["amount"],
           ),
-          _con.userPhone);
+          widget.userPhone);
       EasyLoading.dismiss();
       EasyLoading.showSuccess('Modification réussie!', maskType: EasyLoadingMaskType.custom);
       Duration(seconds: 2);

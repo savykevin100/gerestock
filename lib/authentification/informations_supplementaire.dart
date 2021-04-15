@@ -12,9 +12,13 @@ import 'package:gerestock/constantes/hexadecimal.dart';
 import 'package:gerestock/constantes/submit_button.dart';
 import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/modeles/utilisateurs.dart';
+import 'package:gerestock/pages/accueil.dart';
 import 'package:gerestock/pages/payement/select_test_mode_or_payement.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gerestock/repository.dart' as userRepo;
 // ignore: must_be_immutable
+
 class InformationSupplementaire extends StatefulWidget {
   String email;
   String numeroDeTelephone;
@@ -364,6 +368,7 @@ class _InformationSupplementaireState extends State<InformationSupplementaire> {
 
   Future<void> addInfoDb() async {
     try {
+      userRepo.dateCreatedAccount();
       await FirestoreService().addUtilisateur(
           Utilisateur(
              password: widget.password,
@@ -374,14 +379,16 @@ class _InformationSupplementaireState extends State<InformationSupplementaire> {
               country:pays,
               telephoneNumber: widget.numeroDeTelephone,
               address: _adresse.text,
-              created: DateTime.now().toString()
+              created: DateTime.now().toString(),
+              amount: 0.0,
+             dateExpiryAmount: DateTime.now().toString()
           ),
           widget.numeroDeTelephone);
       EasyLoading.dismiss();
       EasyLoading.showSuccess('Enregistrement réussie!', maskType: EasyLoadingMaskType.custom);
       Duration(seconds: 2);
       Navigator.push(context, MaterialPageRoute(
-          builder: (context) => TestModeOrPayement()
+          builder: (context) => Accueil()
       ));
     } catch(e){
       EasyLoading.dismiss();

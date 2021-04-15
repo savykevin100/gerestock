@@ -88,7 +88,10 @@ class _FournisseursClientsWidgetState extends StateMVC<FournisseursClientsWidget
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 100,),
-                Text("Pas de nouveaux "+widget.title),
+                TextClasse(
+                  text: "Pas de nouveaux "+widget.title,
+                  family: "MonserratSemiBold",
+                ),
               ],
             );
           else {
@@ -101,7 +104,7 @@ class _FournisseursClientsWidgetState extends StateMVC<FournisseursClientsWidget
                     children: [
                       InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FournisseursClientsDetails(clientsFouniss: client, title: widget.title,)),
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => FournisseursClientsDetails(clientsFouniss: client, title: widget.title, userPhone: _con.userPhone,)),
                           );
                         },
                         child: ListTile(

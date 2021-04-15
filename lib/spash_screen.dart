@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return FirebaseAuth.instance.currentUser;
   }
 
-  Future<void>  getAbonnementInfos(String email){
+ /* Future<void>  getAbonnementInfos(String email){
     print("ABonnement chekc");
     Firestore.instance.collection("Utilisateurs").doc(email).collection("Abonnement").get().then((value) {
      value.docs.forEach((element) {
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
        print(DateTime.now().isBefore(dateBeginTestMode.add(Duration(minutes: 2))));
      });
     });
-  }
+  }*/
 
 
   bool currentUser=false;
@@ -85,9 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if(value!=null){
         setState(()  {
           currentUser=true;
-          SplashScreen.emailEntreprise = value.email;
         });
-        //getAbonnementInfos(value.email);
       }
     });
     StarTimer();

@@ -11,6 +11,7 @@ import 'package:gerestock/authentification/connexion.dart';
 import 'package:gerestock/authentification/connexion_phone.dart';
 import 'package:gerestock/constantes/color.dart';
 import 'package:gerestock/constantes/hexadecimal.dart';
+import 'package:gerestock/constantes/text_classe.dart';
 import 'package:gerestock/pages/parametres.dart';
 
 import 'accueil.dart';
@@ -39,20 +40,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         children: <Widget>[
           //creationHeader(),
           SizedBox(height: 100,),
-
           drawerItem(
               icon: Icons.home,
               text: "Accueil",
               onTap: () {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => Accueil()));
-              }),
-          drawerItem(
-              icon: Icons.person,
-              text: "Paramètres",
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Parametres()));
               }),
           drawerItem(
               icon: Icons.chat,

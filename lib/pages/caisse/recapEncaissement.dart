@@ -70,14 +70,7 @@ class _DetailsFactureState extends State<DetailsFacture> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value){
-      if(value!=null){
-        setState(()  {
-          widget.userPhone = value.email;
-        });
         fetchDataUser();
-      }
-    });
     widget.products.forEach((element) {
       print(element);
       setState(() {

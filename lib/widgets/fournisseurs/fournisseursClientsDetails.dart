@@ -15,7 +15,8 @@ class FournisseursClientsDetails extends StatefulWidget {
 
   String title;
   ClientsFounisseursModel clientsFouniss = ClientsFounisseursModel();
-  FournisseursClientsDetails({this.clientsFouniss, this.title});
+  String userPhone;
+  FournisseursClientsDetails({this.clientsFouniss, this.title, this.userPhone});
 
 
   @override
@@ -56,7 +57,7 @@ class _FournisseursClientsDetailsState extends State<FournisseursClientsDetails>
           submitButton(context, "MODIFIER", (){
             print(widget.title);
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ModifyClientOrFournisseur(title: widget.title, clientsFouniss: widget.clientsFouniss,)));
+                context, MaterialPageRoute(builder: (context) => ModifyClientOrFournisseur(title: widget.title, clientsFouniss: widget.clientsFouniss, userPhone: widget.userPhone,)));
           })
         ],
       ),

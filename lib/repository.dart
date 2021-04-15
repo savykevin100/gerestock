@@ -18,4 +18,14 @@ Future<String> userNumero() async {
   return numero_user;
 }
 
+Future<void>  dateCreatedAccount() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString("created_account", DateTime.now().toString());
+}
+
+
+Future<String> getDateCreatedAccount() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString("created_account");
+}
 

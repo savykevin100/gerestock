@@ -19,6 +19,8 @@ import '../../helper.dart';
 
 class Facturation1 extends StatefulWidget {
   static String id = "Facturation1";
+  String userPhone; 
+  Facturation1({this.userPhone});
   @override
   _Facturation1State createState() => _Facturation1State();
 }
@@ -53,9 +55,12 @@ class _Facturation1State extends StateMVC<Facturation1> {
 
 
   Future<void> fetchProductsFromDb(){
+    print("Ici");
     try {
-      FirebaseFirestore.instance.collection("Utilisateurs").doc(_con.userPhone).collection("TousLesProduits").get().then((value){
+      FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("TousLesProduits").get().then((value){
+        print("Ici");
           value.docs.forEach((element) {
+            print(element);
             if(this.mounted)
               setState(() {
                 _productName.add(element.data()["productName"]);
@@ -71,7 +76,8 @@ class _Facturation1State extends StateMVC<Facturation1> {
   }
 
   Future<void> fetchClientFromDb(){
-    FirebaseFirestore.instance.collection("Utilisateurs").doc(_con.userPhone).collection("Clients").get().then((value) {
+    FirebaseFirestore.instance.collection("Utilisateurs").doc(widget.userPhone).collection("Clients").get().then((value) {
+      print("Ici");
       if(value.docs.isNotEmpty)
         value.docs.forEach((element) {
           if(this.mounted)
@@ -88,12 +94,8 @@ class _Facturation1State extends StateMVC<Facturation1> {
   void initState() {
     // TODO: implement initState
     super.initState();
-   // displaySnackBarNom(context, "Veuillez vérifier si vous avez déjà enregistrer un client et des produits", Colors.white);
-      _con.numeroUser();
-      if(_con.userPhone!=""){
-        fetchClientFromDb();
-        fetchProductsFromDb();
-      }
+         fetchClientFromDb();
+         fetchProductsFromDb();
   }
 
   @override
@@ -406,8 +408,9 @@ class _Facturation1State extends StateMVC<Facturation1> {
               submitButton(context, "GENERER", (){
 
                 if(_dateInput!=null && _clientSelect!=null && _products.length!=0) {
+                  print(_con.userPhone);
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => Facturation2(typeFacturation: (_serviceOrSelle==false)?false:true, dateInput: _dateInput, client: _clientSelect, products: _products, userPhone: _con.userPhone,)));
+                      MaterialPageRoute(builder: (_) => Facturation2(typeFacturation: (_serviceOrSelle==false)?false:true, dateInput: _dateInput, client: _clientSelect, products: _products, userPhone: widget.userPhone,)));
                 }
 
                 else displaySnackBarNom(context, "Veuillez remplir tous les champs", Colors.white);

@@ -41,7 +41,7 @@ class Facturation2 extends StatefulWidget {
     this.client,
     this.products,
     this.typeFacturation,
-    this.userPhone
+    this.userPhone,
    });
 
   @override
@@ -78,14 +78,7 @@ class _Facturation2State extends State<Facturation2> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value){
-      if(value!=null){
-        setState(()  {
-          widget.userPhone = value.email;
-        });
-        fetchDataUser();
-      }
-    });
+    fetchDataUser();
     widget.products.forEach((element) {
       setState(() {
         _amountTotal=_amountTotal + int.tryParse(element["quantite"]) * int.tryParse(element["sellPriceProduct"]);

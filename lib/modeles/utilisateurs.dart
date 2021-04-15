@@ -8,6 +8,8 @@ class Utilisateur {
   String telephoneNumber;
   String address;
   String created;
+  double amount;
+  String dateExpiryAmount;
 
 
 
@@ -20,10 +22,12 @@ class Utilisateur {
       this.country,
       this.telephoneNumber,
       this.address,
-      this.created
+      this.created,
+      this.amount,
+      this.dateExpiryAmount
       });
 
-  Utilisateur.fromMap(Map<String, dynamic> donnees, String id)
+  Utilisateur.fromMap(Map<String, dynamic> donnees)
       : password = donnees["password"],
         logo = donnees["logo"],
         companyName = donnees["companyName"],
@@ -32,6 +36,8 @@ class Utilisateur {
         country = donnees["country"],
         telephoneNumber = donnees["telephoneNumber"],
         created = donnees["created"],
+        amount = donnees["amount"],
+        dateExpiryAmount = donnees["dateExpiryAmount"],
         address = donnees["address"];
 
 
@@ -45,6 +51,8 @@ class Utilisateur {
       "country": country,
       "telephoneNumber": telephoneNumber,
       "created": created,
+      "amount": amount,
+      "dateExpiryAmount": dateExpiryAmount,
       "address": address,
     };
   }

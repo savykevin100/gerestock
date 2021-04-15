@@ -18,9 +18,10 @@ class ModifyClientOrFournisseur extends StatefulWidget {
 
 String title;
 ClientsFounisseursModel clientsFouniss = ClientsFounisseursModel();
+String userPhone;
 
 
-ModifyClientOrFournisseur({this.title, this.clientsFouniss});
+ModifyClientOrFournisseur({this.title, this.clientsFouniss, this.userPhone});
 
   @override
   _ModifyClientOrFournisseurState createState() =>
@@ -29,7 +30,6 @@ ModifyClientOrFournisseur({this.title, this.clientsFouniss});
 
 class _ModifyClientOrFournisseurState extends State<ModifyClientOrFournisseur> {
   final _formKey = GlobalKey<FormState>();
-  String _emailEntreprise;
   TextEditingController _name = TextEditingController();
   TextEditingController _address = TextEditingController();
   TextEditingController _telephone = TextEditingController();
@@ -48,13 +48,6 @@ class _ModifyClientOrFournisseurState extends State<ModifyClientOrFournisseur> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((value){
-      if(value!=null){
-        setState(()  {
-          _emailEntreprise = value.email;
-        });
-      }
-    });
     setState(() {
       _name.text = widget.clientsFouniss.name;
       _address.text=widget.clientsFouniss.address;
@@ -178,7 +171,7 @@ class _ModifyClientOrFournisseurState extends State<ModifyClientOrFournisseur> {
     EasyLoading.show(status: 'Chargement', dismissOnTap: false);
     Firestore.instance
         .collection("Utilisateurs")
-        .doc(_emailEntreprise)
+        .doc(widget.userPhone)
         .collection(table)
         .doc(widget.clientsFouniss.id)
         .update({
@@ -187,7 +180,6 @@ class _ModifyClientOrFournisseurState extends State<ModifyClientOrFournisseur> {
         "telephoneNumber":_telephone.text,
         "address": _address.text
     });
-
     EasyLoading.dismiss();
     EasyLoading.showSuccess('Modification réussie!', maskType: EasyLoadingMaskType.custom);
   }
